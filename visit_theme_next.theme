@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * Funciones del subtema visit_theme_next.
+ *
+ * Hereda todo de visit_theme; añade aqui solo lo que cambie.
+ */

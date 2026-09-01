@@ -1,0 +1,9 @@
+overrides:
+  version: VERSION
+  css:
+    theme:
+      css/overrides.css: {}
+  js:
+    js/overrides.js: {}
+  dependencies:
+    - visit_theme/global-styling

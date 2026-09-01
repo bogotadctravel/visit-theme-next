@@ -1,0 +1,20 @@
+name: "Visit Bogota — Theme Next"
+type: theme
+description: "Subtema de trabajo sobre visit_theme. Solo se despliega en staging."
+core_version_requirement: ^10 || ^11
+base theme: visit_theme
+package: Custom
+
+libraries:
+  - visit_theme_next/overrides
+
+# Se redeclaran las regiones del tema base para heredarlas.
+regions:
+  bannersHeader: 'Banners header'
+  header: Header
+  headerTheme: 'Header Theme'
+  headerVisit: 'Header Visit'
+  bannersHome: 'Banners home'
+  content: Content
+  sidebar: Sidebar
+  footer: Footer
