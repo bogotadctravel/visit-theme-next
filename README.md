@@ -1,21 +1,18 @@
 # visit_theme_next
 
-Subtema de `visit_theme` (Visit Bogota 2.0). **Solo se activa en staging.**
+Subtema de `visit_theme` (Visit Bogotá 2.0). **Se activa solo en staging.**
+Producción sigue con `visit_theme`.
 
-## Trabajar
+- **Staging:** https://staging.visitbogota.co
+- **Cómo trabajar y ver los cambios:** [DESARROLLO.md](DESARROLLO.md)
 
-1. En tu maquina: rama de trabajo en este repo, editar SCSS/Twig/CSS.
-2. Compilar el CSS localmente y commitear el resultado (el servidor no tiene toolchain).
-3. `git push`.
-4. En staging: `sudo -u useridt git -C <ruta> pull`  ->  `drush cr` (contenedor staging).
+## TL;DR
 
-## Config que necesita el subtema (regiones, bloques, ajustes)
+```bash
+# editar templates/ scss/ js/  ->  compilar SCSS a css/  ->  commitear
+git add -A && git commit -m "..." && git push        # staging sigue main
 
-Exportar SOLO esos objetos a `config/deploy/*.yml` y commitearlos:
-
+# en el servidor (ssh useridt@10.216.153.78):
+sudo /data/backups/bin/pull-theme.sh        # solo theme (~10s)
+sudo /data/backups/bin/refresh-staging.sh   # + contenido nuevo de producción (~5min)
 ```
-drush @staging config:get block.block.mi_bloque --format=yaml > config/deploy/block.block.mi_bloque.yml
-```
-
-`refresh-staging.sh` reaplica `config/deploy/` con `config:import --partial`
-despues de cada refresh de contenido desde produccion.
