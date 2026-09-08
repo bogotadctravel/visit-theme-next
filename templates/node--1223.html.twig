@@ -1,0 +1,196 @@
+{#
+  Home (nodo 1223) — estructura y clases del prototipo v3 (visitbogota3-theme).
+  Franjas: hero · 10 Imperdibles · Descubre Bogotá · Eventos esta semana ·
+  Planea tu viaje · Blog.
+  Datos: visit_theme (taxonomy, article, banners_home, campos de video) +
+  visit_theme_next_preprocess_node() (imperdibles, eventosVisit).
+  Estilos en css/overrides.css (scss/_home.scss); interacción en js/overrides.js.
+#}
+{% set meses = {
+  'Jan':'Ene','Feb':'Feb','Mar':'Mar','Apr':'Abr','May':'May','Jun':'Jun',
+  'Jul':'Jul','Aug':'Ago','Sep':'Sep','Oct':'Oct','Nov':'Nov','Dec':'Dic'
+} %}
+
+<div class="vn-home">
+
+  <h1 class="sr-only">{{ node.getTitle() }}</h1>
+
+  {# ================= HERO ================= #}
+  {% set hero_desktop = node.field_poster_video_escritorio.entity
+      ? node.field_poster_video_escritorio.entity.uri.value|image_style('ancho')
+      : '/sites/default/files/2026-07/Plantilla%20Banners%20IDT_1920x1150.webp' %}
+  {% set hero_mobile = node.field_poster_video_movil.entity
+      ? node.field_poster_video_movil.entity.uri.value|image_style('hero_mobile')
+      : hero_desktop %}
+
+  <section class="hero" aria-label="Bogotá">
+    <div class="hero__track">
+      <div class="hero__slide is-active">
+        <picture>
+          <source media="(max-width: 768px)" srcset="{{ hero_mobile }}">
+          <img class="hero__bg" src="{{ hero_desktop }}" alt="" fetchpriority="high" decoding="async">
+        </picture>
+      </div>
+    </div>
+    <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+    {% if node.field_link_cta_banner.0.value and node.field_texto_cta_banner.0.value %}
+    <div class="hero__cta">
+      <a class="btn btn--primary hasAnalytics" data-event="homebanner"
+        href="{{ node.field_link_cta_banner.0.value }}">{{ node.field_texto_cta_banner.0.value }}</a>
+    </div>
+    {% endif %}
+  </section>
+
+  {% if banners_home %}<div class="vn-home__banners">{{ banners_home }}</div>{% endif %}
+
+  {# ================= 10 IMPERDIBLES ================= #}
+  {% if imperdibles is not empty %}
+  <section class="imperdibles reveal" aria-labelledby="vn-imperdibles-title">
+    <div class="imperdibles__head">
+      <div class="imperdibles__heading">
+        <h2 class="imperdibles__title" id="vn-imperdibles-title">{{ 'Imperdibles de Bogotá'|t }}</h2>
+        <p class="imperdibles__desc">{{ 'Los sitios más icónicos de la ciudad, los que no te puedes perder en tu visita.'|t }}</p>
+      </div>
+    </div>
+    <div class="imperdibles__viewport">
+      <ul class="imperdibles__track" id="imperdiblesTrack">
+        {% for item in imperdibles %}
+        <li class="imperdibles__item">
+          <a class="card-imperdible" href="{{ item.url }}">
+            <span class="card-imperdible__media">
+              <img class="card-imperdible__img" src="{{ item.image_thumb ?: item.image }}"
+                alt="{{ item.title }}" loading="lazy" decoding="async">
+            </span>
+            <span class="card-imperdible__title">{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="imperdibles__dots" id="imperdiblesDots"></div>
+  </section>
+  {% endif %}
+
+  {# ================= DESCUBRE BOGOTÁ ================= #}
+  {% set categorias = taxonomy('categorias_turisticas') %}
+  {% if categorias is not empty %}
+  <section class="que-hacer reveal" aria-labelledby="vn-quehacer-title">
+    <div class="que-hacer__head">
+      <h2 class="que-hacer__title" id="vn-quehacer-title">{{ 'Descubre Bogotá'|t }}</h2>
+      <p class="que-hacer__desc">{{ 'Explora la ciudad por categorías, desde gastronomía y cultura hasta bienestar y negocios.'|t }}</p>
+    </div>
+    <ul class="que-hacer__grid">
+      {% for cat in categorias %}
+      <li>
+        <a class="card-categoria" href="{{ cat.url }}">
+          <span class="card-categoria__media">
+            <img class="card-categoria__img" src="{{ cat.image_thumb ?: cat.image }}" alt="" loading="lazy" decoding="async">
+          </span>
+          <span class="card-categoria__title">{{ cat.name }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {# ================= EVENTOS ESTA SEMANA ================= #}
+  {% if eventosVisit is not empty %}
+  <section class="eventos reveal" aria-labelledby="vn-eventos-title">
+    <div class="eventos__wrap">
+      <div class="eventos__intro">
+        <h2 class="eventos__title" id="vn-eventos-title">{{ 'Eventos en Bogotá'|t }}</h2>
+        <p class="eventos__desc">{{ 'Conciertos, ferias y planes que se viven en Bogotá durante los próximos días.'|t }}</p>
+        <a class="btn btn--outline eventos__cta" href="/agenda-de-eventos">{{ 'Ver la agenda completa'|t }}</a>
+      </div>
+
+      <div class="eventos__carousel">
+        <button class="eventos__arrow eventos__arrow--prev" type="button" data-dir="-1" aria-label="{{ 'Ver anteriores'|t }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="eventos__arrow eventos__arrow--next" type="button" data-dir="1" aria-label="{{ 'Ver siguientes'|t }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <ul class="eventos__track" id="eventosTrack">
+          {% for item in eventosVisit|slice(0, 12) %}
+          {% set mes_ini = item.field_fecha_de_inicio|date('M') %}
+          {% set dia_ini = item.field_fecha_de_inicio|date('d') %}
+          <li class="eventos__item">
+            <a class="card-evento" href="{{ item.url }}">
+              <span class="card-evento__media">
+                <img class="card-evento__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+                <span class="card-evento__caption">
+                  <span class="card-evento__banner">
+                    <span class="card-evento__title">{{ item.title }}</span>
+                  </span>
+                  <span class="card-evento__info">
+                    <span class="card-evento__info-date">
+                      <span class="card-evento__info-day">{{ dia_ini }}</span>
+                      <span class="card-evento__info-month">{{ meses[mes_ini] ?? mes_ini }}</span>
+                    </span>
+                    <span class="card-evento__info-venue">{{ item['field_lugar_del_evento'] }}</span>
+                  </span>
+                </span>
+              </span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <div class="eventos__dots" id="eventosDots"></div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= PLANEA TU VIAJE ================= #}
+  <section class="planea-viaje reveal">
+    <div class="planea-viaje__wrap">
+      <div class="planea-viaje__intro">
+        <h2 class="planea-viaje__title">{{ 'Planea tu viaje'|t }}</h2>
+        <p class="planea-viaje__subtitle">{{ 'Todo lo que necesitas para disfrutar Bogotá a tu manera.'|t }}</p>
+        <p class="planea-viaje__desc">{{ '¿Cuánto tiempo tienes? ¿Qué quieres conocer? ¿Viajas solo, en pareja, con amigos o en familia? Bogotá tiene un plan para cada momento y para cada forma de viajar.'|t }}</p>
+      </div>
+
+      <div class="planea-viaje__actions">
+        <a class="planea-viaje__badge" href="/planifica-tu-viaje" aria-label="{{ 'Bogotá en 24 horas'|t }}">
+          <img src="/{{ subtheme_path ?: directory }}/images/plan-24h.png" alt="" loading="lazy">
+        </a>
+        <a class="planea-viaje__badge" href="/planifica-tu-viaje" aria-label="{{ 'Bogotá en 48 horas'|t }}">
+          <img src="/{{ subtheme_path ?: directory }}/images/plan-48h.png" alt="" loading="lazy">
+        </a>
+        <a class="planea-viaje__badge" href="/planifica-tu-viaje" aria-label="{{ 'Bogotá en 72 horas'|t }}">
+          <img src="/{{ subtheme_path ?: directory }}/images/plan-72h.png" alt="" loading="lazy">
+        </a>
+        <a class="planea-viaje__info-btn" href="/informacion-al-viajero">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 8v5M12 16.2v.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          {{ 'Información del viajero'|t }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {# ================= BLOG ================= #}
+  {% if article is not empty %}
+  <section class="blog-home reveal" aria-labelledby="vn-blog-title">
+    <div class="blog-home__head">
+      <h2 class="blog-home__title" id="vn-blog-title">{{ 'Blog'|t }}</h2>
+      <p class="blog-home__desc">{{ 'No hay una sola Bogotá: está la que quieres conocer, la que quieres sentir y la que quieres recordar. Elige lo que te mueve y descubre tu próximo plan.'|t }}</p>
+      <p class="blog-home__desc blog-home__desc--strong">{{ '¿Qué Bogotá quieres vivir?'|t }}</p>
+    </div>
+
+    <ul class="blog-home__mosaic">
+      {% for item in article|slice(0, 5) %}
+      <li>
+        <a class="blog-home__item{% if loop.first %} blog-home__item--big{% endif %}" href="{{ item.url }}">
+          <img class="blog-home__img" src="{{ item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+          <span class="blog-home__caption">{{ item.title }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+</div>

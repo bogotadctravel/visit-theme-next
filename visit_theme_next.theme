@@ -6,3 +6,52 @@
  *
  * Hereda todo de visit_theme; añade aqui solo lo que cambie.
  */
+
+/**
+ * Ruta base del subtema (para <img src>, etc.), p. ej. "themes/custom/visit_theme_next".
+ */
+function _visit_theme_next_path(): string {
+  return \Drupal::service('extension.list.theme')->getPath('visit_theme_next');
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.
+ *
+ * Expone la ruta del subtema al header (que se incluye desde page.html.twig).
+ */
+function visit_theme_next_preprocess_page(array &$variables) {
+  $variables['subtheme_path'] = _visit_theme_next_path();
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.
+ *
+ * Home (nodo 1223): el prototipo v3 añade dos franjas nuevas que el tema base
+ * no alimenta para este nodo:
+ *   · "10 Imperdibles de Bogotá"  → $variables['imperdibles']
+ *   · "Eventos esta semana"        → $variables['eventosVisit']
+ * Se cargan aquí, con el mismo servicio que usa visit_theme.
+ */
+function visit_theme_next_preprocess_node(array &$variables) {
+  $variables['subtheme_path'] = _visit_theme_next_path();
+
+  $node = $variables['node'] ?? NULL;
+  if (!$node instanceof \Drupal\node\NodeInterface) {
+    return;
+  }
+
+  if ((int) $node->id() === 1223) {
+    /** @var \Drupal\idt_theme_support\Service\ContentLoader $content_loader */
+    $content_loader = \Drupal::service('idt_theme_support.content_loader');
+
+    if (empty($variables['imperdibles'])) {
+      $variables['imperdibles'] = $content_loader->getImperdibles(10);
+    }
+    if (empty($variables['eventosVisit'])) {
+      $variables['eventosVisit'] = $content_loader->getEventosTeaserByMiceFlag(NULL, 12);
+    }
+
+    $variables['#cache']['tags'][] = 'node_list:atractivos';
+    $variables['#cache']['tags'][] = 'node_list:eventos';
+  }
+}

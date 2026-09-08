@@ -207,9 +207,151 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHeader);
-  } else {
+  // =========================================================
+  //  HOME (nodo 1223) — carruseles y animación al hacer scroll
+  //  Portado de visitbogota3-theme/js/main.js.
+  // =========================================================
+
+  // Carrusel con arrastre (mouse) + swipe nativo (touch) + bullets/flechas.
+  function initTrack(opts) {
+    var track = document.getElementById(opts.trackId);
+    if (!track || track.dataset.vnInit) return;
+    track.dataset.vnInit = '1';
+
+    var items = [].slice.call(track.querySelectorAll(opts.itemSelector));
+    if (!items.length) return;
+    var step = function () {
+      return items[1] ? items[1].offsetLeft - items[0].offsetLeft : items[0].offsetWidth;
+    };
+
+    var arrows = opts.arrowSelector ? [].slice.call(document.querySelectorAll(opts.arrowSelector)) : [];
+    arrows.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        track.scrollBy({ left: step() * Number(btn.dataset.dir), behavior: 'smooth' });
+      });
+    });
+
+    var dotsWrap = opts.dotsId ? document.getElementById(opts.dotsId) : null;
+    if (dotsWrap) {
+      items.forEach(function (_, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.setAttribute('aria-label', (opts.dotLabel || 'Ir a') + ' ' + (i + 1));
+        dot.addEventListener('click', function () {
+          track.scrollTo({ left: step() * i, behavior: 'smooth' });
+        });
+        dotsWrap.appendChild(dot);
+      });
+    }
+    var dots = dotsWrap ? [].slice.call(dotsWrap.children) : [];
+
+    var update = function () {
+      var max = track.scrollWidth - track.clientWidth - 2;
+      if (arrows[0]) arrows[0].disabled = track.scrollLeft <= 0;
+      if (arrows[1]) arrows[1].disabled = track.scrollLeft >= max;
+      if (dots.length) {
+        var index = Math.round(track.scrollLeft / step());
+        dots.forEach(function (d, i) { d.classList.toggle('is-active', i === index); });
+      }
+    };
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+
+    // Arrastre con mouse (en táctil deja actuar al scroll nativo).
+    var isDown = false, dragged = false, startX = 0, startScroll = 0;
+    track.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      isDown = true; dragged = false; startX = e.clientX; startScroll = track.scrollLeft;
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!isDown) return;
+      var delta = e.clientX - startX;
+      if (!dragged && Math.abs(delta) > 4) { dragged = true; track.classList.add('is-dragging'); }
+      if (dragged) track.scrollLeft = startScroll - delta;
+    });
+    var endDrag = function () {
+      if (!isDown) return;
+      isDown = false;
+      track.classList.remove('is-dragging');
+    };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+    track.addEventListener('click', function (e) {
+      if (dragged) { e.preventDefault(); e.stopPropagation(); dragged = false; }
+    }, true);
+  }
+
+  function initHome() {
+    var home = document.querySelector('.vn-home');
+    if (!home || home.dataset.vnHomeInit) return;
+    home.dataset.vnHomeInit = '1';
+
+    // Animación al hacer scroll — primero, para que un fallo posterior no deje
+    // las franjas ocultas (.reveal parte de opacity:0).
+    var revealEls = [].slice.call(home.querySelectorAll('.reveal'));
+    if (revealEls.length && 'IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries, o) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          o.unobserve(entry.target);
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+      revealEls.forEach(function (el) { obs.observe(el); });
+    } else {
+      revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+    }
+
+    // Hero slider (si hay más de una diapositiva)
+    var heroTrack = document.querySelector('.vn-home .hero__track');
+    var heroDots = document.getElementById('heroDots');
+    if (heroTrack && heroDots) {
+      var slides = [].slice.call(heroTrack.querySelectorAll('.hero__slide'));
+      if (slides.length > 1) {
+        slides.forEach(function (_, i) {
+          var dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'hero__dot' + (i === 0 ? ' is-active' : '');
+          dot.setAttribute('aria-label', 'Ir al slide ' + (i + 1));
+          dot.addEventListener('click', function () {
+            slides.forEach(function (s, j) { s.classList.toggle('is-active', i === j); });
+            [].slice.call(heroDots.children).forEach(function (d, j) {
+              d.classList.toggle('is-active', i === j);
+            });
+          });
+          heroDots.appendChild(dot);
+        });
+      }
+    }
+
+    try {
+      initTrack({
+        trackId: 'imperdiblesTrack',
+        dotsId: 'imperdiblesDots',
+        itemSelector: '.imperdibles__item',
+        dotLabel: 'Ir al imperdible',
+      });
+      initTrack({
+        trackId: 'eventosTrack',
+        dotsId: 'eventosDots',
+        arrowSelector: '.vn-home .eventos__arrow',
+        itemSelector: '.eventos__item',
+        dotLabel: 'Ir al evento',
+      });
+    } catch (err) {
+      if (window.console) console.warn('[vn-home] carrusel:', err);
+    }
+  }
+
+  function init() {
     initHeader();
+    initHome();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 })();

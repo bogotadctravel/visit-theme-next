@@ -186,7 +186,10 @@ body.nav-open { overflow: hidden; }
 
   // El ítem del mega menú no ancla su propio panel: así el panel absolute
   // queda anclado a .masthead__bar2 y se extiende a todo el ancho.
-  .mainnav__item--mega { position: static; }
+  // (Doble clase para ganarle a `.dropdown { position: relative }`, que va
+  // después en la hoja.)
+  .mainnav__item--mega,
+  .mainnav__item--mega.dropdown { position: static; }
 
   // Pequeña división vertical roja entre cada ítem
   .mainnav__item + .mainnav__item:not(.mainnav__topbar-mobile)::before {
@@ -331,6 +334,7 @@ body.nav-open { overflow: hidden; }
 
   .megamenu__panels {
     flex: 1;
+    min-width: 0;
     position: relative;
     min-height: 180px;
   }
@@ -346,6 +350,7 @@ body.nav-open { overflow: hidden; }
 
   .megamenu__sub {
     position: relative;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -359,7 +364,7 @@ body.nav-open { overflow: hidden; }
   .megamenu__sub-media {
     display: block;
     width: 100%;
-    height: var(--megamenu-img-h, 280px);
+    height: clamp(200px, var(--megamenu-img-h, 280px), 320px);
     border: 1px solid #707070;
     border-radius: 8px;
     overflow: hidden;
