@@ -899,8 +899,11 @@ body.nav-open {
 }
 .vn-home .hero {
   position: relative;
-  min-height: min(68vh, 600px);
+  min-height: min(108vh, 600px);
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
 }
 .vn-home .hero__track {
   position: relative;
@@ -969,6 +972,7 @@ body.nav-open {
 .vn-home .eventos__dots button {
   width: 9px;
   height: 9px;
+  min-height: 9px;
   border-radius: 50%;
   padding: 0;
   background: var(--vn-blanco);
