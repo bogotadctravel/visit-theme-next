@@ -104,7 +104,7 @@
                   {% set cat_subcats = [] %}
                   {% for subcat in subcategorias %}
                   {% set rel_tids = [] %}
-                  {% for rel in subcat.field_categoria_superior %}
+                  {% for rel in subcat.cat_rel %}
                   {% set rel_tids = rel_tids|merge([rel.tid]) %}
                   {% endfor %}
                   {% if cat.tid in rel_tids and subcat.tid != 202 %}

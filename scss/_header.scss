@@ -63,6 +63,11 @@ body.nav-open { overflow: hidden; }
 
   :focus-visible { outline: 3px solid var(--vn-amarillo); outline-offset: 2px; }
 
+  .brand__logo{
+    border-radius: 0;
+    background: transparent;
+  }
+
   // ── Barra 1: logo, buscador, idioma ──
   &__bar1 {
     height: var(--vn-bar1-h);
