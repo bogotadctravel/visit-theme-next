@@ -3,9 +3,6 @@
 //  (visitbogota3-theme). Portado de su css/styles.css + theme-rojo.css
 //  y acotado bajo .masthead para no chocar con el tema base.
 // =========================================================
-
-.vn-cat .cat-subcats__dots button { min-height: 9px; }
-
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap');
 
 :root {
@@ -649,3 +646,6 @@ body.nav-open { overflow: hidden; }
     color: var(--vn-gris-60);
   }
 }
+
+
+.vn-cat .cat-subcats__dots button { min-height: 9px; }
