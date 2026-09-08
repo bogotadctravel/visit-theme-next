@@ -1,0 +1,154 @@
+// =========================================================
+//  Footer del subtema — prototipo v3 (visitbogota3-theme).
+//  Portado de su css/styles.css. Se acota bajo `.site-footer--next`
+//  porque el tema base (y el footer "conecta", y node 2461) también usan
+//  `.site-footer` con estilos propios (fondo gris, padding 3rem…).
+// =========================================================
+
+.site-footer--next {
+  padding: 0;                    // anula el padding del `.site-footer` base
+  background: var(--vn-rojo-principal);
+  color: var(--vn-blanco);
+  font-family: 'Lato', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  text-align: left;
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  a { color: inherit; text-decoration: none; }
+
+  .site-footer__top {
+    max-width: var(--vn-max);
+    margin: 0 auto;
+    padding: clamp(48px, 7vw, 72px) var(--vn-pad) 40px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 40px;
+  }
+
+  .site-footer__brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .site-footer__logo { height: 52px; width: auto; }
+
+  .site-footer__tagline {
+    margin: 0;
+    max-width: 26ch;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .site-footer__whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--vn-blanco);
+    transition: opacity var(--vn-transicion);
+
+    svg { width: 18px; height: 18px; flex: none; }
+    &:hover { opacity: 0.8; text-decoration: underline; }
+  }
+
+  .site-footer__social {
+    display: flex;
+    gap: 10px;
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+
+    a {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: var(--vn-blanco);
+      transition: background var(--vn-transicion), border-color var(--vn-transicion), transform var(--vn-transicion);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.6);
+        transform: translateY(-2px);
+      }
+    }
+    svg { width: 16px; height: 16px; }
+  }
+
+  .site-footer__heading {
+    margin: 0 0 16px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--vn-blanco);
+  }
+
+  .site-footer__col {
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    a {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      transition: color var(--vn-transicion);
+
+      &:hover { color: var(--vn-blanco); text-decoration: underline; }
+    }
+  }
+
+  .site-footer__bottom {
+    max-width: var(--vn-max);
+    margin: 0 auto;
+    padding: 20px var(--vn-pad);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+  }
+
+  .site-footer__copy {
+    margin: 0;
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .site-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    a {
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.75);
+      transition: color var(--vn-transicion);
+
+      &:hover { color: var(--vn-blanco); text-decoration: underline; }
+    }
+  }
+
+  @media (max-width: 900px) {
+    .site-footer__top { grid-template-columns: 1fr 1fr; }
+    .site-footer__brand { grid-column: 1 / -1; }
+  }
+  @media (max-width: 560px) {
+    .site-footer__top { grid-template-columns: 1fr; gap: 32px; }
+    .site-footer__bottom { justify-content: flex-start; }
+  }
+}

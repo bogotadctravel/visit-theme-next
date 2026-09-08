@@ -1,0 +1,84 @@
+{#
+  Footer del subtema visit_theme_next — estructura y clases del prototipo v3
+  (visitbogota3-theme: .site-footer con fondo rojo).
+  Datos del tema base:
+    · site_info (whatsapp, redes)            → visit_theme_preprocess_page()
+    · taxonomy('categorias_2026')            → columna "Qué hacer"
+    · mas_opciones['#items']                 → columna "Más opciones"
+  Estilos en css/overrides.css (scss/_footer.scss).
+#}
+<footer class="site-footer site-footer--next">
+  <div class="site-footer__top">
+
+    <div class="site-footer__brand">
+      <img class="site-footer__logo" src="/{{ subtheme_path ?: directory }}/images/visitlogo-blanco.svg"
+        alt="Visit Bogotá" width="472" height="113" loading="lazy" decoding="async">
+      <p class="site-footer__tagline">{{ 'Bogotá, tu casa.'|t }}</p>
+
+      {% if site_info.whatsapp %}
+      <a class="site-footer__whatsapp" href="{{ site_info.whatsapp }}" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5a10.6 10.6 0 0 0-16.9 12.7L2 21l4.9-1.6A10.6 10.6 0 0 0 20.5 3.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.3 8.1c.2-.5.5-.5.8-.5h.6c.2 0 .5 0 .7.5l.8 1.9c.1.2 0 .5-.1.6l-.6.7c-.1.2-.1.4 0 .6.4.8 1.6 2 2.4 2.4.2.1.4.1.6 0l.7-.6c.2-.1.4-.2.6-.1l1.9.8c.4.2.4.5.4.7v.6c0 .3 0 .6-.5.8-1.9 1-4.6-.2-6.5-2.1-1.9-1.9-3.1-4.6-2.1-6.5Z" fill="currentColor"/></svg>
+        {{ 'ui.tourist_support'|t }}
+      </a>
+      {% endif %}
+
+      <ul class="site-footer__social">
+        {% if site_info.facebook %}
+        <li><a href="{{ site_info.facebook }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5h2.5V5.2c-.4 0-1.9-.2-3.1-.2-3 0-4.9 1.8-4.9 5.1v2.7H5.5V16h3v8h3.4v-8h3l.5-3.2h-3.5V10c0-.9.2-1.5 1.6-1.5Z" fill="currentColor"/></svg></a></li>
+        {% endif %}
+        {% if site_info.instagram %}
+        <li><a href="{{ site_info.instagram }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg></a></li>
+        {% endif %}
+        {% if site_info.threads %}
+        <li><a href="{{ site_info.threads }}" target="_blank" rel="noopener noreferrer" aria-label="Threads">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c4.4 0 7.5 2.7 7.9 6.9.3 3.6-1 6.4-3.8 7.7-1.1.5-2.3.7-3.5.6-2.7-.2-4.4-1.6-4.4-3.5 0-2 1.9-3.2 4.6-3.2.9 0 1.7.1 2.4.3-.2-1.6-1.1-2.4-2.7-2.4-1.1 0-2.1.4-2.9 1.1l-1.4-1.6c1.2-1.1 2.7-1.7 4.4-1.7 3 0 4.9 1.9 5.1 4.9.1 1 0 1.9-.3 2.7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a></li>
+        {% endif %}
+        {% if site_info.twitter %}
+        <li><a href="{{ site_info.twitter }}" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></a></li>
+        {% endif %}
+        {% if site_info.youtube %}
+        <li><a href="{{ site_info.youtube }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6.5" width="18" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 10.2v3.6l3.3-1.8-3.3-1.8Z" fill="currentColor"/></svg></a></li>
+        {% endif %}
+      </ul>
+    </div>
+
+    {% set categorias_footer = taxonomy('categorias_2026') %}
+    {% if categorias_footer is not empty %}
+    <nav class="site-footer__col" aria-label="{{ 'ui.what_to_do'|t }}">
+      <h3 class="site-footer__heading">{{ 'ui.what_to_do'|t }}</h3>
+      <ul>
+        {% for item in categorias_footer %}
+        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    {% if mas_opciones['#items'] is not empty %}
+    <nav class="site-footer__col" aria-label="{{ 'ui.more_options'|t }}">
+      <h3 class="site-footer__heading">{{ 'ui.more_options'|t }}</h3>
+      <ul>
+        {% for item in mas_opciones['#items'] %}
+        <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+
+  </div>
+
+  <div class="site-footer__bottom">
+    <p class="site-footer__copy">{{ 'now'|date('Y') }} © {{ 'ui.all_rights_reserved'|t }}</p>
+    <ul class="site-footer__legal">
+      <li><a href="/manual-de-politica-de-proteccion-de-datos-personales">{{ 'ui.privacy_policy'|t }}</a></li>
+      <li><a target="_blank" rel="noopener noreferrer" href="https://files.visitbogota.co/sites/default/files/2022-03/Res.%20239%205-11-2021%20Por%20la%20cual%20se%20reglmente%20el%20acceso%20a%20un%20banco%20de%20imagenes%20del%20IDT.pdf">{{ 'ui.resolution_239'|t }}</a></li>
+      <li><a target="_blank" rel="noopener noreferrer" href="https://www.idt.gov.co/marca-bogota">{{ 'ui.city_brand'|t }}</a></li>
+    </ul>
+  </div>
+</footer>
+
+<div id="root"></div>
