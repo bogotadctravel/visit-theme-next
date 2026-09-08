@@ -58,7 +58,7 @@
         <li class="imperdibles__item">
           <a class="card-imperdible" href="{{ item.url }}">
             <span class="card-imperdible__media">
-              <img class="card-imperdible__img" src="{{ item.image_thumb ?: item.image }}"
+              <img class="card-imperdible__img" src="{{ item.image }}"
                 alt="{{ item.title }}" loading="lazy" decoding="async">
             </span>
             <span class="card-imperdible__title">{{ item.title }}</span>
@@ -84,7 +84,7 @@
       <li>
         <a class="card-categoria" href="{{ cat.url }}">
           <span class="card-categoria__media">
-            <img class="card-categoria__img" src="{{ cat.image_thumb ?: cat.image }}" alt="" loading="lazy" decoding="async">
+            <img class="card-categoria__img" src="{{ cat.image }}" alt="" loading="lazy" decoding="async">
           </span>
           <span class="card-categoria__title">{{ cat.name }}</span>
         </a>
@@ -119,7 +119,7 @@
           <li class="eventos__item">
             <a class="card-evento" href="{{ item.url }}">
               <span class="card-evento__media">
-                <img class="card-evento__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+                <img class="card-evento__img" src="{{ item.image }}" alt="" loading="lazy" decoding="async">
                 <span class="card-evento__caption">
                   <span class="card-evento__banner">
                     <span class="card-evento__title">{{ item.title }}</span>
