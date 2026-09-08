@@ -71,8 +71,8 @@
         <ul>
 
           {# ── Descubre Bogotá — mega menú (categorías + subcategorías) ── #}
-          {% set categorias = taxonomy('categorias_turisticas') %}
-          {% set subcategorias = taxonomy('subcategorias_turisticas') %}
+          {% set categorias = taxonomy('categorias_2026') %}
+          {% set subcategorias = taxonomy('subcategorias_2026') %}
           {% set has_tax = categorias is not empty %}
 
           <li class="mainnav__item{% if has_tax %} dropdown mainnav__item--mega{% endif %}">
@@ -104,7 +104,7 @@
                   {% set cat_subcats = [] %}
                   {% for subcat in subcategorias %}
                   {% set rel_tids = [] %}
-                  {% for rel in subcat.cat_rel %}
+                  {% for rel in subcat.field_categoria_superior %}
                   {% set rel_tids = rel_tids|merge([rel.tid]) %}
                   {% endfor %}
                   {% if cat.tid in rel_tids and subcat.tid != 202 %}
