@@ -1,2 +1,5 @@
-// Fuentes SCSS del subtema. Compila a ../css/ y commitea el CSS.
-// @import de los parciales del tema base si tu herramienta lo permite.
+// Fuentes SCSS del subtema. Compila a ../css/overrides.css y commitea el CSS:
+//   sass scss/overrides.scss css/overrides.css --style=compressed --no-source-map
+// (o el comando equivalente del tema base).
+
+@use "header";

@@ -1,0 +1,54 @@
+{#
+  Override de page.html.twig del tema base.
+  Único cambio: el header "visit" se incluye desde el subtema
+  (@visit_theme_next) para usar la nueva estructura/estilos del prototipo v3.
+  El header/footer "conecta" y el footer "visit" siguen viniendo de @visit_theme.
+#}
+{# 1. IDs específicos #}
+{% set visit_node_ids = ['639'] %}
+{% set conecta_node_ids = ['870','1270'] %}
+
+{# 2. Flags #}
+{% set is_specific_visit_id = node.id in visit_node_ids %}
+{% set is_specific_conecta_id = node.id in conecta_node_ids %}
+
+{# 3. Tipos Visit #}
+{% set visit_types = [
+  'atractivos',
+  'home_visit_2_0',
+  'hoteles',
+  'establecimientos',
+  'rutas',
+  'experiencias',
+  'eventos',
+  'page',
+  'article',
+  'pagina_agenda_de_eventos',
+  'pagina-que-hacer',
+  'banco_de_imagenes'
+] %}
+
+{# 4. Decisión FINAL (una sola regla) #}
+{% set use_conecta =
+  not is_specific_visit_id and (
+    is_specific_conecta_id
+    or (node is defined and node.bundle not in visit_types)
+  )
+%}
+{# --- RENDER DEL HEADER --- #}
+{% if use_conecta %}
+  {% include "@visit_theme/includes/header_conecta.html.twig" %}
+{% else %}
+  {% include "@visit_theme_next/includes/header_visit.html.twig" %}
+{% endif %}
+
+<main id="main-content" class="site-content">
+  {{ page.content }}
+</main>
+
+{# --- RENDER DEL FOOTER --- #}
+{% if use_conecta %}
+  {% include "@visit_theme/includes/footer_conecta.html.twig" %}
+{% else %}
+  {% include "@visit_theme/includes/footer_visit.html.twig" %}
+{% endif %}
