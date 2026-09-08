@@ -344,9 +344,50 @@
     }
   }
 
+  // =========================================================
+  //  CATEGORÍA / SUBCATEGORÍA (prototipo v3)
+  // =========================================================
+  function initCat() {
+    var cat = document.querySelector('.vn-cat');
+    if (!cat || cat.dataset.vnCatInit) return;
+    cat.dataset.vnCatInit = '1';
+
+    // Carrusel de subcategorías
+    try {
+      initTrack({
+        trackId: 'catSubcatsTrack',
+        dotsId: 'catSubcatsDots',
+        arrowSelector: '.vn-cat .cat-subcats__arrow',
+        itemSelector: '.cat-subcats__item',
+        dotLabel: 'Ir a la subcategoría',
+      });
+    } catch (err) {
+      if (window.console) console.warn('[vn-cat] carrusel:', err);
+    }
+
+    // Texto colapsable ("Leer más")
+    var body = cat.querySelector('#catIntroBody');
+    var toggle = cat.querySelector('#catIntroToggle');
+    if (body && toggle) {
+      var label = toggle.querySelector('.cat-intro__toggle-label');
+      // Si el texto ya cabe en la altura colapsada, no hace falta el botón.
+      if (body.scrollHeight <= body.clientHeight + 4) {
+        body.classList.add('cat-intro__body--fits');
+        toggle.hidden = true;
+      } else {
+        toggle.addEventListener('click', function () {
+          var expanded = body.classList.toggle('is-expanded');
+          toggle.setAttribute('aria-expanded', String(expanded));
+          if (label) label.textContent = expanded ? 'Leer menos' : 'Leer más';
+        });
+      }
+    }
+  }
+
   function init() {
     initHeader();
     initHome();
+    initCat();
   }
 
   if (document.readyState === 'loading') {

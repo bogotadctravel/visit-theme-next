@@ -1,0 +1,99 @@
+{#
+  Página de subcategoría (vocabulario subcategorias_2026) — estructura del
+  prototipo v3 (visitbogota3-theme/subcategory.html).
+  Datos: visit_theme_next_preprocess_taxonomy_term() (atractivos, article)
+  + taxonomy('categorias_2026', ids) para el breadcrumb de la categoría padre.
+#}
+{% set sub_bg = term.field_imagen_principal.entity
+    ? term.field_imagen_principal.entity.uri.value|image_style('ancho') : '' %}
+
+{% set parent_ids = [] %}
+{% for rel in term.field_rel_cat %}
+  {% set parent_ids = parent_ids|merge([rel.target_id]) %}
+{% endfor %}
+{% set parent_cats = parent_ids is not empty ? taxonomy('categorias_2026', parent_ids) : [] %}
+{% set parent_cat = parent_cats|first %}
+
+<div class="vn-cat vn-cat--sub">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall cat-hero--light" aria-label="{{ term.name.value }}">
+    {% if sub_bg %}<img class="cat-hero__bg" src="{{ sub_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          {% if parent_cat %}<li><a href="{{ parent_cat.url }}">{{ parent_cat.name }}</a></li>{% endif %}
+          <li aria-current="page">{{ term.name.value }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner">
+      <h1 class="cat-hero__title">{{ term.name.value }}</h1>
+    </div>
+  </section>
+
+  {# ================= INTRO ================= #}
+  <section class="cat-layout cat-layout--tight">
+    <div class="cat-layout__wrap">
+      <article class="cat-layout__main">
+        {% if term.description.value %}
+        <div class="cat-intro__body cat-intro__body--collapsible" id="catIntroBody">
+          {{ term.description.value|raw }}
+        </div>
+        <button class="cat-intro__toggle" type="button" id="catIntroToggle"
+          aria-expanded="false" aria-controls="catIntroBody">
+          <span class="cat-intro__toggle-label">{{ 'Leer más'|t }}</span>
+          <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        {% endif %}
+      </article>
+      <aside class="cat-layout__sidebar cat-layout__sidebar--empty" aria-hidden="true"></aside>
+    </div>
+  </section>
+
+  {# ================= ATRACTIVOS ================= #}
+  {% if atractivos is not empty %}
+  <section class="cat-attractions">
+    <div class="cat-attractions__wrap">
+      <h2 class="cat-attractions__title">{{ 'Atractivos'|t }}</h2>
+      <ul class="cat-attractions__grid">
+        {% for item in atractivos|slice(0, 8) %}
+        <li>
+          <a class="card-imperdible" href="{{ item.url }}">
+            <span class="card-imperdible__media">
+              <img class="card-imperdible__img" src="{{ item.image_thumb ?: item.image }}"
+                alt="{{ item.title }}" loading="lazy" decoding="async">
+            </span>
+            <span class="card-imperdible__title">{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= TAMBIÉN TE PUEDE INTERESAR ================= #}
+  {% if article is not empty %}
+  <section class="cat-blog">
+    <div class="cat-blog__wrap">
+      <h2 class="cat-blog__title">{{ 'También te puede interesar'|t }}</h2>
+      <ul class="cat-blog__grid">
+        {% for item in article|slice(0, 4) %}
+        <li>
+          <a class="card-blog-post" href="{{ item.url }}">
+            <span class="card-blog-post__media">
+              <img class="card-blog-post__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+            </span>
+            <span class="card-blog-post__title">{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
+</div>

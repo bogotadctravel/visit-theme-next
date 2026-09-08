@@ -1,0 +1,157 @@
+{#
+  Página de categoría (vocabulario categorias_2026) — estructura del prototipo v3
+  (visitbogota3-theme/category.html).
+  Datos: visit_theme_next_preprocess_taxonomy_term() (rutas, atractivos, article)
+  + taxonomy('subcategorias_2026') para las subcategorías relacionadas.
+  Estilos en css/overrides.css (scss/_category.scss); interacción en js/overrides.js.
+#}
+{% set cat_bg = term.field_imagen_principal.entity
+    ? term.field_imagen_principal.entity.uri.value|image_style('ancho') : '' %}
+
+<div class="vn-cat">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall" aria-label="{{ term.name.value }}">
+    {% if cat_bg %}<img class="cat-hero__bg" src="{{ cat_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li><a href="/que-hacer-en-bogota">{{ 'Descubre Bogotá'|t }}</a></li>
+          <li aria-current="page">{{ term.name.value }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner">
+      <h1 class="cat-hero__title">{{ term.name.value }}</h1>
+    </div>
+  </section>
+
+  {# ================= INTRO + RUTAS RELACIONADAS ================= #}
+  <section class="cat-layout cat-layout--narrow">
+    <div class="cat-layout__wrap">
+
+      <article class="cat-layout__main">
+        {% if term.description.value %}
+        <div class="cat-intro__body cat-intro__body--collapsible" id="catIntroBody">
+          {{ term.description.value|raw }}
+        </div>
+        <button class="cat-intro__toggle" type="button" id="catIntroToggle"
+          aria-expanded="false" aria-controls="catIntroBody">
+          <span class="cat-intro__toggle-label">{{ 'Leer más'|t }}</span>
+          <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        {% endif %}
+      </article>
+
+      {% if rutas is not empty %}
+      <aside class="rutas-sidebar">
+        <h2 class="rutas-sidebar__title">{{ 'Rutas relacionadas'|t }}</h2>
+        <ul class="rutas-sidebar__grid">
+          {% for item in rutas|slice(0, 3) %}
+          <li>
+            <a class="card-ruta" href="{{ item.url }}">
+              <span class="card-ruta__media">
+                <img class="card-ruta__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+              </span>
+              <span class="card-ruta__title">{{ item.title }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </aside>
+      {% endif %}
+
+    </div>
+  </section>
+
+  {# ================= SUBCATEGORÍAS ================= #}
+  {% set subcategorias = taxonomy('subcategorias_2026') %}
+  {% set related_subcats = [] %}
+  {% for subcat in subcategorias %}
+    {% set rel_tids = [] %}
+    {% for rel in subcat.cat_rel %}
+      {% set rel_tids = rel_tids|merge([rel.tid]) %}
+    {% endfor %}
+    {% if (term.id() in rel_tids or term.tid.value in rel_tids) and subcat.tid != 202 %}
+      {% set related_subcats = related_subcats|merge([subcat]) %}
+    {% endif %}
+  {% endfor %}
+
+  {% if related_subcats is not empty %}
+  <section class="cat-subcats">
+    <div class="cat-subcats__wrap">
+      <h2 class="cat-subcats__title">{{ 'Explora'|t }} {{ term.name.value }} {{ 'por subcategoría'|t }}</h2>
+      <div class="cat-subcats__carousel">
+        <button class="cat-subcats__arrow cat-subcats__arrow--prev" type="button" data-dir="-1" aria-label="{{ 'Ver anteriores'|t }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="cat-subcats__arrow cat-subcats__arrow--next" type="button" data-dir="1" aria-label="{{ 'Ver siguientes'|t }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="cat-subcats__viewport">
+          <ul class="cat-subcats__track" id="catSubcatsTrack">
+            {% for subcat in related_subcats %}
+            <li class="cat-subcats__item">
+              <a class="card-imperdible" href="{{ subcat.url }}">
+                <span class="card-imperdible__media">
+                  <img class="card-imperdible__img" src="{{ subcat.image_thumb ?: subcat.image }}"
+                    alt="{{ subcat.name }}" loading="lazy" decoding="async">
+                </span>
+                <span class="card-imperdible__title">{{ subcat.name }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div class="cat-subcats__dots" id="catSubcatsDots"></div>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= BLOG ================= #}
+  {% if article is not empty %}
+  <section class="cat-blog">
+    <div class="cat-blog__wrap">
+      <h2 class="cat-blog__title">{{ 'Blog'|t }}</h2>
+      <ul class="cat-blog__grid">
+        {% for item in article|slice(0, 4) %}
+        <li>
+          <a class="card-blog-post" href="{{ item.url }}">
+            <span class="card-blog-post__media">
+              <img class="card-blog-post__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+            </span>
+            <span class="card-blog-post__title">{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= ATRACTIVOS ================= #}
+  {% if atractivos is not empty %}
+  <section class="cat-attractions">
+    <div class="cat-attractions__wrap">
+      <h2 class="cat-attractions__title">{{ 'Atractivos'|t }}</h2>
+      <ul class="cat-attractions__grid">
+        {% for item in atractivos|slice(0, 8) %}
+        <li>
+          <a class="card-imperdible" href="{{ item.url }}">
+            <span class="card-imperdible__media">
+              <img class="card-imperdible__img" src="{{ item.image_thumb ?: item.image }}"
+                alt="{{ item.title }}" loading="lazy" decoding="async">
+            </span>
+            <span class="card-imperdible__title">{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
+</div>

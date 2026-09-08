@@ -24,6 +24,41 @@ function visit_theme_next_preprocess_page(array &$variables) {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for taxonomy_term.
+ *
+ * Los vocabularios nuevos `categorias_2026` / `subcategorias_2026` no están en
+ * la lista blanca de visit_theme_preprocess_taxonomy_term(), así que aquí se
+ * cargan los listados que necesitan las plantillas del prototipo (category.html
+ * / subcategory.html): rutas relacionadas, atractivos y blog.
+ */
+function visit_theme_next_preprocess_taxonomy_term(array &$variables) {
+  $variables['subtheme_path'] = _visit_theme_next_path();
+
+  $term = $variables['term'] ?? NULL;
+  if (!$term instanceof \Drupal\taxonomy\TermInterface) {
+    return;
+  }
+  if (!in_array($term->bundle(), ['categorias_2026', 'subcategorias_2026'], TRUE)) {
+    return;
+  }
+
+  /** @var \Drupal\idt_theme_support\Service\ContentLoader $content_loader */
+  $content_loader = \Drupal::service('idt_theme_support.content_loader');
+  $tid = (int) $term->id();
+
+  $variables['atractivos'] = $content_loader->getNodesTeaserByCategory('atractivos', $tid, 12);
+  $variables['article']    = $content_loader->getNodesTeaserByCategory('article', $tid, 8);
+  if ($term->bundle() === 'categorias_2026') {
+    $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 6);
+  }
+
+  $variables['#cache']['tags'][] = 'node_list:atractivos';
+  $variables['#cache']['tags'][] = 'node_list:article';
+  $variables['#cache']['tags'][] = 'node_list:rutas';
+  $variables['#cache']['tags'][] = 'taxonomy_term_list:subcategorias_2026';
+}
+
+/**
  * Implements hook_preprocess_HOOK() for node.
  *
  * Home (nodo 1223): el prototipo v3 añade dos franjas nuevas que el tema base
