@@ -2,6 +2,7 @@
 //   sass scss/overrides.scss css/overrides.css --style=compressed --no-source-map
 // (o el comando equivalente del tema base).
 
+@use "default";
 @use "header";
 @use "footer";
 @use "home";
