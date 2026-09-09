@@ -46,6 +46,13 @@
 
 body.nav-open { overflow: hidden; }
 
+// El bloque de miga de pan de Drupal (system_breadcrumb_block) se oculta:
+// el tema base ya lo hace para su bloque (#block-visit-theme-breadcrumbs), pero
+// al activar el subtema Drupal genera su propio bloque con otro id. Las fichas
+// del prototipo llevan su propia miga dentro del hero (con la ruta taxonómica,
+// que la miga por defecto de Drupal no arma para nodos).
+.block-system-breadcrumb-block { display: none; }
+
 // =========================================================
 //  HEADER
 // =========================================================
