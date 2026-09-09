@@ -6,6 +6,10 @@ section {
   margin: 0;
 }
 
+#block-visit-theme-next-breadcrumbs {
+  display: none;
+}
+
 :root {
   --vn-azul-marino: #1A2B4A;
   --vn-rojo-principal: #FF3108;
