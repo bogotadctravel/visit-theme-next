@@ -3,6 +3,7 @@
   single-place.html). Datos: visit_theme_preprocess_node() caso 'hoteles'
   (nodos_cercanos, body_sin_estilos, contenidos_relacionados) + campos del nodo.
 #}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
 {% set hero_bg = node.field_mainimg.entity
     ? file_url(node.field_mainimg.entity.uri.value)
     : (node.field_cover.entity ? file_url(node.field_cover.entity.uri.value) : '') %}
@@ -21,7 +22,7 @@
         <ol>
           <li><a href="/">{{ 'Inicio'|t }}</a></li>
           <li><a href="/donde-dormir">{{ 'ui.where_to_sleep'|t }}</a></li>
-          {% if cat %}<li><a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id}) }}">{{ cat.name.value }}</a></li>{% endif %}
+          {% if cat %}<li><a href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a></li>{% endif %}
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>
       </nav>

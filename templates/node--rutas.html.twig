@@ -3,6 +3,7 @@
   v3 single-place.html). Datos: body_sin_estilos, contenidos_relacionados,
   nodos_cercanos (si tiene latlong) + campos del nodo.
 #}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
 {% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
 {% set cat = node.field_turcat.0.entity %}
 {% set lat = node.field_latlong.0.value %}
@@ -19,7 +20,7 @@
         <ol>
           <li><a href="/">{{ 'Inicio'|t }}</a></li>
           <li><a href="/rutas-turisticas">{{ 'ui.tourist_routes'|t }}</a></li>
-          {% if cat %}<li><a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id}) }}">{{ cat.name.value }}</a></li>{% endif %}
+          {% if cat %}<li><a href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a></li>{% endif %}
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>
       </nav>
@@ -107,7 +108,7 @@
           <div class="place-sidebar__row">
             <span class="place-sidebar__label">{{ 'ui.category'|t }}</span>
             <span class="place-sidebar__tags">
-              <a class="place-tag" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id}) }}">{{ cat.name.value }}</a>
+              <a class="place-tag" href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a>
             </span>
           </div>
           {% endif %}

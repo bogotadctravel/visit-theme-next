@@ -856,25 +856,27 @@
     &--image { width: auto; max-width: min(92vw, 1100px); background: none; border-radius: 0; }
   }
 
+  // La "X" va fija en la esquina del viewport: siempre visible, no depende del
+  // alto de la foto (antes en top:-44px podía quedar fuera de pantalla).
   &__close {
-    position: absolute;
-    top: -44px;
-    right: 0;
-    z-index: 2;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 3;
     display: grid;
     place-items: center;
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(0, 0, 0, 0.55);
     border: 0;
     cursor: pointer;
-    color: var(--vn-gris-oscuro);
-    font-size: 20px;
+    color: var(--vn-blanco);
+    font-size: 24px;
     line-height: 1;
-    transition: background var(--vn-transicion), color var(--vn-transicion);
+    transition: background var(--vn-transicion), transform var(--vn-transicion);
 
-    &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); }
+    &:hover { background: var(--vn-rojo-principal); transform: scale(1.05); }
   }
 
   &__image {

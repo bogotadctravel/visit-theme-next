@@ -10,6 +10,7 @@
   'Jan':'Ene','Feb':'Feb','Mar':'Mar','Apr':'Abr','May':'May','Jun':'Jun',
   'Jul':'Jul','Aug':'Ago','Sep':'Sep','Oct':'Oct','Nov':'Nov','Dec':'Dic'
 } %}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
 
 <div class="vn-home">
 
@@ -82,7 +83,7 @@
     <ul class="que-hacer__grid">
       {% for cat in categorias %}
       <li>
-        <a class="card-categoria" href="{{ cat.url }}">
+        <a class="card-categoria" href="{{ conecta.cat_href(cat.name, cat.url) }}">
           <span class="card-categoria__media">
             <img class="card-categoria__img" src="{{ cat.image_full ?: cat.image }}" alt="" loading="lazy" decoding="async">
           </span>

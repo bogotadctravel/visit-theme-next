@@ -9,6 +9,7 @@
     · page.bannersHeader          → banners sobre el header
   Estilos en css/overrides.css (scss/_header.scss); interacción en js/overrides.js.
 #}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
 <a href="#main-content" class="skip-link">{{ 'ui.skip_to_content'|t }}</a>
 
 {{ page.bannersHeader }}
@@ -103,7 +104,7 @@
                   {% endfor %}
 
                   <div class="megamenu__panel" data-panel="cat-{{ cat.tid }}" hidden>
-                    <a class="megamenu__panel-link" href="{{ cat.url }}">
+                    <a class="megamenu__panel-link" href="{{ conecta.cat_href(cat.name, cat.url) }}">
                       {{ 'Ver toda la categoría'|t }} {{ cat.name }}
                       <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">
                         <path d="M2 8l6-6M3 2h5v5" fill="none" stroke="currentColor" stroke-width="1.4"
@@ -111,7 +112,7 @@
                       </svg>
                     </a>
                     {% for subcat in cat_subcats %}
-                    <a class="megamenu__sub" href="{{ subcat.url }}">
+                    <a class="megamenu__sub" href="{{ conecta.subcat_href(subcat.name, subcat.url, cat.name) }}">
                       <span class="megamenu__sub-media">
                         {% if subcat.image %}
                         <img src="{{ subcat.image_full ?: subcat.image }}" alt="" loading="lazy" decoding="async">
@@ -132,8 +133,9 @@
           {# ── Ítems dinámicos del menú principal ── #}
           {% for item in menu_principal_visitbogota['#items'] %}
           {% set item_classes = item.attributes.class ? item.attributes.class|join(' ') : '' %}
+          {% set item_href = 'corporativa' in item.title|lower ? '/conecta' : item.url %}
           <li class="mainnav__item {{ item_classes }}{% if item.below %} dropdown{% endif %}">
-            <a class="mainnav__link{% if item.below %} dropdown__toggle{% endif %}" href="{{ item.url }}"
+            <a class="mainnav__link{% if item.below %} dropdown__toggle{% endif %}" href="{{ item_href }}"
               {% if item.below %}aria-expanded="false" aria-controls="dd-{{ loop.index }}"{% endif %}>
               {{ item.title }}
               {% if item.below %}
@@ -146,7 +148,7 @@
             {% if item.below %}
             <ul class="dropdown__menu" id="dd-{{ loop.index }}" hidden>
               {% for subitem in item.below %}
-              <li><a href="{{ subitem.url }}">{{ subitem.title }}</a></li>
+              <li><a href="{{ conecta.subcat_href(subitem.title, subitem.url, item.title) }}">{{ subitem.title }}</a></li>
               {% for nested in subitem.below %}
               <li><a href="{{ nested.url }}">{{ nested.title }}</a></li>
               {% endfor %}

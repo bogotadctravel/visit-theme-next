@@ -1,0 +1,84 @@
+{#
+  Selector de idioma con banderita — override del subtema visit_theme_next.
+  Igual estructura que el del tema base (.language-dropdown), pero añade la
+  bandera de cada idioma (prototipo v3). `current_langcode` lo expone
+  visit_theme_preprocess_links__language_block().
+#}
+{% set allowed_langs = ['es', 'en'] %}
+{% set flags = {
+  'es': '<svg viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="4" fill="#FCD116"/><rect y="4" width="12" height="2" fill="#003893"/><rect y="6" width="12" height="2" fill="#CE1126"/></svg>',
+  'en': '<svg viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="8" fill="#012169"/><path d="M0 0l12 8M12 0L0 8" stroke="#fff" stroke-width="1.6"/><path d="M0 0l12 8M12 0L0 8" stroke="#C8102E" stroke-width=".9"/><path d="M6 0v8M0 4h12" stroke="#fff" stroke-width="2.6"/><path d="M6 0v8M0 4h12" stroke="#C8102E" stroke-width="1.5"/></svg>'
+} %}
+
+<style>
+  .language-dropdown { position: relative; display: inline-block; font-family: inherit; }
+  .language-dropdown__toggle {
+    background: transparent; border: 0; cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 10px; border-radius: 6px;
+    font: inherit; font-size: 13px; font-weight: 600; color: inherit;
+  }
+  .language-dropdown__flag { display: inline-flex; width: 20px; height: 14px; border-radius: 3px; overflow: hidden; flex: none; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+  .language-dropdown__flag svg { width: 100%; height: 100%; display: block; }
+  .language-dropdown__arrow { font-size: 9px; opacity: .7; }
+  .language-dropdown__menu {
+    position: absolute; top: 100%; right: 0;
+    min-width: 116px; margin: 6px 0 0; padding: 6px; list-style: none;
+    background: #fff; border: 1px solid #D8DCE3; border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(16,27,48,.18);
+    opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s;
+    z-index: 1000;
+  }
+  .language-dropdown:hover .language-dropdown__menu,
+  .language-dropdown:focus-within .language-dropdown__menu {
+    opacity: 1; visibility: visible; transform: translateY(0);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .language-dropdown__menu .language-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 5px;
+    color: #1D1D1D; text-decoration: none; font-size: 14px; font-weight: 600;
+  }
+  .language-dropdown__menu .language-link:hover { background: #F5F6F8; }
+  .language-dropdown__menu .language-link.is-active { color: #FF3108; pointer-events: none; }
+</style>
+
+{% if links -%}
+  {% set current = (current_langcode in allowed_langs) ? current_langcode : 'es' %}
+  <div class="language-dropdown">
+
+    <button type="button" class="language-dropdown__toggle" aria-haspopup="true" aria-expanded="false"
+      aria-label="{{ 'Seleccionar idioma. Idioma actual:'|t }} {{ current|upper }}">
+      <span class="language-dropdown__flag" aria-hidden="true">{{ flags[current]|raw }}</span>
+      <span aria-hidden="true">{{ current|upper }}</span>
+      <span class="language-dropdown__arrow" aria-hidden="true">▼</span>
+    </button>
+
+    <ul class="language-dropdown__menu">
+      {% for key, item in links %}
+        {% set lp = key|split('-')|first|lower %}
+        {% if lp in allowed_langs %}
+        <li class="language-dropdown__item">
+          {# Se conserva el <a> que arma Drupal (href, hreflang, is-active del core
+             JS); solo se reemplaza el texto por bandera + código y se añade la
+             clase .language-link. #}
+          {% set opts = item.link['#options']|default({}) %}
+          {% set attrs = opts.attributes|default({}) %}
+          {% set custom_link = item.link|merge({
+            '#title': {
+              '#type': 'inline_template',
+              '#template': '<span class="language-dropdown__flag" aria-hidden="true">{{ flag|raw }}</span>{{ code }}',
+              '#context': { 'flag': flags[lp], 'code': lp|upper }
+            },
+            '#options': opts|merge({
+              'attributes': attrs|merge({ 'class': (attrs.class|default([]))|merge(['language-link']) })
+            })
+          }) %}
+          {{ custom_link }}
+        </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{%- endif %}

@@ -1,0 +1,24 @@
+{#
+  "Bogotá corporativa" y sus subcategorías (Proveedores, Venues) apuntan al
+  micrositio Conecta (/conecta, /conecta/proveedores, /conecta/venues) en vez de
+  a su página de taxonomía. Se detecta por nombre (independiente del entorno).
+
+  Uso:
+    {% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
+    <a href="{{ conecta.cat_href(cat.name, cat.url) }}">
+    <a href="{{ conecta.subcat_href(subcat.name, subcat.url, parent_name) }}">
+#}
+
+{%- macro cat_href(name, fallback) -%}
+  {%- if 'corporativa' in name|lower -%}/conecta{%- else -%}{{ fallback }}{%- endif -%}
+{%- endmacro -%}
+
+{%- macro subcat_href(name, fallback, parent_name) -%}
+  {%- if parent_name is defined and 'corporativa' in parent_name|lower -%}
+    {%- set n = name|lower -%}
+    {%- if 'proveedor' in n -%}/conecta/proveedores
+    {%- elseif 'venue' in n -%}/conecta/venues
+    {%- else -%}{{ fallback }}
+    {%- endif -%}
+  {%- else -%}{{ fallback }}{%- endif -%}
+{%- endmacro -%}

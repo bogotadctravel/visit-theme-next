@@ -7,6 +7,7 @@
     · mas_opciones['#items']                 → columna "Más opciones"
   Estilos en css/overrides.css (scss/_footer.scss).
 #}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
 <footer class="site-footer site-footer--next">
   <div class="site-footer__top">
 
@@ -52,7 +53,7 @@
       <h3 class="site-footer__heading">{{ 'ui.what_to_do'|t }}</h3>
       <ul>
         {% for item in categorias_footer %}
-        <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+        <li><a href="{{ conecta.cat_href(item.name, item.url) }}">{{ item.name }}</a></li>
         {% endfor %}
       </ul>
     </nav>

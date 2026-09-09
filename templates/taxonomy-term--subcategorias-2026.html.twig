@@ -4,6 +4,7 @@
   Datos: visit_theme_next_preprocess_taxonomy_term() (atractivos, article)
   + taxonomy('categorias_2026', ids) para el breadcrumb de la categoría padre.
 #}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
 {% set sub_bg = term.field_imagen_principal.entity
     ? file_url(term.field_imagen_principal.entity.uri.value) : '' %}
 
@@ -13,6 +14,14 @@
 {% endfor %}
 {% set parent_cats = parent_ids is not empty ? taxonomy('categorias_2026', parent_ids) : [] %}
 {% set parent_cat = parent_cats|first %}
+
+{# Subcategorías de "Bogotá corporativa" (Proveedores, Venues) viven en el
+   micrositio Conecta. Redirección de respaldo (lo ideal: un Redirect de config). #}
+{% set conecta_sub = parent_cat ? conecta.subcat_href(term.name.value, '', parent_cat.name) : '' %}
+{% if conecta_sub starts with '/conecta' %}
+<script>window.location.replace('{{ conecta_sub }}');</script>
+<noscript><meta http-equiv="refresh" content="0; url={{ conecta_sub }}"></noscript>
+{% endif %}
 
 <div class="vn-cat vn-cat--sub">
 
@@ -24,7 +33,7 @@
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
           <li><a href="/">{{ 'Inicio'|t }}</a></li>
-          {% if parent_cat %}<li><a href="{{ parent_cat.url }}">{{ parent_cat.name }}</a></li>{% endif %}
+          {% if parent_cat %}<li><a href="{{ conecta.cat_href(parent_cat.name, parent_cat.url) }}">{{ parent_cat.name }}</a></li>{% endif %}
           <li aria-current="page">{{ term.name.value }}</li>
         </ol>
       </nav>

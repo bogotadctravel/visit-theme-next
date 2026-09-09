@@ -5,6 +5,15 @@
   + taxonomy('subcategorias_2026') para las subcategorías relacionadas.
   Estilos en css/overrides.css (scss/_category.scss); interacción en js/overrides.js.
 #}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
+
+{# "Bogotá corporativa" no tiene página propia: redirige al micrositio Conecta.
+   Lo ideal es un Redirect en el término 285 (config/deploy/), esto es el respaldo. #}
+{% if 'corporativa' in term.name.value|lower %}
+<script>window.location.replace('/conecta');</script>
+<noscript><meta http-equiv="refresh" content="0; url=/conecta"></noscript>
+{% endif %}
+
 {% set cat_bg = term.field_imagen_principal.entity
     ? file_url(term.field_imagen_principal.entity.uri.value) : '' %}
 
@@ -94,7 +103,7 @@
           <ul class="cat-subcats__track" id="catSubcatsTrack">
             {% for subcat in related_subcats %}
             <li class="cat-subcats__item">
-              <a class="card-imperdible" href="{{ subcat.url }}">
+              <a class="card-imperdible" href="{{ conecta.subcat_href(subcat.name, subcat.url, term.name.value) }}">
                 <span class="card-imperdible__media">
                   <img class="card-imperdible__img" src="{{ subcat.image_full ?: subcat.image }}"
                     alt="{{ subcat.name }}" loading="lazy" decoding="async">
