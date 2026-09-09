@@ -1,0 +1,207 @@
+{#
+  Ficha de evento — estructura del prototipo v3 (visitbogota3-theme/single-event.html,
+  alineado con single-place.html tras el commit "Ajustes en single-event").
+  Datos: visit_theme_preprocess_node() (caso 'eventos') + visit_theme_next
+  (eventosVisit = eventos relacionados).
+#}
+{% set meses = {
+  1:'enero', 2:'febrero', 3:'marzo', 4:'abril', 5:'mayo', 6:'junio',
+  7:'julio', 8:'agosto', 9:'septiembre', 10:'octubre', 11:'noviembre', 12:'diciembre'
+} %}
+{% set meses_abbr = {
+  'Jan':'Ene','Feb':'Feb','Mar':'Mar','Apr':'Abr','May':'May','Jun':'Jun',
+  'Jul':'Jul','Aug':'Ago','Sep':'Sep','Oct':'Oct','Nov':'Nov','Dec':'Dic'
+} %}
+{% set dias = {
+  1:'Lunes', 2:'Martes', 3:'Miércoles', 4:'Jueves', 5:'Viernes', 6:'Sábado', 7:'Domingo'
+} %}
+
+{% set hero_bg = node.field_mainimg.entity ? node.field_mainimg.entity.uri.value|image_style('ancho') : '' %}
+{% set cat_evento = node.field_categoria_de_evento.0.entity.name.value %}
+{% set raw_inicio = node.field_fecha_de_inicio.0.value %}
+{% set raw_fin = node.field_fecha_de_finalizacion.0.value %}
+{% set hora_inicio = node.field_hora_de_inicio_del_evento.0.value %}
+{% set lat = node.field_latlong.0.value %}
+{% set lng = node.field_latlong.1.value %}
+
+{% set fecha_txt = '' %}
+{% if raw_inicio %}
+  {% if raw_fin and raw_inicio|date('Y-m-d') != raw_fin|date('Y-m-d') %}
+    {% set fecha_txt = raw_inicio|date('j') ~ ' de ' ~ meses[raw_inicio|date('n')] ~ ' – ' ~ raw_fin|date('j') ~ ' de ' ~ meses[raw_fin|date('n')] ~ ' de ' ~ raw_fin|date('Y') %}
+  {% else %}
+    {% set fecha_txt = dias[raw_inicio|date('N')] ~ ' ' ~ raw_inicio|date('j') ~ ' de ' ~ meses[raw_inicio|date('n')] ~ ' de ' ~ raw_inicio|date('Y') %}
+  {% endif %}
+{% endif %}
+
+{{ banners_eventos }}
+
+<div class="vn-place vn-place--event">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall cat-hero--light" aria-label="{{ node.getTitle() }}">
+    {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li><a href="/agenda-de-eventos">{{ 'Eventos'|t }}</a></li>
+          {% if cat_evento %}<li>{{ cat_evento }}</li>{% endif %}
+          <li aria-current="page">{{ node.getTitle() }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner">
+      <h1 class="cat-hero__title">{{ node.getTitle() }}</h1>
+    </div>
+  </section>
+
+  {# ================= CONTENIDO + SIDEBAR ================= #}
+  <section class="place-body">
+    <div class="place-body__wrap">
+
+      <article class="place-content">
+        {% if node.body.0.value %}
+        <div class="place-content__body cat-intro__body--collapsible" id="catIntroBody">
+          {{ node.body.0.value|raw }}
+        </div>
+        <button class="cat-intro__toggle" type="button" id="catIntroToggle"
+          aria-expanded="false" aria-controls="catIntroBody">
+          <span class="cat-intro__toggle-label">{{ 'Leer más'|t }}</span>
+          <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        {% endif %}
+      </article>
+
+      <aside class="place-sidebar">
+        <div class="place-sidebar__card">
+
+          {% if node.field_lugar_del_evento.0.value %}
+          <div class="place-sidebar__row place-sidebar__row--address">
+            <span class="place-sidebar__value">{{ node.field_lugar_del_evento.0.value }}</span>
+          </div>
+          {% endif %}
+
+          {% if fecha_txt %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'Fecha'|t }}</span>
+            <span class="place-sidebar__value">{{ fecha_txt }}</span>
+          </div>
+          {% endif %}
+
+          {% if hora_inicio %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'ui.opening_hours'|t }}</span>
+            <span class="place-sidebar__value">{{ 'Inicio del evento'|t }}: {{ hora_inicio }}</span>
+          </div>
+          {% endif %}
+
+          {% if node.field_weblink.0.url %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'ui.official_website'|t }}</span>
+            <a class="place-sidebar__link" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ node.field_weblink.0.url|replace({'https://':'', 'http://':''})|trim('/') }}</a>
+          </div>
+          {% endif %}
+
+          {% if node.field_link_a_boleteria.0.url %}
+          <a class="btn btn--primary place-sidebar__btn" href="{{ node.field_link_a_boleteria.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'Entradas'|t }}</a>
+          {% endif %}
+          {% if node.field_weblink.0.url %}
+          <a class="btn place-sidebar__btn place-sidebar__btn--secondary" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.more_information'|t }}</a>
+          {% endif %}
+
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  {# ================= GALERÍA ================= #}
+  {% if node.hasField('field_picgallery') and node.field_picgallery|length > 0 %}
+  <section class="place-gallery-section">
+    <div class="place-gallery-section__head">
+      <h2 class="place-gallery-section__title">{{ 'Galería'|t }}</h2>
+    </div>
+    <ul class="place-gallery place-gallery-section__wrap">
+      {% for item in node.field_picgallery|slice(0, 8) %}
+      <li>
+        <button class="place-gallery__item" type="button"
+          data-gallery-src="{{ file_url(item.entity.fileuri) }}"
+          aria-label="{{ 'Ver foto'|t }}: {{ item.alt ?: node.getTitle() }}">
+          <img src="{{ item.entity.uri.value|image_style('grande') }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {# ================= CÓMO LLEGAR ================= #}
+  {% if lat and lng %}
+  <section class="place-map-section">
+    <div class="place-map-section__head">
+      <h2 class="place-map-section__title">{{ 'ui.how_to_get_there'|t }}</h2>
+    </div>
+    <div class="place-map-section__wrap">
+      <div class="place-map place-map--embed">
+        <iframe title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q={{ lat }},{{ lng }}&z=15&output=embed"></iframe>
+        <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">
+          <img src="/{{ subtheme_path ?: directory }}/images/transmilenio-logo.png" alt="" aria-hidden="true">
+          <span>{{ 'Cómo llegar en transporte público'|t }}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= EVENTOS RELACIONADOS ================= #}
+  {% set eventos_rel = [] %}
+  {% for item in eventosVisit %}
+    {% if item.id != node.id() %}{% set eventos_rel = eventos_rel|merge([item]) %}{% endif %}
+  {% endfor %}
+  {% if eventos_rel is not empty %}
+  <section class="eventos" aria-labelledby="vn-rel-eventos-title">
+    <div class="eventos__head">
+      <h2 class="eventos__title" id="vn-rel-eventos-title">{{ 'Eventos relacionados'|t }}</h2>
+      <p class="eventos__desc">{{ 'Otros conciertos y planes que también pueden interesarte.'|t }}</p>
+    </div>
+    <ul class="eventos__grid">
+      {% for item in eventos_rel|slice(0, 4) %}
+      {% set mes_ini = item.field_fecha_de_inicio|date('M') %}
+      <li>
+        <a class="card-evento" href="{{ item.url }}">
+          <span class="card-evento__media">
+            <img class="card-evento__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+            <span class="card-evento__caption">
+              <span class="card-evento__banner">
+                <span class="card-evento__title">{{ item.title }}</span>
+                <span class="card-evento__cta">{{ 'Ver evento'|t }}</span>
+              </span>
+              <span class="card-evento__info">
+                <span class="card-evento__info-date">
+                  <span class="card-evento__info-day">{{ item.field_fecha_de_inicio|date('d') }}</span>
+                  <span class="card-evento__info-month">{{ meses_abbr[mes_ini] ?? mes_ini }}</span>
+                </span>
+                <span class="card-evento__info-venue">{{ item['field_lugar_del_evento'] }}</span>
+              </span>
+            </span>
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+</div>
+
+{# ================= MODAL: foto de la galería ================= #}
+<div class="vn-modal" id="galleryModal" hidden>
+  <div class="vn-modal__backdrop" data-modal-close></div>
+  <div class="vn-modal__dialog vn-modal__dialog--image" role="dialog" aria-modal="true" aria-label="{{ 'Foto de la galería'|t }}">
+    <button class="vn-modal__close" type="button" data-modal-close aria-label="{{ 'ui.close'|t }}">&times;</button>
+    <img class="vn-modal__image" id="galleryModalImg" src="" alt="">
+  </div>
+</div>

@@ -75,10 +75,10 @@ function visit_theme_next_preprocess_node(array &$variables) {
     return;
   }
 
-  if ((int) $node->id() === 1223) {
-    /** @var \Drupal\idt_theme_support\Service\ContentLoader $content_loader */
-    $content_loader = \Drupal::service('idt_theme_support.content_loader');
+  /** @var \Drupal\idt_theme_support\Service\ContentLoader $content_loader */
+  $content_loader = \Drupal::service('idt_theme_support.content_loader');
 
+  if ((int) $node->id() === 1223) {
     if (empty($variables['imperdibles'])) {
       $variables['imperdibles'] = $content_loader->getImperdibles(10);
     }
@@ -87,6 +87,19 @@ function visit_theme_next_preprocess_node(array &$variables) {
     }
 
     $variables['#cache']['tags'][] = 'node_list:atractivos';
+    $variables['#cache']['tags'][] = 'node_list:eventos';
+  }
+
+  // Ficha de evento (single-event.html): "Eventos relacionados". El tema base
+  // no fija $eventosVisit para el bundle 'eventos'.
+  if ($node->bundle() === 'eventos' && empty($variables['eventosVisit'])) {
+    $tid = 0;
+    if ($node->hasField('field_turcat') && !$node->get('field_turcat')->isEmpty()) {
+      $tid = (int) $node->get('field_turcat')->target_id;
+    }
+    $variables['eventosVisit'] = $tid
+      ? $content_loader->getEventosTeaserByCategoryAndMice($tid, 0, 8)
+      : $content_loader->getEventosTeaserByMiceFlag(NULL, 8);
     $variables['#cache']['tags'][] = 'node_list:eventos';
   }
 }

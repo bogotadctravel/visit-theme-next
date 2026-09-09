@@ -1,0 +1,762 @@
+// =========================================================
+//  Ficha de atractivo / evento — prototipo v3
+//  (visitbogota3-theme/single-place.html + single-event.html).
+//  Acotado bajo .vn-place.
+// =========================================================
+
+.vn-place {
+  --vn-max: 1280px;
+  --vn-pad: clamp(16px, 4vw, 40px);
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  // ── Botones ──
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform var(--vn-transicion), background var(--vn-transicion), box-shadow var(--vn-transicion);
+  }
+  .btn--primary {
+    background: var(--vn-rojo-principal);
+    color: var(--vn-blanco);
+    box-shadow: 0 6px 22px rgba(255, 49, 49, 0.35);
+
+    &:hover { transform: translateY(-2px); background: var(--vn-rojo-principal-h); }
+  }
+
+  // ── Hero de atractivo (reusa .cat-hero del prototipo) ──
+  .cat-hero {
+    position: relative;
+    min-height: min(48vh, 460px);
+    display: flex;
+    align-items: flex-end;
+    color: var(--vn-blanco);
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.28) 100%);
+    }
+  }
+  .cat-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cat-hero__topright {
+    position: absolute;
+    z-index: 2;
+    top: 24px;
+    right: calc(max(0px, (100% - var(--vn-max)) / 2) + var(--vn-pad));
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 14px;
+
+    .hero-logo-mark { position: static; width: min(140px, 20vw); height: auto; pointer-events: none; }
+    .breadcrumb { margin-bottom: 0; }
+  }
+  .cat-hero__banner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 20px var(--vn-pad);
+    background: rgba(255, 255, 255, 0.65);
+    text-align: left;
+  }
+  .cat-hero__title {
+    margin: 0;
+    font-size: clamp(30px, 5vw, 50px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--vn-gris-oscuro);
+  }
+  // Sello "imperdible" sobre el cajón claro del hero de atractivo
+  .cat-hero__banner .place-hero__kicker {
+    margin: 0 0 4px;
+    color: var(--vn-rojo-principal);
+  }
+
+  // ── Hero de evento (.place-hero, oscuro) ──
+  .place-hero {
+    position: relative;
+    min-height: min(48vh, 420px);
+    display: flex;
+    align-items: flex-end;
+    padding: 0 var(--vn-pad) 40px;
+    color: var(--vn-blanco);
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.28) 100%);
+    }
+
+    .hero-logo-mark {
+      position: absolute;
+      z-index: 2;
+      top: 24px;
+      right: calc(max(0px, (100% - var(--vn-max)) / 2) + var(--vn-pad));
+      width: min(140px, 20vw);
+      height: auto;
+      pointer-events: none;
+    }
+  }
+  .place-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .place-hero__content { position: relative; z-index: 2; max-width: var(--vn-max); width: 100%; margin-inline: auto; }
+  .place-hero__kicker {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--vn-amarillo);
+  }
+  .place-hero__title {
+    margin: 0 0 14px;
+    font-size: clamp(30px, 5vw, 50px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .place-hero__date {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+    font-size: clamp(18px, 2.2vw, 23px);
+    font-weight: 700;
+    color: var(--vn-amarillo);
+
+    svg { width: 24px; height: 24px; flex: none; }
+  }
+  .place-hero__date-sep { color: rgba(255, 255, 255, 0.5); font-weight: 400; margin: 0 2px; }
+  .place-hero__address {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    max-width: 56ch;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+
+    svg { width: 17px; height: 17px; flex: none; }
+  }
+
+  // ── Breadcrumb ──
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    list-style: none;
+    margin: 0 0 18px;
+    padding: 0;
+  }
+  .place-hero .breadcrumb ol { margin-bottom: 14px; }
+  .breadcrumb li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+
+    & + li::before { content: '/'; color: rgba(255, 255, 255, 0.45); }
+    &[aria-current='page'] { color: var(--vn-blanco); font-weight: 600; }
+  }
+  .breadcrumb a {
+    color: rgba(255, 255, 255, 0.75);
+    text-decoration: none;
+    transition: color var(--vn-transicion);
+
+    &:hover { color: var(--vn-blanco); text-decoration: underline; }
+  }
+  // En el hero de atractivo (banner claro) el breadcrumb va sobre la foto, no
+  // sobre el cajón — se mantiene claro (está dentro de .cat-hero__topright).
+
+  // ── Cuerpo: contenido + sidebar ──
+  .place-body {
+    padding: clamp(32px, 4vw, 48px) 0 clamp(24px, 3vw, 36px);
+    background: var(--vn-blanco);
+  }
+  .place-body__wrap {
+    max-width: var(--vn-max);
+    margin: 0 auto;
+    padding-inline: var(--vn-pad);
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    align-items: start;
+    gap: 56px;
+  }
+
+  .place-content__title {
+    margin: 0 0 24px;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--vn-gris-oscuro);
+
+    &--map { margin-top: 44px; }
+  }
+
+  .place-content__body {
+    color: var(--vn-tinta);
+    font-size: 16px;
+    line-height: 1.75;
+
+    > :first-child { margin-top: 0; }
+    > :last-child { margin-bottom: 0; }
+
+    h2 {
+      margin: 0 0 24px;
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--vn-gris-oscuro);
+    }
+    h3 {
+      margin: 36px 0 14px;
+      font-size: 19px;
+      line-height: 1.4;
+      font-weight: 700;
+      color: var(--vn-gris-oscuro);
+    }
+    p { margin: 0 0 18px; }
+    ul, ol { margin: 0 0 18px; padding-left: 20px; }
+    li { margin-bottom: 10px; }
+    a {
+      color: var(--vn-rojo-principal);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+
+      &:hover { color: var(--vn-rojo-principal-h); }
+    }
+  }
+
+  // Texto colapsable (ficha de atractivo)
+  .cat-intro__body--collapsible {
+    position: relative;
+    max-height: 460px;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 110px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--vn-blanco));
+      pointer-events: none;
+    }
+    &.is-expanded { max-height: none; }
+    &.is-expanded::after,
+    &.cat-intro__body--fits::after { display: none; }
+  }
+  .cat-intro__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 11px 22px;
+    border: 1px solid var(--vn-gris-30);
+    border-radius: 999px;
+    background: var(--vn-blanco);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--vn-rojo-principal);
+    transition: background var(--vn-transicion), border-color var(--vn-transicion);
+
+    &:hover { background: var(--vn-gris-10); border-color: var(--vn-rojo-principal); }
+    svg { width: 11px; height: 7px; flex: none; transition: transform var(--vn-transicion); }
+    &[aria-expanded='true'] svg { transform: rotate(180deg); }
+    &[hidden] { display: none; }
+  }
+
+  // ── Sidebar ──
+  .place-sidebar__card {
+    position: sticky;
+    top: calc(var(--vn-bar2-h) + 24px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .place-sidebar__row {
+    padding: 18px 20px;
+    border: 1px solid var(--vn-gris-30);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &--address {
+      align-items: center;
+      text-align: center;
+      background: #cbbba0;
+      border-color: #cbbba0;
+
+      .place-sidebar__label,
+      .place-sidebar__value { color: #000; }
+    }
+  }
+  .place-sidebar__label {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--vn-gris-60);
+  }
+  .place-sidebar__value {
+    font-size: 16px;
+    line-height: 1.55;
+    font-weight: 500;
+    color: #111;
+  }
+  .place-sidebar__link {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--vn-rojo-principal);
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+  .place-sidebar__btn {
+    width: 100%;
+    margin-top: 20px;
+
+    &--secondary {
+      margin-top: 10px;
+      background: var(--vn-blanco);
+      color: var(--vn-rojo-principal);
+      border: 1px solid var(--vn-rojo-principal);
+      box-shadow: none;
+
+      &:hover { background: var(--vn-gris-10); }
+    }
+  }
+  // Botón "Cómo llegar en transporte público": sobre el mapa, abajo a la derecha.
+  .place-map__transmi {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--vn-azul-marino);
+    background: var(--vn-azul-marino);
+    color: var(--vn-blanco);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transition: background var(--vn-transicion), border-color var(--vn-transicion);
+
+    img { width: 22px; height: 22px; flex: none; }
+    &:hover { background: #142140; border-color: #142140; }
+  }
+
+  // ── Galería ──
+  .place-gallery-section {
+    padding: clamp(24px, 3vw, 36px) 0;
+    background: var(--vn-blanco);
+  }
+  .place-gallery-section__head,
+  .place-gallery-section__wrap {
+    max-width: var(--vn-max);
+    margin: 0 auto;
+    padding-inline: var(--vn-pad);
+  }
+  .place-gallery-section__title,
+  .place-map-section__title {
+    margin: 0 0 24px;
+    font-size: clamp(22px, 2.9vw, 29px);
+    font-weight: 700;
+    line-height: 1.125;
+    letter-spacing: -0.01em;
+    color: var(--vn-gris-oscuro);
+  }
+  .place-gallery {
+    // Sin `margin:0`: dejaría fuera el `margin:0 auto` de
+    // .place-gallery-section__wrap (misma especificidad) y descentraría la
+    // galería de la zona segura de 1280px.
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 0;
+    list-style: none;
+  }
+  .place-gallery__item {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--vn-gris-10);
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--vn-transicion);
+    }
+    &:hover img { transform: scale(1.06); }
+  }
+
+  // ── Cómo llegar ──
+  .place-map-section {
+    padding: clamp(24px, 3vw, 36px) 0;
+    background: var(--vn-blanco);
+  }
+  .place-map-section__head { max-width: var(--vn-max); margin: 0 auto 24px; padding-inline: var(--vn-pad); }
+  .place-map-section__wrap { max-width: var(--vn-max); margin: 0 auto; padding-inline: var(--vn-pad); }
+  .place-map {
+    position: relative;
+    height: 320px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--vn-negro);
+    border: 1px solid var(--vn-gris-30);
+  }
+  .place-map--embed { height: 420px; background: var(--vn-gris-10); }
+  .place-map--embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .place-map__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 64px),
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 64px);
+  }
+  .place-map__pin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+
+    svg path { fill: var(--vn-amarillo); stroke: var(--vn-negro); }
+    svg circle { fill: var(--vn-negro); }
+  }
+  .place-map__label {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--vn-blanco);
+    color: var(--vn-gris-oscuro);
+    font-size: 12.5px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(16, 27, 48, 0.15);
+  }
+
+  // ── Lugares relacionados ──
+  .cat-related {
+    padding: clamp(20px, 3vw, 32px) 0 clamp(40px, 5vw, 56px);
+    background: var(--vn-gris-10);
+  }
+  .cat-related__head { max-width: var(--vn-max); margin: 0 auto 36px; padding-inline: var(--vn-pad); }
+  .cat-related__title {
+    margin: 0;
+    font-size: clamp(26px, 3.5vw, 37px);
+    font-weight: 700;
+    line-height: 1.125;
+    letter-spacing: -0.01em;
+    color: var(--vn-gris-oscuro);
+  }
+  .cat-related__group { max-width: var(--vn-max); margin: 0 auto; padding-inline: var(--vn-pad); }
+  .cat-related__grid {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  @media (min-width: 901px) {
+    .cat-related__grid--atractivos { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  // ── Eventos relacionados (ficha de evento) ──
+  .eventos {
+    padding: clamp(40px, 6vw, 72px) 0 clamp(48px, 7vw, 88px);
+    background: var(--vn-blanco);
+  }
+  .eventos__head { max-width: var(--vn-max); margin: 0 auto 28px; padding-inline: var(--vn-pad); }
+  .eventos__title {
+    margin: 0;
+    font-size: clamp(26px, 3.5vw, 37px);
+    font-weight: 700;
+    line-height: 1.125;
+    letter-spacing: -0.01em;
+    color: var(--vn-gris-oscuro);
+
+    &::after {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 3px;
+      margin-top: 8px;
+      border-radius: 2px;
+      background: var(--vn-rojo-principal);
+    }
+  }
+  .eventos__desc {
+    margin: 8px 0 0;
+    max-width: 62ch;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--vn-gris-60);
+  }
+  .eventos__grid {
+    max-width: var(--vn-max);
+    margin: 0 auto;
+    padding-inline: var(--vn-pad);
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    list-style: none;
+  }
+
+  // ── Tarjeta genérica vertical (imperdible) ──
+  .card-imperdible {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    text-decoration: none;
+    transition: transform var(--vn-transicion);
+
+    &__media {
+      display: block;
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--vn-gris-30);
+      box-shadow: 0 10px 24px rgba(16, 27, 48, 0.12);
+      transition: box-shadow var(--vn-transicion), border-color var(--vn-transicion);
+    }
+    &__img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 420ms cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    &__title {
+      color: var(--vn-gris-oscuro);
+      text-align: center;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.22;
+      transition: color var(--vn-transicion);
+    }
+
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-6px);
+
+      .card-imperdible__img { transform: scale(1.05); }
+      .card-imperdible__media { border-color: var(--vn-rojo-principal); }
+      .card-imperdible__title { color: var(--vn-rojo-principal); }
+    }
+  }
+
+  // ── Tarjeta de evento ──
+  .card-evento {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    text-decoration: none;
+    transition: transform var(--vn-transicion);
+
+    &__media {
+      display: block;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--vn-gris-30);
+      box-shadow: 0 10px 24px rgba(16, 27, 48, 0.12);
+      transition: box-shadow var(--vn-transicion), border-color var(--vn-transicion);
+    }
+    &__img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 420ms cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    &__caption {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    &__banner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: var(--vn-rojo-principal);
+      color: var(--vn-blanco);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: -10px;
+      text-align: center;
+      transition: background var(--vn-transicion);
+    }
+    &__title {
+      display: block;
+      color: var(--vn-blanco);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    &__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--vn-blanco);
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.9;
+
+      &::after { content: '→'; transition: transform var(--vn-transicion); }
+    }
+    &__info {
+      position: relative;
+      z-index: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.9);
+      color: var(--vn-blanco);
+      margin: 0 -14px -14px;
+      padding: 18px 14px 12px;
+    }
+    &__info-date { display: flex; align-items: baseline; gap: 3px; flex: none; }
+    &__info-day { font-size: 26px; font-weight: 700; line-height: 1; }
+    &__info-month { font-size: 15px; font-weight: 600; line-height: 1; color: rgba(255, 255, 255, 0.8); }
+    &__info-venue { font-size: 12.5px; font-weight: 600; line-height: 1.3; text-align: right; opacity: 0.9; }
+
+    &:hover,
+    &:focus-visible {
+      transform: translateY(-6px);
+
+      .card-evento__media { border-color: var(--vn-rojo-principal); }
+      .card-evento__img { transform: scale(1.08); }
+      .card-evento__banner { background: var(--vn-rojo-principal-h); }
+      .card-evento__cta::after { transform: translateX(3px); }
+    }
+  }
+
+  // ── Responsive ──
+  @media (max-width: 900px) {
+    .place-body__wrap { grid-template-columns: 1fr; }
+    .place-sidebar__card { position: static; }
+  }
+  @media (max-width: 640px) {
+    .cat-hero { min-height: 26vh; }
+    .place-hero { min-height: 38vh; }
+    .place-gallery { grid-template-columns: repeat(2, 1fr); }
+    .place-map { height: 240px; }
+    .place-map--embed { height: 320px; }
+    .cat-related__grid--atractivos,
+    .eventos__grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .place-map__transmi span { display: none; }
+  }
+}
+
+// ── Modal de foto (fuera de .vn-place: se monta al final del body).
+//    Namespaced .vn-modal para no chocar con el .modal del tema base. ──
+.vn-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+
+  &[hidden] { display: none; }
+
+  &__backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.75); }
+
+  &__dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 400px;
+    max-height: 88vh;
+    background: var(--vn-blanco);
+    border-radius: 12px;
+    overflow: hidden;
+
+    &--image { width: auto; max-width: min(92vw, 1100px); background: none; border-radius: 0; }
+  }
+
+  &__close {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    border: 0;
+    cursor: pointer;
+    color: var(--vn-gris-oscuro);
+    font-size: 20px;
+    line-height: 1;
+    transition: background var(--vn-transicion), color var(--vn-transicion);
+
+    &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); }
+  }
+
+  &__image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(92vw, 1100px);
+    max-height: 88vh;
+    border-radius: 8px;
+  }
+}

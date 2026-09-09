@@ -344,6 +344,61 @@
     }
   }
 
+  // Texto colapsable ("Leer más") — .cat-intro__body--collapsible + su toggle.
+  function initCollapsible(root) {
+    var body = root.querySelector('.cat-intro__body--collapsible');
+    var toggle = root.querySelector('.cat-intro__toggle');
+    if (!body || !toggle || toggle.dataset.vnInit) return;
+    toggle.dataset.vnInit = '1';
+
+    var label = toggle.querySelector('.cat-intro__toggle-label');
+    // Si el texto ya cabe en la altura colapsada, no hace falta el botón.
+    if (body.scrollHeight <= body.clientHeight + 4) {
+      body.classList.add('cat-intro__body--fits');
+      toggle.hidden = true;
+      return;
+    }
+    toggle.addEventListener('click', function () {
+      var expanded = body.classList.toggle('is-expanded');
+      toggle.setAttribute('aria-expanded', String(expanded));
+      if (label) label.textContent = expanded ? 'Leer menos' : 'Leer más';
+    });
+  }
+
+  // Modal de imagen (galería de la ficha de atractivo).
+  function initGalleryModal() {
+    var modal = document.getElementById('galleryModal');
+    if (!modal || modal.dataset.vnInit) return;
+    modal.dataset.vnInit = '1';
+
+    var img = document.getElementById('galleryModalImg');
+    var open = function (src, alt) {
+      if (!img) return;
+      img.src = src;
+      img.alt = alt || '';
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    var close = function () {
+      modal.hidden = true;
+      if (img) img.src = '';
+      document.body.style.overflow = '';
+    };
+
+    document.querySelectorAll('.place-gallery__item[data-gallery-src]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var el = btn.querySelector('img');
+        open(btn.dataset.gallerySrc, el ? el.alt : '');
+      });
+    });
+    modal.querySelectorAll('[data-modal-close]').forEach(function (el) {
+      el.addEventListener('click', close);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+  }
+
   // =========================================================
   //  CATEGORÍA / SUBCATEGORÍA (prototipo v3)
   // =========================================================
@@ -352,7 +407,6 @@
     if (!cat || cat.dataset.vnCatInit) return;
     cat.dataset.vnCatInit = '1';
 
-    // Carrusel de subcategorías
     try {
       initTrack({
         trackId: 'catSubcatsTrack',
@@ -365,29 +419,26 @@
       if (window.console) console.warn('[vn-cat] carrusel:', err);
     }
 
-    // Texto colapsable ("Leer más")
-    var body = cat.querySelector('#catIntroBody');
-    var toggle = cat.querySelector('#catIntroToggle');
-    if (body && toggle) {
-      var label = toggle.querySelector('.cat-intro__toggle-label');
-      // Si el texto ya cabe en la altura colapsada, no hace falta el botón.
-      if (body.scrollHeight <= body.clientHeight + 4) {
-        body.classList.add('cat-intro__body--fits');
-        toggle.hidden = true;
-      } else {
-        toggle.addEventListener('click', function () {
-          var expanded = body.classList.toggle('is-expanded');
-          toggle.setAttribute('aria-expanded', String(expanded));
-          if (label) label.textContent = expanded ? 'Leer menos' : 'Leer más';
-        });
-      }
-    }
+    initCollapsible(cat);
+  }
+
+  // =========================================================
+  //  FICHA DE ATRACTIVO / EVENTO (prototipo v3)
+  // =========================================================
+  function initPlace() {
+    var place = document.querySelector('.vn-place');
+    if (!place || place.dataset.vnPlaceInit) return;
+    place.dataset.vnPlaceInit = '1';
+
+    initCollapsible(place);
+    initGalleryModal();
   }
 
   function init() {
     initHeader();
     initHome();
     initCat();
+    initPlace();
   }
 
   if (document.readyState === 'loading') {
