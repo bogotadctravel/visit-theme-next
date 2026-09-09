@@ -519,13 +519,12 @@
     color: var(--vn-gris-oscuro);
   }
   .place-gallery {
-    // Sin `margin:0`: dejaría fuera el `margin:0 auto` de
-    // .place-gallery-section__wrap (misma especificidad) y descentraría la
-    // galería de la zona segura de 1280px.
+    // Sin `margin` ni `padding` propios: pisarían el `margin:0 auto` y el
+    // `padding-inline` de .place-gallery-section__wrap (misma especificidad) y
+    // la galería quedaría descentrada / pegada al borde de los 1280px seguros.
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 4px;
-    padding: 0;
     list-style: none;
   }
   .place-gallery__item {

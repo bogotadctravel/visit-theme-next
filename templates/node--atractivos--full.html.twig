@@ -95,9 +95,6 @@
           {% if node.field_weblink.0.url %}
           <a class="btn btn--primary place-sidebar__btn" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.more_information'|t }}</a>
           {% endif %}
-          {% if node.field_mapslink.0.url %}
-          <a class="btn place-sidebar__btn place-sidebar__btn--secondary" href="{{ node.field_mapslink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.how_to_get_maps'|t }}</a>
-          {% endif %}
 
         </div>
       </aside>

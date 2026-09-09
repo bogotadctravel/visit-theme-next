@@ -1,0 +1,14 @@
+{#
+  Listado de rutas turísticas (nodo 826) — usa la plantilla general-list del
+  prototipo v3. Datos: visit_theme_preprocess_node() case 'page' expone `rutas`
+  (getNodesTeaser('rutas', 12, TRUE, 0)) y `pager_rutas`.
+#}
+{% include '@visit_theme_next/includes/_general_list.html.twig' with {
+  list_title: node.getTitle() ?: 'ui.tourist_routes'|t,
+  list_crumb: 'ui.tourist_routes'|t,
+  list_items: rutas,
+  list_hero_bg: node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '',
+  list_pager: pager_rutas,
+  subtheme_path: subtheme_path,
+  directory: directory,
+} %}

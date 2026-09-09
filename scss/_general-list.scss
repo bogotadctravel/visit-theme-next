@@ -1,0 +1,46 @@
+// =========================================================
+//  Listado general — prototipo v3 (general-list.html)
+//  Plantilla reutilizable: hero + cuadrícula de 4 columnas de tarjetas
+//  simples (card-imperdible horizontal). Se usa en los nodos de listado
+//  826 (rutas), 835 y 1280 (experiencias). Envuelve en .vn-cat para
+//  reutilizar hero, breadcrumb y el componente card-imperdible.
+// =========================================================
+
+.vn-general-list {
+
+  .general-list {
+    padding: clamp(40px, 6vw, 64px) 0 clamp(56px, 8vw, 96px);
+    background: var(--vn-blanco);
+  }
+  .general-list__wrap {
+    max-width: var(--vn-max);
+    margin: 0 auto;
+    padding-inline: var(--vn-pad);
+  }
+  .general-list__head { margin: 0 0 24px; }
+  .general-list__count {
+    margin: 0;
+    font-size: 15px;
+    color: var(--vn-gris-60);
+  }
+  .general-list__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Tarjetas horizontales (no verticales) para este listado.
+  .card-imperdible__media { aspect-ratio: 4 / 3; }
+
+  .general-list__pager { margin-top: 40px; }
+
+  @media (max-width: 900px) {
+    .general-list__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .general-list__grid { grid-template-columns: 1fr; }
+  }
+}

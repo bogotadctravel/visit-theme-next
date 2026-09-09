@@ -1,0 +1,15 @@
+{#
+  Listado de experiencias (nodo 835 — ofertas y beneficios) — plantilla
+  general-list del prototipo v3. Datos: visit_theme_preprocess_node() case 'page'
+  expone `experiencias` (getNodesTeaser('experiencias', 12, TRUE, 1, FALSE)) y
+  `pager_experiencias`.
+#}
+{% include '@visit_theme_next/includes/_general_list.html.twig' with {
+  list_title: node.getTitle() ?: 'ui.tourist_experiences_heading'|t,
+  list_crumb: node.getTitle() ?: 'ui.tourist_experiences_heading'|t,
+  list_items: experiencias,
+  list_hero_bg: node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '',
+  list_pager: pager_experiencias,
+  subtheme_path: subtheme_path,
+  directory: directory,
+} %}

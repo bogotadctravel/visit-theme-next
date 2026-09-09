@@ -1,0 +1,58 @@
+{#
+  Listado de blog (nodo 650) — cuadrícula tipo Pinterest del prototipo v3
+  (visitbogota3-theme/blog.html). Datos: visit_theme_preprocess_node() para el
+  nodo 650 expone `article` (getNodesTeaser('article', 12, FALSE, 2)) paginado y
+  `pager_article`. Estilos en css/overrides.css (scss/_blog.scss).
+#}
+{% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
+{# Proporciones rotativas: recrean el efecto de tablero desordenado del prototipo. #}
+{% set ratios = ['a', 'b', 'c', 'd', 'b', 'a', 'e', 'c', 'd', 'a', 'b', 'c', 'e', 'a', 'd', 'b'] %}
+
+<div class="vn-cat vn-blog">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall" aria-label="{{ node.getTitle() }}">
+    {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li aria-current="page">{{ 'Blog'|t }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner">
+      <h1 class="cat-hero__title">{{ node.getTitle() ?: 'Blog'|t }}</h1>
+    </div>
+  </section>
+
+  {# ================= CUADRÍCULA ================= #}
+  <section class="blog-grid-section">
+    {% if node.field_introduccion.0.value or node.body.0.value %}
+    <div class="blog-grid-section__head">
+      <p class="blog-grid-section__intro">
+        {{ node.field_introduccion.0.value ?: (node.body.0.value|striptags|trim) }}
+      </p>
+    </div>
+    {% endif %}
+
+    {% if article is not empty %}
+    <ul class="blog-grid">
+      {% for item in article %}
+      <li class="blog-grid__item">
+        <a class="blog-card blog-card--{{ ratios[loop.index0 % ratios|length] }}" href="{{ item.url }}">
+          <img class="blog-card__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
+          <span class="blog-card__caption">{{ item.title }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if pager_article %}
+    <div class="blog-grid__pager">{{ pager_article }}</div>
+    {% endif %}
+  </section>
+
+</div>

@@ -1,0 +1,91 @@
+{#
+  Ficha de artículo de blog — prototipo v3 (visitbogota3-theme/single-blog.html).
+  Sin hero banner: título + imagen de portada junto a la columna de contenido,
+  cuerpo colapsable ("Leer más") y sidebar "Blogs relacionados".
+  Datos: body_sin_estilos, contenidos_relacionados (con respaldo en `article`),
+  campos del nodo. Estilos en css/overrides.css (scss/_blog.scss).
+#}
+{% set cover = node.field_cover.entity ?: (node.field_mainimg.entity ?: node.field_image.entity) %}
+{% set cover_url = cover ? file_url(cover.uri.value) : '' %}
+{% set cat = node.field_turcat.0.entity %}
+
+{# Tiempo de lectura aproximado (~200 palabras/min) a partir del cuerpo. #}
+{% set palabras = node.body.0.value|striptags|split(' ')|length %}
+{% set minutos = max(1, (palabras / 200)|round(0, 'ceil')) %}
+
+{% set relacionados = contenidos_relacionados ?: article %}
+
+<div class="vn-cat vn-blog-single">
+
+  <section class="cat-layout cat-layout--narrow">
+    <div class="cat-layout__wrap">
+
+      <article class="cat-layout__main">
+        <nav class="breadcrumb breadcrumb--dark" aria-label="{{ 'Ruta de navegación'|t }}">
+          <ol>
+            <li><a href="/">{{ 'Inicio'|t }}</a></li>
+            <li><a href="{{ path('entity.node.canonical', {'node': 650}) }}">{{ 'Blog'|t }}</a></li>
+            <li aria-current="page">{{ node.getTitle() }}</li>
+          </ol>
+        </nav>
+
+        <h1 class="single-blog__title">{{ node.getTitle() }}</h1>
+        <p class="single-blog__meta">
+          {%- if cat %}{{ cat.name.value }} <span aria-hidden="true">·</span> {% endif -%}
+          {{ minutos }} {{ 'min de lectura'|t }}
+        </p>
+
+        {% if cover_url %}
+        <img class="single-blog__cover" src="{{ cover_url }}" alt="{{ node.getTitle() }}">
+        {% endif %}
+
+        {% if node.field_introduccion.0.value or body_sin_estilos or node.body.0.value %}
+        <div class="cat-intro__body cat-intro__body--collapsible" id="catIntroBody">
+          {% if node.field_introduccion.0.value %}
+          <p class="cat-intro__lead">{{ node.field_introduccion.0.value }}</p>
+          {% endif %}
+          {% if body_sin_estilos %}{{ body_sin_estilos }}{% else %}{{ node.body.0.value|raw }}{% endif %}
+        </div>
+        <button class="cat-intro__toggle" type="button" id="catIntroToggle" aria-expanded="false" aria-controls="catIntroBody">
+          <span class="cat-intro__toggle-label">{{ 'Leer más'|t }}</span>
+          <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        {% endif %}
+
+        {% if node.field_tags|length > 0 or node.field_turpara|length > 0 %}
+        <div class="single-blog__tags">
+          {% for item in node.field_tags %}<span class="place-tag">{{ item.entity.name.value }}</span>{% endfor %}
+          {% for item in node.field_turpara %}<span class="place-tag">{{ item.entity.name.value }}</span>{% endfor %}
+        </div>
+        {% endif %}
+      </article>
+
+      {% set relacionados_filtrados = [] %}
+      {% for item in relacionados %}
+        {% if item.id != node.id() and relacionados_filtrados|length < 3 %}
+          {% set relacionados_filtrados = relacionados_filtrados|merge([item]) %}
+        {% endif %}
+      {% endfor %}
+
+      {% if relacionados_filtrados is not empty %}
+      <aside class="rutas-sidebar">
+        <h2 class="rutas-sidebar__title">{{ 'Blogs relacionados'|t }}</h2>
+        <ul class="rutas-sidebar__grid">
+          {% for item in relacionados_filtrados %}
+          <li>
+            <a class="card-ruta" href="{{ item.url }}">
+              <span class="card-ruta__media">
+                <img class="card-ruta__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
+              </span>
+              <span class="card-ruta__title">{{ item.title }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </aside>
+      {% endif %}
+
+    </div>
+  </section>
+
+</div>

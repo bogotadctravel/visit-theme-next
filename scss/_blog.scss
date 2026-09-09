@@ -1,0 +1,155 @@
+// =========================================================
+//  Blog — prototipo v3
+//   · Listado (blog.html)        → nodo 650, .vn-blog
+//   · Ficha de artículo (single-blog.html) → node--article--full, .vn-blog-single
+//  Ambas envuelven en .vn-cat para reutilizar hero, breadcrumb, layout,
+//  intro colapsable y tarjetas del listado de categoría.
+// =========================================================
+
+// ── Listado tipo Pinterest (columnas CSS con alturas variables) ──
+.vn-blog {
+
+  .blog-grid-section {
+    padding: clamp(40px, 6vw, 64px) 0 clamp(56px, 8vw, 96px);
+    background: var(--vn-blanco);
+  }
+  .blog-grid-section__head {
+    max-width: var(--vn-max);
+    margin: 0 auto 28px;
+    padding-inline: var(--vn-pad);
+  }
+  .blog-grid-section__intro {
+    max-width: 640px;
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 600;
+    color: var(--vn-gris-oscuro);
+  }
+
+  .blog-grid {
+    max-width: var(--vn-max);
+    margin: 0 auto;
+    padding-inline: var(--vn-pad);
+    list-style: none;
+    column-count: 4;
+    column-gap: 14px;
+  }
+  .blog-grid__item {
+    break-inside: avoid;
+    margin-bottom: 14px;
+  }
+
+  .blog-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-decoration: none;
+  }
+  .blog-card__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--vn-transicion);
+  }
+  .blog-card:hover .blog-card__img,
+  .blog-card:focus-visible .blog-card__img { transform: scale(1.05); }
+  .blog-card__caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--vn-gris-oscuro);
+  }
+
+  // Proporciones distintas por tarjeta → cuadrícula tipo tablero.
+  .blog-card--a { aspect-ratio: 3 / 4; }
+  .blog-card--b { aspect-ratio: 1 / 1; }
+  .blog-card--c { aspect-ratio: 4 / 5; }
+  .blog-card--d { aspect-ratio: 16 / 9; }
+  .blog-card--e { aspect-ratio: 9 / 16; }
+
+  .blog-grid__pager {
+    max-width: var(--vn-max);
+    margin: 40px auto 0;
+    padding-inline: var(--vn-pad);
+  }
+
+  @media (max-width: 960px) {
+    .blog-grid { column-count: 3; }
+  }
+  @media (max-width: 640px) {
+    .blog-grid { column-count: 2; column-gap: 10px; }
+    .blog-grid__item { margin-bottom: 10px; }
+    .blog-card__caption { padding: 14px; font-size: 13px; }
+  }
+  @media (max-width: 420px) {
+    .blog-grid { column-count: 1; }
+  }
+}
+
+// ── Ficha de artículo: sin hero banner, portada junto al contenido ──
+.vn-cat.vn-blog-single {
+
+  // Breadcrumb sobre fondo blanco (variante oscura del prototipo).
+  .breadcrumb--dark li { color: var(--vn-gris-60); }
+  .breadcrumb--dark li + li::before { color: var(--vn-gris-30); }
+  .breadcrumb--dark a { color: var(--vn-gris-60); }
+  .breadcrumb--dark a:hover { color: var(--vn-rojo-principal); }
+  .breadcrumb--dark li[aria-current='page'] { color: var(--vn-gris-oscuro); }
+
+  .breadcrumb ol { margin: 0 0 18px; }
+
+  .single-blog__title {
+    margin: 0 0 10px;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--vn-gris-oscuro);
+  }
+  .single-blog__meta {
+    margin: 0 0 24px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--vn-gris-60);
+  }
+  .single-blog__cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin: 0 0 32px;
+  }
+
+  .cat-intro__lead {
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 600;
+    color: var(--vn-gris-oscuro);
+  }
+
+  .single-blog__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
+  }
+  .single-blog__tags .place-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border: 1px solid var(--vn-gris-30);
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--vn-gris-60);
+  }
+}
