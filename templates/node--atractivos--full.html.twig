@@ -87,7 +87,7 @@
           {% if node.field_weblink.0.url %}
           <div class="place-sidebar__row">
             <span class="place-sidebar__label">{{ 'ui.official_website'|t }}</span>
-            <a class="place-sidebar__link" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ node.field_weblink.0.url|replace({'https://':'', 'http://':''})|trim('/') }}</a>
+            <a class="place-sidebar__link" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ node.field_weblink.0.title ?: (node.field_weblink.0.uri|replace({'https://':'', 'http://':'', 'www.':''})|trim('/')) }}</a>
           </div>
           {% endif %}
 
