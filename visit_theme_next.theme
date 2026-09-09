@@ -103,3 +103,46 @@ function visit_theme_next_preprocess_node(array &$variables) {
     $variables['#cache']['tags'][] = 'node_list:eventos';
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for views_view.
+ *
+ * Vista `atractivos_por_categoria` (listado archive-places): el argumento de la
+ * ruta `/atractivos/%` es el TID de la categoría; se carga el término para
+ * alimentar el hero (nombre, URL y imagen). Ver docs/VISTA-ATRACTIVOS.md.
+ */
+function visit_theme_next_preprocess_views_view(array &$variables) {
+  $view = $variables['view'] ?? NULL;
+  if (!$view || $view->id() !== 'atractivos_por_categoria') {
+    return;
+  }
+
+  $variables['subtheme_path'] = _visit_theme_next_path();
+
+  $tid = $view->args[0] ?? NULL;
+  if (!$tid || !is_numeric($tid)) {
+    return;
+  }
+
+  $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load((int) $tid);
+  if (!$term instanceof \Drupal\taxonomy\TermInterface) {
+    return;
+  }
+
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if ($term->hasTranslation($lang)) {
+    $term = $term->getTranslation($lang);
+  }
+
+  $variables['vn_term_name'] = $term->label();
+  $variables['vn_term_url'] = $term->toUrl()->toString();
+
+  if ($term->hasField('field_imagen_principal') && !$term->get('field_imagen_principal')->isEmpty()) {
+    $file = $term->get('field_imagen_principal')->entity;
+    if ($file) {
+      $variables['vn_term_img_uri'] = $file->getFileUri();
+    }
+  }
+
+  $variables['#cache']['tags'][] = 'taxonomy_term:' . $tid;
+}

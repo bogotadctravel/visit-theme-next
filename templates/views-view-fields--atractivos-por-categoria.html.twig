@@ -1,0 +1,13 @@
+{#
+  Una tarjeta de atractivo (fila de la vista "atractivos_por_categoria").
+  Campos de la vista (todos con "Exclude from display"):
+    · title  — Content: Título (sin "link to content")
+    · imagen — field_cover / field_mainimg / field_image (Formatter: Image, estilo 'grande')
+#}
+{% set img = fields.field_cover.content ?: (fields.field_mainimg.content ?: (fields.field_image.content ?: '')) %}
+{% set node_url = row._entity ? path('entity.node.canonical', {'node': row._entity.id}) : '#' %}
+
+<a class="card-imperdible" href="{{ node_url }}">
+  <span class="card-imperdible__media">{{ img }}</span>
+  <span class="card-imperdible__title">{{ fields.title.content }}</span>
+</a>

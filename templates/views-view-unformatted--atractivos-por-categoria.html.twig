@@ -1,0 +1,8 @@
+{#
+  Filas de la vista "atractivos_por_categoria" — grilla de tarjetas.
+#}
+<ul class="archive__grid">
+  {% for row in rows %}
+    <li class="archive__item">{{ row.content }}</li>
+  {% endfor %}
+</ul>

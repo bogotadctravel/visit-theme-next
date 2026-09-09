@@ -136,7 +136,12 @@
   {% if atractivos is not empty %}
   <section class="cat-attractions">
     <div class="cat-attractions__wrap">
-      <h2 class="cat-attractions__title">{{ 'Atractivos'|t }}</h2>
+      <div class="cat-attractions__head">
+        <h2 class="cat-attractions__title">{{ 'Atractivos'|t }}</h2>
+        {% if atractivos|length > 8 %}
+        <a class="btn btn--ghost cat-attractions__cta" href="/atractivos/{{ term.id() }}">{{ 'Explorar todo'|t }} {{ term.name.value }}</a>
+        {% endif %}
+      </div>
       <ul class="cat-attractions__grid">
         {% for item in atractivos|slice(0, 8) %}
         <li>
