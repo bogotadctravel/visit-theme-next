@@ -5,9 +5,19 @@ categoría / subcategoría) apunta a **`/atractivos/{ID_DEL_TÉRMINO}`**. Esa ru
 sirve una **vista de Drupal** que hay que crear una vez. El subtema ya trae las
 plantillas y los estilos; solo falta la vista.
 
-> Al crearla en staging, exporta su config a `config/deploy/` para que sobreviva a
-> los refresh de contenido (ver `DESARROLLO.md` §5):
-> `drush @staging config:get views.view.atractivos_por_categoria --format=yaml > config/deploy/views.view.atractivos_por_categoria.yml`
+> Al crearla en staging, **exporta su config a `config/deploy/`** para que sobreviva a
+> los refresh de contenido. Drush vive dentro del contenedor Docker (ver
+> `DESARROLLO.md` §5 para el detalle):
+>
+> ```bash
+> # en el servidor (ssh useridt@10.216.153.78)
+> docker exec -w /var/www/vhosts/localhost/html staging_visitbogota_co \
+>   vendor/bin/drush config:get views.view.atractivos_por_categoria --format=yaml > /tmp/vista.yml
+>
+> # en tu máquina
+> scp useridt@10.216.153.78:/tmp/vista.yml config/deploy/views.view.atractivos_por_categoria.yml
+> git add config/deploy/ && git commit -m "config: vista atractivos_por_categoria" && git push
+> ```
 
 ## Crear la vista (`/admin/structure/views/add`)
 

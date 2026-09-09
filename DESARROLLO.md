@@ -85,18 +85,42 @@ theme necesita **regiones nuevas, otra colocación de bloques, ajustes de theme,
 image styles nuevos, view modes…** eso vive en la **base de datos de Drupal** y
 un refresh de contenido lo sobrescribiría.
 
-Para que sobreviva:
+### Cómo se ejecuta `drush` en staging
+
+Staging corre en un contenedor Docker. No hay alias `@staging`; drush vive
+**dentro del contenedor**:
 
 ```bash
-# 1. Haz el cambio en staging (por la UI o con drush).
-# 2. Exporta SOLO ese objeto de config a este repo:
-drush @staging config:get block.block.MI_BLOQUE --format=yaml \
-  > config/deploy/block.block.MI_BLOQUE.yml
-# 3. Commitea config/deploy/*.yml
+# contenedor y docroot (los usa /data/backups/bin/pull-theme.sh)
+STG=staging_visitbogota_co
+DR=/var/www/vhosts/localhost/html
+
+drush() { docker exec -w "$DR" "$STG" vendor/bin/drush "$@"; }   # helper para la sesión
 ```
 
-`refresh-staging.sh` reaplica todo `config/deploy/*.yml` con
-`drush config:import --partial` después de cada sincronización con producción.
+### Exportar un objeto de config a este repo
+
+```bash
+# 1. Haz el cambio en staging por la UI (/admin/...) o con `drush`.
+# 2. En el servidor: vuelca el YAML a /tmp (el `>` corre en el host).
+ssh useridt@10.216.153.78
+docker exec -w /var/www/vhosts/localhost/html staging_visitbogota_co \
+  vendor/bin/drush config:get views.view.MI_VISTA --format=yaml > /tmp/MI_VISTA.yml
+
+# 3. Desde tu máquina: baja el archivo a config/deploy/ y commitea.
+scp useridt@10.216.153.78:/tmp/MI_VISTA.yml \
+  config/deploy/views.view.MI_VISTA.yml
+git add config/deploy/ && git commit -m "config: MI_VISTA" && git push
+```
+
+> Alternativa sin `scp`: corre el `config:get` sin `>`, copia el YAML del
+> terminal y pégalo en el archivo dentro de `config/deploy/` en tu máquina.
+>
+> No commitees desde el checkout del servidor: `pull-theme.sh` hace
+> `git pull --ff-only` y un commit local lo rompería.
+
+`pull-theme.sh` y `refresh-staging.sh` reaplican todo `config/deploy/*.yml` con
+`drush config:import --partial` en cada actualización.
 
 > Nombres de config útiles: `block.block.*` (bloques), `system.theme` (no tocar),
 > `visit_theme_next.settings` (ajustes del theme), `image.style.*`,
