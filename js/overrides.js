@@ -205,6 +205,36 @@
         if (e.key === 'Escape' && mainnav.classList.contains('is-open')) closeDrawer();
       });
     }
+
+    // ── Buscador en línea: solo se muestra el panel de resultados con el foco.
+    //    La búsqueda en vivo (fetch + render) la hace el behavior del tema base;
+    //    aquí solo se gestiona abrir/cerrar y navegar con Enter. ──
+    var searchComp = masthead.querySelector('.search-comp');
+    var searchInput = masthead.querySelector('#search-input');
+    if (searchComp && searchInput) {
+      var results = searchComp.querySelector('#search-results');
+      var openResults = function () {
+        searchComp.classList.add('is-open');
+        searchInput.setAttribute('aria-expanded', 'true');
+      };
+      var closeResults = function () {
+        searchComp.classList.remove('is-open');
+        searchInput.setAttribute('aria-expanded', 'false');
+      };
+
+      searchInput.addEventListener('focus', openResults);
+      searchInput.addEventListener('input', openResults);
+      searchInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { closeResults(); searchInput.blur(); return; }
+        if (e.key === 'Enter' && results) {
+          var firstLink = results.querySelector('li a[href]');
+          if (firstLink) { e.preventDefault(); window.location.href = firstLink.getAttribute('href'); }
+        }
+      });
+      document.addEventListener('click', function (e) {
+        if (!searchComp.contains(e.target)) closeResults();
+      });
+    }
   }
 
   // =========================================================
@@ -434,11 +464,46 @@
     initGalleryModal();
   }
 
+  // =========================================================
+  //  DIRECTORIO DE GUÍAS — filtro por idioma / sector (client-side)
+  // =========================================================
+  function initGuias() {
+    var table = document.getElementById('guias-table');
+    if (!table || table.dataset.vnInit) return;
+    table.dataset.vnInit = '1';
+
+    var fLang = document.getElementById('f-idioma');
+    var fSector = document.getElementById('f-sector');
+    var count = document.getElementById('guias-count');
+    var rows = [].slice.call(table.querySelectorAll('.guias-row'));
+    if (!fLang || !fSector || !rows.length) return;
+
+    var countTpl = count ? count.textContent.replace(/^\d+\s*/, '') : '';
+
+    var apply = function () {
+      var l = fLang.value;
+      var s = fSector.value;
+      var visible = 0;
+      rows.forEach(function (row) {
+        var langs = (row.dataset.languages || '').split(' ').filter(Boolean);
+        var secs = (row.dataset.sector || '').split(' ').filter(Boolean);
+        var match = (!l || langs.indexOf(l) !== -1) && (!s || secs.indexOf(s) !== -1);
+        row.classList.toggle('is-hidden', !match);
+        if (match) visible++;
+      });
+      if (count) count.textContent = visible + ' ' + countTpl;
+    };
+
+    fLang.addEventListener('change', apply);
+    fSector.addEventListener('change', apply);
+  }
+
   function init() {
     initHeader();
     initHome();
     initCat();
     initPlace();
+    initGuias();
   }
 
   if (document.readyState === 'loading') {

@@ -1,0 +1,116 @@
+{#
+  Directorio de guías turísticos (nodo 1380) — estructura del prototipo v3
+  (visitbogota3-theme/guias.html).
+  Datos: visit_theme_preprocess_node() → $guides (getGuiasTuristicos).
+  Estilos en css/overrides.css (scss/_listing.scss); filtro en js/overrides.js.
+#}
+{% set hero_bg = node.field_mainimg.entity ? node.field_mainimg.entity.uri.value|image_style('ancho') : '' %}
+
+<div class="vn-listing vn-listing--guias">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall" aria-label="{{ node.label }}">
+    {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li aria-current="page">{{ node.label }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner">
+      <h1 class="cat-hero__title">{{ node.label }}</h1>
+    </div>
+  </section>
+
+  {# ================= INTRO + AVISO LEGAL ================= #}
+  <section class="guias">
+    <div class="guias__wrap">
+      {% if node.body.0.value %}
+      <div class="guias__intro">{{ node.body.0.value|raw }}</div>
+      {% endif %}
+
+      <div class="guias__notice">
+        <p>{{ 'El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los guías incluidos en este directorio, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas.'|t }}
+          <a href="/{{ subtheme_path ?: directory }}/docs/Aviso_legal_Directorio_guias.pdf" target="_blank" rel="noopener noreferrer">{{ 'Revisa nuestro aviso legal'|t }}</a>.</p>
+      </div>
+
+      <a class="btn btn--primary guias__register" href="https://forms.gle/2BgMA8ScdRMcaa5z7" target="_blank" rel="noopener noreferrer">{{ 'Registrarse como Guía Turístico'|t }}</a>
+    </div>
+  </section>
+
+  {% if guides is not empty %}
+  {# ================= FILTROS ================= #}
+  {% set idiomas = [] %}
+  {% set sectores = [] %}
+  {% for guide in guides %}
+    {% for l in guide.field_idiomas_que_maneja %}{% if l not in idiomas %}{% set idiomas = idiomas|merge([l]) %}{% endif %}{% endfor %}
+    {% for s in guide.field_sector %}{% if s not in sectores %}{% set sectores = sectores|merge([s]) %}{% endif %}{% endfor %}
+  {% endfor %}
+
+  <section class="events-filters-wrap guias-filters-wrap">
+    <form class="events-filters" id="guias-filters" onsubmit="return false;">
+      <div class="events-filters__row">
+        <div class="events-filters__field">
+          <label for="f-idioma">{{ 'Idioma'|t }}</label>
+          <select id="f-idioma">
+            <option value="">{{ 'Todos los idiomas'|t }}</option>
+            {% for l in idiomas %}<option value="{{ l|lower|replace({', ':'-', ' ':'-'}) }}">{{ l }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="events-filters__field">
+          <label for="f-sector">{{ 'Sector turístico'|t }}</label>
+          <select id="f-sector">
+            <option value="">{{ 'Todos los sectores'|t }}</option>
+            {% for s in sectores %}<option value="{{ s|lower|replace({', ':'-', ' ':'-'}) }}">{{ s }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  {# ================= TABLA ================= #}
+  <section class="guias-table-section">
+    <div class="guias-table-section__wrap">
+      <p class="guias-table__count" id="guias-count">{{ guides|length }} {{ 'guías encontrados'|t }}</p>
+      <div class="guias-table__scroll">
+        <table class="guias-table" id="guias-table">
+          <thead>
+            <tr>
+              <th>{{ 'Nombre'|t }}</th>
+              <th>{{ 'Especialidad'|t }}</th>
+              <th>{{ 'Idioma'|t }}</th>
+              <th>{{ 'Sector'|t }}</th>
+              <th>RNT</th>
+              <th>{{ 'Teléfono'|t }}</th>
+              <th>{{ 'Correo'|t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for guide in guides %}
+            <tr class="guias-row"
+              data-languages="{% for l in guide.field_idiomas_que_maneja %}{{ l|lower|replace({', ':'-', ' ':'-'}) }} {% endfor %}"
+              data-sector="{% for s in guide.field_sector %}{{ s|lower|replace({', ':'-', ' ':'-'}) }} {% endfor %}">
+              <td>{{ guide.label }}</td>
+              <td>{{ guide.field_especialidad ?: '—' }}</td>
+              <td>
+                {% for l in guide.field_idiomas_que_maneja %}<span class="guias-table__tag">{{ l }}</span>{% else %}<span class="guias-table__tag">—</span>{% endfor %}
+              </td>
+              <td>
+                {% for s in guide.field_sector %}<span class="guias-table__tag">{{ s }}</span>{% else %}<span class="guias-table__tag">—</span>{% endfor %}
+              </td>
+              <td>{{ guide.field_rnt ?: '—' }}</td>
+              <td>{% if guide.field_telefono %}<a href="tel:+57{{ guide.field_telefono }}">+57 {{ guide.field_telefono }}</a>{% else %}—{% endif %}</td>
+              <td>{% if guide.field_correo %}<a href="mailto:{{ guide.field_correo }}">{{ guide.field_correo }}</a>{% else %}—{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+</div>

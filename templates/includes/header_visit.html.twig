@@ -26,32 +26,22 @@
 
       <div class="masthead__tools">
 
-        {# Buscador: se conserva el markup del overlay del tema base
-           (lo maneja el behavior "idt-search-toggle" de visit_theme/global-styling). #}
+        {# Buscador en línea: el input es directamente el buscador con autocompletar.
+           El behavior "idt-search-toggle" de visit_theme/global-styling detecta
+           #search-input / #search-results dentro de .search-comp y cablea la
+           búsqueda en vivo (sin overlay ni botón para abrirla). #}
         <div class="search-comp">
-          <button type="button" id="openSearch" class="search-trigger"
-            aria-label="{{ 'ui.open_search'|t }}" aria-expanded="false" aria-controls="search-overlay">
-            <svg class="search-trigger__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <div class="search-field">
+            <svg class="search-field__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
               <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
               <path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <span class="search-trigger__label">{{ 'ui.search_placeholder'|t }}</span>
-          </button>
-          <div class="overlay" id="search-overlay" role="dialog" aria-modal="true"
-            aria-label="{{ 'ui.search'|t }}" hidden>
-            <button type="button" class="close" aria-label="{{ 'ui.close_search'|t }}">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true" focusable="false">
-                <path d="M20.67 17.84L35.09 3.42C35.87 2.64 35.87 1.37 35.09 0.589998C34.31 -0.190002 33.04 -0.190002 32.26 0.589998L17.84 15.01L3.41 0.589998C2.63 -0.200002 1.37 -0.200002 0.589998 0.589998C-0.200002 1.37 -0.200002 2.63 0.589998 3.41L15.01 17.83L0.589998 32.26C-0.190002 33.04 -0.190002 34.31 0.589998 35.09C0.979998 35.48 1.49 35.68 2 35.68C2.51 35.68 3.02 35.48 3.41 35.09L17.83 20.67L32.25 35.09C32.64 35.48 33.15 35.68 33.66 35.68C34.17 35.68 34.68 35.48 35.07 35.09C35.85 34.31 35.85 33.04 35.07 32.26L20.65 17.84H20.67Z" fill="currentColor"/>
-              </svg>
-            </button>
-            <div class="content">
-              <label for="search-input" class="sr-only">{{ 'ui.search_placeholder'|t }}</label>
-              <input type="text" name="search-input" id="search-input"
-                placeholder="{{ 'ui.search_placeholder'|t }}" autocomplete="off">
-              <ul id="search-results" role="listbox" aria-live="polite" aria-atomic="false"></ul>
-            </div>
+            <label for="search-input" class="sr-only">{{ 'ui.search_placeholder'|t }}</label>
+            <input type="search" name="search-input" id="search-input" autocomplete="off"
+              placeholder="{{ 'ui.search_placeholder'|t }}"
+              role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list">
           </div>
+          <ul id="search-results" class="search-results" role="listbox" aria-live="polite" aria-atomic="false"></ul>
         </div>
 
         {# Selector de idioma (región headerVisit del tema base). #}

@@ -1,0 +1,146 @@
+{#
+  Agenda de eventos (listado) — estructura del prototipo v3 (visitbogota3-theme/events.html).
+  Datos de visit_theme_preprocess_node() (caso 'pagina_agenda_de_eventos'):
+    eventosVisit, meses_disponibles, current_*, pager_eventos, hoy.
+  Estilos en css/overrides.css (scss/_listing.scss); interacción en js/overrides.js.
+#}
+{% set meses = {
+  'Jan':'Ene','Feb':'Feb','Mar':'Mar','Apr':'Abr','May':'May','Jun':'Jun',
+  'Jul':'Jul','Aug':'Ago','Sep':'Sep','Oct':'Oct','Nov':'Nov','Dec':'Dic'
+} %}
+{% set hero_bg = node.field_mainimg.entity
+    ? node.field_mainimg.entity.uri.value|image_style('ancho')
+    : (node.field_cover.entity ? node.field_cover.entity.uri.value|image_style('ancho') : '') %}
+
+<div class="vn-listing vn-listing--events">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero" aria-label="{{ node.label }}">
+    {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
+    <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+    <div class="cat-hero__content">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li aria-current="page">{{ 'Eventos'|t }}</li>
+        </ol>
+      </nav>
+      <h1 class="cat-hero__title">{{ node.label }}</h1>
+    </div>
+  </section>
+
+  {# ================= INTRO ================= #}
+  {% if node.body.0.value %}
+  <section class="cat-intro">
+    <div class="cat-intro__wrap">
+      <div class="cat-intro__body">{{ node.body.0.value|raw }}</div>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= FILTROS ================= #}
+  <section class="events-filters-wrap">
+    <form class="events-filters" method="GET" action="">
+      <div class="events-filters__row">
+
+        <div class="events-filters__field">
+          <label for="filtro_mes">{{ 'ui.month'|t }}</label>
+          <select name="filtro_mes" id="filtro_mes">
+            <option value="all"{% if current_filtro_mes == 'all' %} selected{% endif %}>{{ 'ui.all_months'|t }}</option>
+            {% for val, nombre in meses_disponibles %}
+            <option value="{{ val }}"{% if current_filtro_mes == val %} selected{% endif %}>{{ nombre }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="events-filters__field">
+          <label for="categoria">{{ 'ui.category'|t }}</label>
+          <select name="categoria" id="categoria">
+            <option value="all"{% if current_categoria == 'all' %} selected{% endif %}>{{ 'ui.all_categories'|t }}</option>
+            {% for cat in taxonomy('categorias_2026') %}
+            <option value="{{ cat.tid }}"{% if current_categoria == cat.tid %} selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="events-filters__field">
+          <label for="tipo">{{ 'ui.event_type'|t }}</label>
+          <select name="tipo" id="tipo">
+            <option value="all"{% if current_tipo == 'all' %} selected{% endif %}>{{ 'ui.all_filter'|t }}</option>
+            {% for cat in taxonomy('tipos_de_evento') %}
+            <option value="{{ cat.tid }}"{% if current_tipo == cat.tid %} selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+            <option value="mice"{% if current_tipo == 'mice' %} selected{% endif %}>MICE</option>
+          </select>
+        </div>
+
+        <div class="events-filters__field">
+          <label for="fecha_desde">{{ 'ui.from_date'|t }}</label>
+          <input type="date" id="fecha_desde" name="fecha_desde" value="{{ current_fecha_desde }}" min="{{ hoy }}">
+        </div>
+        <div class="events-filters__field">
+          <label for="fecha_hasta">{{ 'ui.to_date'|t }}</label>
+          <input type="date" id="fecha_hasta" name="fecha_hasta" value="{{ current_fecha_hasta }}" min="{{ current_fecha_desde ?: hoy }}">
+        </div>
+
+        <button class="btn btn--primary events-filters__submit" type="submit">{{ 'ui.search'|t }}</button>
+      </div>
+    </form>
+  </section>
+
+  {# ================= RESULTADOS ================= #}
+  <section class="events-results">
+    {% if eventosVisit is not empty %}
+    <ul class="eventos__grid events-results__grid">
+      {% for item in eventosVisit %}
+      {% set fecha_ini = item.field_fecha_de_inicio|date('Y-m-d') %}
+      {% set fecha_fin = item.field_fecha_de_finalizacion|date('Y-m-d') %}
+      {% set mes_ini = item.field_fecha_de_inicio|date('M') %}
+      <li>
+        <a class="card-evento" href="{{ item.url }}">
+          <span class="card-evento__media">
+            <img class="card-evento__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+            <span class="card-evento__caption">
+              <span class="card-evento__banner">
+                <span class="card-evento__title">{{ item.title }}</span>
+                <span class="card-evento__cta">{{ 'Ver evento'|t }}</span>
+              </span>
+              <span class="card-evento__info">
+                <span class="card-evento__info-date">
+                  {% if fecha_ini < hoy %}
+                  <span class="card-evento__info-month">{{ 'Hasta'|t }} {{ item.field_fecha_de_finalizacion|date('d') }} {{ meses[item.field_fecha_de_finalizacion|date('M')] ?? item.field_fecha_de_finalizacion|date('M') }}</span>
+                  {% else %}
+                  <span class="card-evento__info-day">{{ item.field_fecha_de_inicio|date('d') }}</span>
+                  <span class="card-evento__info-month">{{ meses[mes_ini] ?? mes_ini }}</span>
+                  {% endif %}
+                </span>
+                <span class="card-evento__info-venue">{{ item['field_lugar_del_evento'] }}</span>
+              </span>
+            </span>
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="events-results__empty">{{ 'No se encontraron eventos con estos filtros.'|t }}</p>
+    {% endif %}
+
+    {% if pager_eventos %}
+    <div class="events-pagination">{{ pager_eventos }}</div>
+    {% endif %}
+  </section>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var d = document.getElementById('fecha_desde'), h = document.getElementById('fecha_hasta');
+    if (d && h) {
+      d.addEventListener('change', function () {
+        h.min = d.value;
+        if (h.value && h.value < d.value) h.value = d.value;
+      });
+    }
+  });
+</script>
