@@ -5,8 +5,8 @@
   Estilos en css/overrides.css (scss/_place.scss); interacción en js/overrides.js.
 #}
 {% set hero_bg = node.field_cover.entity
-    ? node.field_cover.entity.uri.value|image_style('ancho')
-    : (node.field_mainimg.entity ? node.field_mainimg.entity.uri.value|image_style('ancho') : '') %}
+    ? file_url(node.field_cover.entity.uri.value)
+    : (node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '') %}
 {% set cat = translated_turcat|first %}
 {% set subcat = translated_tursubcat|first %}
 {% set lat = node.field_latlong.0.value %}
@@ -116,7 +116,7 @@
         <button class="place-gallery__item" type="button"
           data-gallery-src="{{ file_url(item.entity.fileuri) }}"
           aria-label="{{ 'Ver foto'|t }}: {{ item.alt ?: node.getTitle() }}">
-          <img src="{{ item.entity.uri.value|image_style('grande') }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+          <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
         </button>
       </li>
       {% endfor %}
@@ -166,7 +166,7 @@
         <li>
           <a class="card-imperdible" href="{{ item.url }}">
             <span class="card-imperdible__media">
-              <img class="card-imperdible__img" src="{{ item.image_thumb ?: item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+              <img class="card-imperdible__img" src="{{ item.image_full ?: item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async">
             </span>
             <span class="card-imperdible__title">{{ item.title }}</span>
           </a>

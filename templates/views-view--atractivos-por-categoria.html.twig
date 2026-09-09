@@ -7,7 +7,7 @@
 
   <section class="cat-hero cat-hero--tall" aria-label="{{ 'Atractivos'|t }}">
     {% if vn_term_img_uri %}
-    <img class="cat-hero__bg" src="{{ vn_term_img_uri|image_style('ancho') }}" alt="" aria-hidden="true">
+    <img class="cat-hero__bg" src="{{ file_url(vn_term_img_uri) }}" alt="" aria-hidden="true">
     {% endif %}
     <div class="cat-hero__topright">
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">

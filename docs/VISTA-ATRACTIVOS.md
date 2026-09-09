@@ -37,9 +37,12 @@ de fila, `views-view-fields--atractivos-por-categoria.html.twig`):
 1. **Content: Título** — *machine name* `title` — **sin** "Link to content"
    (la plantilla ya envuelve la tarjeta en un `<a>`).
 2. **Content: Imagen** — el campo de imagen del atractivo (`field_cover` o
-   `field_mainimg`) — *Formatter:* **Image**, *Image style:* `grande`. Deja el
-   *machine name* como `field_cover` / `field_mainimg` / `field_image` (la plantilla
-   prueba los tres en ese orden).
+   `field_mainimg`) — *Formatter:* **Image**, *Image style:* **— Ninguno (imagen
+   original) —**. Deja el *machine name* como `field_cover` / `field_mainimg` /
+   `field_image` (la plantilla prueba los tres en ese orden).
+
+   > Por ahora las imágenes van en su tamaño original en todo el subtema (se veían
+   > pixeladas con los derivados pequeños); por eso aquí también sin *image style*.
 
 ### Advanced
 - **CSS class:** `vn-archive`  ← esto activa los estilos del prototipo.

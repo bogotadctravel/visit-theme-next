@@ -9,8 +9,8 @@
   'Jul':'Jul','Aug':'Ago','Sep':'Sep','Oct':'Oct','Nov':'Nov','Dec':'Dic'
 } %}
 {% set hero_bg = node.field_mainimg.entity
-    ? node.field_mainimg.entity.uri.value|image_style('ancho')
-    : (node.field_cover.entity ? node.field_cover.entity.uri.value|image_style('ancho') : '') %}
+    ? file_url(node.field_mainimg.entity.uri.value)
+    : (node.field_cover.entity ? file_url(node.field_cover.entity.uri.value) : '') %}
 
 <div class="vn-listing vn-listing--events">
 
@@ -99,7 +99,7 @@
       <li>
         <a class="card-evento" href="{{ item.url }}">
           <span class="card-evento__media">
-            <img class="card-evento__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+            <img class="card-evento__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
             <span class="card-evento__caption">
               <span class="card-evento__banner">
                 <span class="card-evento__title">{{ item.title }}</span>

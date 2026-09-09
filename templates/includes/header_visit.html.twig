@@ -114,7 +114,7 @@
                     <a class="megamenu__sub" href="{{ subcat.url }}">
                       <span class="megamenu__sub-media">
                         {% if subcat.image %}
-                        <img src="{{  subcat.image }}" alt="" loading="lazy" decoding="async">
+                        <img src="{{ subcat.image_full ?: subcat.image }}" alt="" loading="lazy" decoding="async">
                         {% endif %}
                       </span>
                       <span class="megamenu__sub-title">{{ subcat.name }}</span>

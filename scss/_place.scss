@@ -209,6 +209,14 @@
     &--map { margin-top: 44px; }
   }
 
+  .place-content__lead {
+    margin: 0 0 28px;
+    font-size: 19px;
+    line-height: 1.6;
+    font-weight: 600;
+    color: var(--vn-gris-oscuro);
+  }
+
   .place-content__body {
     color: var(--vn-tinta);
     font-size: 16px;
@@ -344,6 +352,124 @@
       box-shadow: none;
 
       &:hover { background: var(--vn-gris-10); }
+    }
+  }
+  // Lista simple (idiomas, tipos de habitación, servicios…) dentro de una fila
+  .place-sidebar__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    li { font-size: 15px; color: #111; }
+  }
+  // Chips de taxonomía al pie del sidebar
+  .place-sidebar__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .place-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--vn-gris-10);
+    border: 1px solid var(--vn-gris-30);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--vn-gris-oscuro);
+    text-decoration: none;
+  }
+  a.place-tag:hover { border-color: var(--vn-rojo-principal); color: var(--vn-rojo-principal); }
+
+  // Badge de descuento (experiencias)
+  .place-sidebar__badge {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: var(--vn-rojo-principal);
+    color: var(--vn-blanco);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  // ── Bloques de contenido extra dentro de .place-content ──
+  .place-block {
+    margin-top: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--vn-gris-10);
+
+    &__title {
+      margin: 0 0 20px;
+      font-size: clamp(20px, 2.6vw, 26px);
+      font-weight: 700;
+      color: var(--vn-gris-oscuro);
+    }
+  }
+  // Grilla de servicios / amenidades (hoteles)
+  .place-amenities {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--vn-tinta); }
+    li img { width: 26px; height: 26px; flex: none; object-fit: contain; }
+    li .place-amenities__check { color: var(--vn-rojo-principal); font-weight: 700; flex: none; }
+  }
+  // Caja de itinerario / destacado (rutas)
+  .place-callout {
+    margin-top: 24px;
+    padding: 20px 22px;
+    border-radius: 12px;
+    background: var(--vn-gris-10);
+
+    h3 { margin: 0 0 10px; font-size: 18px; font-weight: 700; color: var(--vn-gris-oscuro); }
+    :last-child { margin-bottom: 0; }
+  }
+  // Mapa de la ruta (imagen enlazada)
+  .place-routemap {
+    display: block;
+    margin-top: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--vn-gris-30);
+
+    img { display: block; width: 100%; height: auto; }
+  }
+  // Reproductor de audio
+  .place-audio {
+    margin-top: 12px;
+    width: 100%;
+
+    audio { width: 100%; }
+  }
+  // Video con botón de play
+  .place-video {
+    position: relative;
+    margin-top: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+
+    video { display: block; width: 100%; height: auto; }
+    .video-play {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 72px;
+      height: 72px;
+      display: grid;
+      place-items: center;
+      background: none;
+      border: 0;
+      cursor: pointer;
+
+      svg { width: 100%; height: 100%; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.35)); }
     }
   }
   // Botón "Cómo llegar en transporte público": sobre el mapa, abajo a la derecha.

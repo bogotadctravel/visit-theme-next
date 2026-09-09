@@ -4,7 +4,7 @@
   Datos: visit_theme_preprocess_node() → $guides (getGuiasTuristicos).
   Estilos en css/overrides.css (scss/_listing.scss); filtro en js/overrides.js.
 #}
-{% set hero_bg = node.field_mainimg.entity ? node.field_mainimg.entity.uri.value|image_style('ancho') : '' %}
+{% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
 
 <div class="vn-listing vn-listing--guias">
 

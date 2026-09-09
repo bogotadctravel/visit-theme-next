@@ -16,7 +16,7 @@
   1:'Lunes', 2:'Martes', 3:'Miércoles', 4:'Jueves', 5:'Viernes', 6:'Sábado', 7:'Domingo'
 } %}
 
-{% set hero_bg = node.field_mainimg.entity ? node.field_mainimg.entity.uri.value|image_style('ancho') : '' %}
+{% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
 {% set cat_evento = node.field_categoria_de_evento.0.entity.name.value %}
 {% set raw_inicio = node.field_fecha_de_inicio.0.value %}
 {% set raw_fin = node.field_fecha_de_finalizacion.0.value %}
@@ -128,7 +128,7 @@
         <button class="place-gallery__item" type="button"
           data-gallery-src="{{ file_url(item.entity.fileuri) }}"
           aria-label="{{ 'Ver foto'|t }}: {{ item.alt ?: node.getTitle() }}">
-          <img src="{{ item.entity.uri.value|image_style('grande') }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+          <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
         </button>
       </li>
       {% endfor %}
@@ -173,7 +173,7 @@
       <li>
         <a class="card-evento" href="{{ item.url }}">
           <span class="card-evento__media">
-            <img class="card-evento__img" src="{{ item.image_thumb ?: item.image }}" alt="" loading="lazy" decoding="async">
+            <img class="card-evento__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
             <span class="card-evento__caption">
               <span class="card-evento__banner">
                 <span class="card-evento__title">{{ item.title }}</span>

@@ -17,10 +17,10 @@
 
   {# ================= HERO ================= #}
   {% set hero_desktop = node.field_poster_video_escritorio.entity
-      ? node.field_poster_video_escritorio.entity.uri.value|image_style('ancho')
+      ? file_url(node.field_poster_video_escritorio.entity.uri.value)
       : '/sites/default/files/2026-07/Plantilla%20Banners%20IDT_1920x1150.webp' %}
   {% set hero_mobile = node.field_poster_video_movil.entity
-      ? node.field_poster_video_movil.entity.uri.value|image_style('hero_mobile')
+      ? file_url(node.field_poster_video_movil.entity.uri.value)
       : hero_desktop %}
 
   <section class="hero" aria-label="Bogotá">
@@ -58,7 +58,7 @@
         <li class="imperdibles__item">
           <a class="card-imperdible" href="{{ item.url }}">
             <span class="card-imperdible__media">
-              <img class="card-imperdible__img" src="{{ item.image }}"
+              <img class="card-imperdible__img" src="{{ item.image_full ?: item.image }}"
                 alt="{{ item.title }}" loading="lazy" decoding="async">
             </span>
             <span class="card-imperdible__title">{{ item.title }}</span>
@@ -84,7 +84,7 @@
       <li>
         <a class="card-categoria" href="{{ cat.url }}">
           <span class="card-categoria__media">
-            <img class="card-categoria__img" src="{{ cat.image }}" alt="" loading="lazy" decoding="async">
+            <img class="card-categoria__img" src="{{ cat.image_full ?: cat.image }}" alt="" loading="lazy" decoding="async">
           </span>
           <span class="card-categoria__title">{{ cat.name }}</span>
         </a>
@@ -119,7 +119,7 @@
           <li class="eventos__item">
             <a class="card-evento" href="{{ item.url }}">
               <span class="card-evento__media">
-                <img class="card-evento__img" src="{{ item.image }}" alt="" loading="lazy" decoding="async">
+                <img class="card-evento__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
                 <span class="card-evento__caption">
                   <span class="card-evento__banner">
                     <span class="card-evento__title">{{ item.title }}</span>
@@ -184,7 +184,7 @@
       {% for item in article|slice(0, 5) %}
       <li>
         <a class="blog-home__item{% if loop.first %} blog-home__item--big{% endif %}" href="{{ item.url }}">
-          <img class="blog-home__img" src="{{ item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+          <img class="blog-home__img" src="{{ item.image_full ?: item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async">
           <span class="blog-home__caption">{{ item.title }}</span>
         </a>
       </li>
