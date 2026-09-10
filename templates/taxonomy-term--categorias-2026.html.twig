@@ -176,7 +176,7 @@
         <h2 class="cat-attractions__title">{{ 'Dónde comer'|t }}</h2>
       </div>
       <ul class="cat-attractions__grid">
-        {% for item in establecimientos|slice(0, 8) %}
+        {% for item in establecimientos %}
         <li>
           <a class="card-imperdible" href="{{ item.url }}">
             <span class="card-imperdible__media">
