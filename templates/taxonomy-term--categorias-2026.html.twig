@@ -168,4 +168,28 @@
   </section>
   {% endif %}
 
+  {# ================= DÓNDE COMER (establecimientos) ================= #}
+  {% if establecimientos is not empty %}
+  <section class="cat-attractions cat-attractions--eat">
+    <div class="cat-attractions__wrap">
+      <div class="cat-attractions__head">
+        <h2 class="cat-attractions__title">{{ 'Dónde comer'|t }}</h2>
+      </div>
+      <ul class="cat-attractions__grid">
+        {% for item in establecimientos|slice(0, 8) %}
+        <li>
+          <a class="card-imperdible" href="{{ item.url }}">
+            <span class="card-imperdible__media">
+              <img class="card-imperdible__img" src="{{ item.image_full ?: item.image }}"
+                alt="{{ item.title }}" loading="lazy" decoding="async">
+            </span>
+            <span class="card-imperdible__title">{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
 </div>

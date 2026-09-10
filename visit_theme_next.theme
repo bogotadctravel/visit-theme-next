@@ -65,8 +65,9 @@ function visit_theme_next_preprocess_taxonomy_term(array &$variables) {
   $content_loader = \Drupal::service('idt_theme_support.content_loader');
   $tid = (int) $term->id();
 
-  $variables['atractivos'] = $content_loader->getNodesTeaserByCategory('atractivos', $tid, 12);
-  $variables['article']    = $content_loader->getNodesTeaserByCategory('article', $tid, 8);
+  $variables['atractivos']      = $content_loader->getNodesTeaserByCategory('atractivos', $tid, 12);
+  $variables['establecimientos'] = $content_loader->getNodesTeaserByCategory('establecimientos', $tid, 12);
+  $variables['article']         = $content_loader->getNodesTeaserByCategory('article', $tid, 8);
   if ($term->bundle() === 'categorias_2026') {
     $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 6);
   }
@@ -78,6 +79,7 @@ function visit_theme_next_preprocess_taxonomy_term(array &$variables) {
   }
 
   $variables['#cache']['tags'][] = 'node_list:atractivos';
+  $variables['#cache']['tags'][] = 'node_list:establecimientos';
   $variables['#cache']['tags'][] = 'node_list:article';
   $variables['#cache']['tags'][] = 'node_list:rutas';
   $variables['#cache']['tags'][] = 'taxonomy_term_list:subcategorias_2026';
