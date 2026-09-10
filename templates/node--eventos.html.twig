@@ -99,15 +99,15 @@
           {% if node.field_weblink.0.url %}
           <div class="place-sidebar__row">
             <span class="place-sidebar__label">{{ 'ui.official_website'|t }}</span>
-            <a class="place-sidebar__link" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ node.field_weblink.0.title ?: (node.field_weblink.0.uri|replace({'https://':'', 'http://':'', 'www.':''})|trim('/')) }}</a>
+            <a class="place-sidebar__link hasAnalytics" data-event="mas_info_evento" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ node.field_weblink.0.title ?: (node.field_weblink.0.uri|replace({'https://':'', 'http://':'', 'www.':''})|trim('/')) }}</a>
           </div>
           {% endif %}
 
           {% if node.field_link_a_boleteria.0.url %}
-          <a class="btn btn--primary place-sidebar__btn" href="{{ node.field_link_a_boleteria.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'Entradas'|t }}</a>
+          <a class="btn btn--primary place-sidebar__btn hasAnalytics" data-event="boleteria_evento" href="{{ node.field_link_a_boleteria.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'Entradas'|t }}</a>
           {% endif %}
           {% if node.field_weblink.0.url %}
-          <a class="btn place-sidebar__btn place-sidebar__btn--secondary" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.more_information'|t }}</a>
+          <a class="btn place-sidebar__btn place-sidebar__btn--secondary hasAnalytics" data-event="mas_info_evento" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.more_information'|t }}</a>
           {% endif %}
 
         </div>

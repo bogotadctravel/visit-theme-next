@@ -112,10 +112,10 @@
           {% endif %}
 
           {% if node.field_linkreservas.0.url %}
-          <a class="btn btn--primary place-sidebar__btn" href="{{ node.field_linkreservas.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.check_availability'|t }}</a>
+          <a class="btn btn--primary place-sidebar__btn hasAnalytics" data-event="consulta_disponibilidad" href="{{ node.field_linkreservas.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.check_availability'|t }}</a>
           {% endif %}
           {% if node.field_weblink.0.url %}
-          <a class="btn place-sidebar__btn place-sidebar__btn--secondary" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.visit_website'|t }}</a>
+          <a class="btn place-sidebar__btn place-sidebar__btn--secondary hasAnalytics" data-event="ver_web_hotel" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.visit_website'|t }}</a>
           {% endif %}
 
         </div>

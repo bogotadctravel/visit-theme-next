@@ -88,12 +88,12 @@
           {% if node.field_weblink.0.url %}
           <div class="place-sidebar__row">
             <span class="place-sidebar__label">{{ 'ui.official_website'|t }}</span>
-            <a class="place-sidebar__link" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ node.field_weblink.0.title ?: (node.field_weblink.0.uri|replace({'https://':'', 'http://':'', 'www.':''})|trim('/')) }}</a>
+            <a class="place-sidebar__link hasAnalytics" data-event="ver_web_atractivo" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ node.field_weblink.0.title ?: (node.field_weblink.0.uri|replace({'https://':'', 'http://':'', 'www.':''})|trim('/')) }}</a>
           </div>
           {% endif %}
 
           {% if node.field_weblink.0.url %}
-          <a class="btn btn--primary place-sidebar__btn" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.more_information'|t }}</a>
+          <a class="btn btn--primary place-sidebar__btn hasAnalytics" data-event="ver_web_atractivo" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.more_information'|t }}</a>
           {% endif %}
 
         </div>
@@ -130,7 +130,7 @@
       <h2 class="place-map-section__title">{{ 'ui.how_to_get_there'|t }}</h2>
     </div>
     <div class="place-map-section__wrap">
-      <div class="place-map{% if arcgis_url %} place-map--embed{% endif %}"{% if not arcgis_url %} role="img" aria-label="{{ 'Ubicación de'|t }} {{ node.getTitle() }}"{% endif %}>
+      <div class="place-map{% if arcgis_url %} place-map--embed hasAnalytics{% endif %}"{% if arcgis_url %} data-event="google_maps_iframe_loaded"{% else %} role="img" aria-label="{{ 'Ubicación de'|t }} {{ node.getTitle() }}"{% endif %}>
         {% if arcgis_url %}
         <iframe src="{{ arcgis_url }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen></iframe>
         {% else %}
