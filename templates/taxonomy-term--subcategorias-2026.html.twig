@@ -62,13 +62,11 @@
       </article>
     </div>
   </section>
-  {# Aviso legal traducible: el texto fuente (ES) se registra con {% trans %};
-     la versión EN se gestiona en Drupal (admin/config/regional/translate) o en un .po. #}
-  {% set registro_link %}<a href="https://forms.gle/2zfNkZ34hz1P2ppi7" target="_blank" rel="noopener noreferrer">{{ 'este enlace'|t }}</a>{% endset %}
+  {# Aviso legal traducible: una sola cadena para t(). El enlace va inline con el
+     placeholder :url (Drupal permite HTML literal en el texto fuente de t()).
+     La versión EN se gestiona en admin/config/regional/translate o en un .po. #}
   <div class="disclaimer" style="padding: 20px; background-color: #f9f9f9; margin: 20px auto; max-width: 800px; border-radius: 8px;">
-    <p style="margin: 0; font-size: 14px;">
-      {% trans %}El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los establecimientos incluidos en visitbogota.co, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas. ¿No ves tu establecimiento aquí? Puedes registrarlo en {{ registro_link|raw }}.{% endtrans %}
-    </p>
+    <p style="margin: 0; font-size: 14px;">{{ 'El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los establecimientos incluidos en visitbogota.co, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas. ¿No ves tu establecimiento aquí? Puedes registrarlo en <a href=":url" target="_blank" rel="noopener noreferrer" style="color: #007bff; text-decoration: underline;">este enlace</a>.'|t({':url': 'https://forms.gle/2zfNkZ34hz1P2ppi7'}) }}</p>
   </div>
   {# ================= ATRACTIVOS ================= #}
   {% if atractivos is not empty %}
