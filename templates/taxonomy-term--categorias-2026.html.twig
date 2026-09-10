@@ -124,7 +124,7 @@
   {% if article is not empty %}
   <section class="cat-blog">
     <div class="cat-blog__wrap">
-      <h2 class="cat-blog__title">{{ term.field_titulo_cronicas }}</h2>
+      <h2 class="cat-blog__title">{{ term.field_titulo_cronicas.value ?: 'Blog'|t }}</h2>
       <ul class="cat-blog__grid">
         {% for item in article|slice(0, 4) %}
         <li>
