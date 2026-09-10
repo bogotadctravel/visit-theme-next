@@ -429,6 +429,39 @@
     });
   }
 
+  // Modal del post de Instagram embebido (reels de la página de subcategoría).
+  function initInstagramModal() {
+    var modal = document.getElementById('instagramModal');
+    if (!modal || modal.dataset.vnInit) return;
+    modal.dataset.vnInit = '1';
+
+    var body = document.getElementById('instagramModalBody');
+    var open = function (url) {
+      if (!body) return;
+      var embedSrc = url.replace(/\/?$/, '/') + 'embed';
+      body.innerHTML = '<iframe src="' + embedSrc + '" loading="lazy" allowtransparency="true"></iframe>';
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    var close = function () {
+      modal.hidden = true;
+      if (body) body.innerHTML = '';
+      document.body.style.overflow = '';
+    };
+
+    document.querySelectorAll('.card-video[data-instagram-url]').forEach(function (card) {
+      card.addEventListener('click', function () {
+        if (card.dataset.instagramUrl) open(card.dataset.instagramUrl);
+      });
+    });
+    modal.querySelectorAll('[data-modal-close]').forEach(function (el) {
+      el.addEventListener('click', close);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) close();
+    });
+  }
+
   // =========================================================
   //  CATEGORÍA / SUBCATEGORÍA (prototipo v3)
   // =========================================================
@@ -450,6 +483,7 @@
     }
 
     initCollapsible(cat);
+    initInstagramModal();
   }
 
   // =========================================================

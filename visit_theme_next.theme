@@ -51,11 +51,78 @@ function visit_theme_next_preprocess_taxonomy_term(array &$variables) {
   if ($term->bundle() === 'categorias_2026') {
     $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 6);
   }
+  if ($term->bundle() === 'subcategorias_2026') {
+    // Franja "También te puede interesar" del prototipo (subcategory.html):
+    // reels de Instagram relacionados con esta subcategoría.
+    $variables['reels'] = _visit_theme_next_get_reels($tid);
+    $variables['#cache']['tags'][] = 'node_list:reels';
+  }
 
   $variables['#cache']['tags'][] = 'node_list:atractivos';
   $variables['#cache']['tags'][] = 'node_list:article';
   $variables['#cache']['tags'][] = 'node_list:rutas';
   $variables['#cache']['tags'][] = 'taxonomy_term_list:subcategorias_2026';
+}
+
+/**
+ * Carga los "reels" (posts de Instagram) relacionados con una subcategoría.
+ *
+ * El tipo de contenido `reels` tiene:
+ *   · field_cover              — imagen de portada
+ *   · field_post_de_instagram  — URL del post/reel de Instagram
+ *   · field_tursubcat          — subcategoría relacionada
+ *
+ * Devuelve un array de arrays con las claves: title, cover_url, instagram_url.
+ */
+function _visit_theme_next_get_reels(int $tid, int $limit = 12): array {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'reels')
+    ->condition('status', 1)
+    ->condition('field_tursubcat.target_id', $tid)
+    ->sort('created', 'DESC')
+    ->range(0, $limit)
+    ->accessCheck(TRUE)
+    ->execute();
+
+  if (!$nids) {
+    return [];
+  }
+
+  $file_url_generator = \Drupal::service('file_url_generator');
+  $reels = [];
+
+  foreach (\Drupal\node\Entity\Node::loadMultiple($nids) as $node) {
+    if ($node->hasTranslation($langcode)) {
+      $node = $node->getTranslation($langcode);
+    }
+
+    // URL del post de Instagram (campo Link o texto plano).
+    $instagram_url = '';
+    if ($node->hasField('field_post_de_instagram') && !$node->get('field_post_de_instagram')->isEmpty()) {
+      $value = $node->get('field_post_de_instagram')->first()->getValue();
+      $instagram_url = $value['uri'] ?? $value['value'] ?? '';
+    }
+    if ($instagram_url === '') {
+      continue;
+    }
+
+    // Portada en formato original (sin image style).
+    $cover_url = '';
+    $file = $node->hasField('field_cover') ? $node->get('field_cover')->entity : NULL;
+    if ($file) {
+      $cover_url = $file_url_generator->generateString($file->getFileUri());
+    }
+
+    $reels[] = [
+      'title' => $node->label(),
+      'cover_url' => $cover_url,
+      'instagram_url' => $instagram_url,
+    ];
+  }
+
+  return $reels;
 }
 
 /**

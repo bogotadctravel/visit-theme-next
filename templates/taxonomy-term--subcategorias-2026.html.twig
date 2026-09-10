@@ -1,8 +1,10 @@
 {#
   Página de subcategoría (vocabulario subcategorias_2026) — estructura del
   prototipo v3 (visitbogota3-theme/subcategory.html).
-  Datos: visit_theme_next_preprocess_taxonomy_term() (atractivos, article)
+  Datos: visit_theme_next_preprocess_taxonomy_term() (atractivos, reels)
   + taxonomy('categorias_2026', ids) para el breadcrumb de la categoría padre.
+  "También te puede interesar" = reels de Instagram (tipo de contenido `reels`,
+  field_tursubcat = esta subcategoría); el click abre el post embebido en .vn-modal.
 #}
 {% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
 {% set sub_bg = term.field_imagen_principal.entity
@@ -58,7 +60,6 @@
         </button>
         {% endif %}
       </article>
-      <aside class="cat-layout__sidebar cat-layout__sidebar--empty" aria-hidden="true"></aside>
     </div>
   </section>
 
@@ -89,20 +90,23 @@
   </section>
   {% endif %}
 
-  {# ================= TAMBIÉN TE PUEDE INTERESAR ================= #}
-  {% if article is not empty %}
-  <section class="cat-blog">
-    <div class="cat-blog__wrap">
-      <h2 class="cat-blog__title">{{ 'También te puede interesar'|t }}</h2>
-      <ul class="cat-blog__grid">
-        {% for item in article|slice(0, 4) %}
+  {# ================= TAMBIÉN TE PUEDE INTERESAR (reels de Instagram) ================= #}
+  {% if reels is not empty %}
+  <section class="cat-videos">
+    <div class="cat-videos__wrap">
+      <h2 class="cat-videos__title">{{ 'También te puede interesar'|t }}</h2>
+      <ul class="cat-videos__grid">
+        {% for reel in reels|slice(0, 6) %}
         <li>
-          <a class="card-blog-post" href="{{ item.url }}">
-            <span class="card-blog-post__media">
-              <img class="card-blog-post__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
+          <button class="card-video" type="button" data-instagram-url="{{ reel.instagram_url }}"
+            aria-label="{{ 'Ver publicación de Instagram'|t }}{% if reel.title %}: {{ reel.title }}{% endif %}">
+            {% if reel.cover_url %}
+            <img class="card-video__img" src="{{ reel.cover_url }}" alt="" loading="lazy" decoding="async">
+            {% endif %}
+            <span class="card-video__play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
             </span>
-            <span class="card-blog-post__title">{{ item.title }}</span>
-          </a>
+          </button>
         </li>
         {% endfor %}
       </ul>
@@ -111,3 +115,14 @@
   {% endif %}
 
 </div>
+
+{% if reels is not empty %}
+{# Namespaced .vn-modal para no chocar con el .modal del tema base. #}
+<div class="vn-modal" id="instagramModal" hidden>
+  <div class="vn-modal__backdrop" data-modal-close></div>
+  <div class="vn-modal__dialog" role="dialog" aria-modal="true" aria-label="{{ 'Publicación de Instagram'|t }}">
+    <button class="vn-modal__close" type="button" data-modal-close aria-label="{{ 'ui.close'|t }}">&times;</button>
+    <div class="vn-modal__body" id="instagramModalBody"></div>
+  </div>
+</div>
+{% endif %}
