@@ -40,6 +40,47 @@ function visit_theme_next_preprocess_page(array &$variables) {
     ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
   ]);
   $variables['menu_principal_visitbogota'] = $menu_tree->build($tree);
+
+  // Imagen específica para el megamenú "Descubre Bogotá": campo `field_imagen_menu`
+  // en los términos de `subcategorias_2026`. Si un término no lo tiene, la
+  // plantilla cae en su imagen principal (`subcat.image`) como hasta ahora.
+  $variables['subcat_menu_images'] = _visit_theme_next_subcat_menu_images();
+  $variables['#cache']['tags'][] = 'taxonomy_term_list:subcategorias_2026';
+}
+
+/**
+ * Mapa [tid => URL] de la imagen de menú (`field_imagen_menu`) de las
+ * subcategorías que la tengan. Solo se usa en el megamenú del header.
+ */
+function _visit_theme_next_subcat_menu_images(): array {
+  $map = [];
+
+  try {
+    $terms = \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadByProperties(['vid' => 'subcategorias_2026']);
+  }
+  catch (\Exception $e) {
+    return $map;
+  }
+
+  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $file_url_generator = \Drupal::service('file_url_generator');
+
+  foreach ($terms as $term) {
+    if ($term->hasTranslation($lang)) {
+      $term = $term->getTranslation($lang);
+    }
+    if (!$term->hasField('field_imagen_menu') || $term->get('field_imagen_menu')->isEmpty()) {
+      continue;
+    }
+    $file = $term->get('field_imagen_menu')->entity;
+    if ($file) {
+      $map[$term->id()] = $file_url_generator->generateString($file->getFileUri());
+    }
+  }
+
+  return $map;
 }
 
 /**
