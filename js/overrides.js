@@ -262,30 +262,54 @@
     });
 
     var dotsWrap = opts.dotsId ? document.getElementById(opts.dotsId) : null;
-    if (dotsWrap) {
-      items.forEach(function (_, i) {
-        var dot = document.createElement('button');
-        dot.type = 'button';
-        dot.setAttribute('aria-label', (opts.dotLabel || 'Ir a') + ' ' + (i + 1));
-        dot.addEventListener('click', function () {
-          track.scrollTo({ left: step() * i, behavior: 'smooth' });
-        });
-        dotsWrap.appendChild(dot);
-      });
-    }
-    var dots = dotsWrap ? [].slice.call(dotsWrap.children) : [];
+    var dots = [];
+
+    // Un punto por posición de scroll, no por ítem: con varias tarjetas visibles
+    // a la vez hay menos posiciones que ítems (si no, sobran puntos "muertos").
+    var dotCount = function () {
+      var s = step();
+      if (!s) return items.length;
+      var maxScroll = track.scrollWidth - track.clientWidth;
+      if (maxScroll <= 1) return 1;
+      return Math.round(maxScroll / s) + 1;
+    };
+
+    var buildDots = function () {
+      if (!dotsWrap) return;
+      var n = dotCount();
+      if (n === dots.length) return;
+      dotsWrap.textContent = '';
+      dots = [];
+      for (var i = 0; i < n; i++) {
+        (function (i) {
+          var dot = document.createElement('button');
+          dot.type = 'button';
+          dot.setAttribute('aria-label', (opts.dotLabel || 'Ir a') + ' ' + (i + 1));
+          dot.addEventListener('click', function () {
+            track.scrollTo({ left: step() * i, behavior: 'smooth' });
+          });
+          dotsWrap.appendChild(dot);
+          dots.push(dot);
+        })(i);
+      }
+      // Los contenedores de puntos llevan display:flex en CSS, así que .hidden
+      // no basta: se oculta por estilo en línea si no hay más de una posición.
+      dotsWrap.style.display = n <= 1 ? 'none' : '';
+    };
+    buildDots();
 
     var update = function () {
       var max = track.scrollWidth - track.clientWidth - 2;
       if (arrows[0]) arrows[0].disabled = track.scrollLeft <= 0;
       if (arrows[1]) arrows[1].disabled = track.scrollLeft >= max;
       if (dots.length) {
-        var index = Math.round(track.scrollLeft / step());
+        var index = Math.min(dots.length - 1, Math.round(track.scrollLeft / step()));
         dots.forEach(function (d, i) { d.classList.toggle('is-active', i === index); });
       }
     };
     track.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+    window.addEventListener('resize', function () { buildDots(); update(); });
+    window.addEventListener('load', function () { buildDots(); update(); });
     update();
 
     // Arrastre con mouse (en táctil deja actuar al scroll nativo).

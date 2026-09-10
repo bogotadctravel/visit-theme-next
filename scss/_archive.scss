@@ -7,6 +7,8 @@
 //  Acotado bajo .vn-archive.
 // =========================================================
 
+@use "pager";
+
 .vn-archive {
   --vn-max: 1280px;
   --vn-pad: clamp(16px, 4vw, 40px);
@@ -131,41 +133,7 @@
   .archive__empty { padding: 40px 0; font-size: 16px; color: var(--vn-gris-60); }
   .archive__pager {
     margin-top: 36px;
-
-    .pager__items {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-    .pager__item a,
-    .pager__item span {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 40px;
-      height: 40px;
-      padding: 0 12px;
-      border-radius: 6px;
-      background: var(--vn-blanco);
-      border: 1px solid var(--vn-gris-30);
-      color: var(--vn-gris-oscuro);
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background var(--vn-transicion), border-color var(--vn-transicion), color var(--vn-transicion);
-    }
-    .pager__item a:hover { background: var(--vn-gris-10); border-color: var(--vn-gris-60); }
-    .pager__item.is-active a,
-    .pager__item.is-active span {
-      background: var(--vn-rojo-principal);
-      border-color: var(--vn-rojo-principal);
-      color: var(--vn-blanco);
-    }
+    @include pager.base;
   }
 
   .archive__filters,

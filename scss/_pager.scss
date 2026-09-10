@@ -1,0 +1,54 @@
+// =========================================================
+//  Pager de Drupal (core/modules/system/templates/pager.html.twig)
+//  Estilo compartido: se incluye dentro del wrapper de cada listado
+//  (.archive__pager, .events-pagination, .general-list__pager,
+//  .blog-grid__pager…), que aporta sus propios márgenes. Namespaced
+//  por el .vn-* del archivo que lo llame.
+//
+//  Uso:  @use "pager";  →  .mi-wrapper__pager { @include pager.base; }
+// =========================================================
+
+@mixin base {
+  .pager__items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .pager__item { margin: 0; }
+
+  // El enlace de cada página (o el <span> de la elipsis). Se excluye
+  // .visually-hidden: es la etiqueta "Página" solo para lectores de pantalla.
+  .pager__item > a,
+  .pager__item > span:not(.visually-hidden) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 6px;
+    background: var(--vn-blanco);
+    border: 1px solid var(--vn-gris-30);
+    color: var(--vn-gris-oscuro);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    transition: background var(--vn-transicion), border-color var(--vn-transicion), color var(--vn-transicion);
+  }
+  .pager__item > a:hover {
+    background: var(--vn-gris-10);
+    border-color: var(--vn-gris-60);
+  }
+  .pager__item.is-active > a,
+  .pager__item.is-active > span:not(.visually-hidden) {
+    background: var(--vn-rojo-principal);
+    border-color: var(--vn-rojo-principal);
+    color: var(--vn-blanco);
+  }
+}

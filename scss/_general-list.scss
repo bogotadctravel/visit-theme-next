@@ -6,6 +6,8 @@
 //  reutilizar hero, breadcrumb y el componente card-imperdible.
 // =========================================================
 
+@use "pager";
+
 .vn-general-list {
 
   .general-list {
@@ -35,7 +37,10 @@
   // Tarjetas horizontales (no verticales) para este listado.
   .card-imperdible__media { aspect-ratio: 4 / 3; }
 
-  .general-list__pager { margin-top: 40px; }
+  .general-list__pager {
+    margin-top: 40px;
+    @include pager.base;
+  }
 
   @media (max-width: 900px) {
     .general-list__grid { grid-template-columns: repeat(2, 1fr); }

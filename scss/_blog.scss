@@ -6,6 +6,8 @@
 //  intro colapsable y tarjetas del listado de categoría.
 // =========================================================
 
+@use "pager";
+
 // ── Listado tipo Pinterest (columnas CSS con alturas variables) ──
 .vn-blog {
 
@@ -80,6 +82,7 @@
     max-width: var(--vn-max);
     margin: 40px auto 0;
     padding-inline: var(--vn-pad);
+    @include pager.base;
   }
 
   @media (max-width: 960px) {
