@@ -1,0 +1,102 @@
+{#
+  Ficha de itinerario (bundle `itinerarios`) — prototipo v3
+  (visitbogota3-theme/trip.html). Duplicado de la página de categoría:
+  hero + descripción a dos columnas con sidebar "Rutas relacionadas" +
+  franja "Atractivos en este itinerario" (sin subcategorías ni blog).
+  Datos: body_sin_estilos + campos del nodo; `rutas` / `atractivos` /
+  `itinerary_cat_tid` los prepara visit_theme_next_preprocess_node()
+  (acotados por field_turcat, o genéricos si el itinerario no tiene categoría).
+  Estilos en css/overrides.css (scss/_category.scss); interacción en js/overrides.js.
+#}
+{% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
+
+<div class="vn-cat vn-cat--trip">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall" aria-label="{{ node.getTitle() }}">
+    {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li><a href="/planifica-tu-viaje">{{ 'Planea tu viaje'|t }}</a></li>
+          <li aria-current="page">{{ node.getTitle() }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner">
+      <h1 class="cat-hero__title">{{ node.getTitle() }}</h1>
+    </div>
+  </section>
+
+  {# ================= DESCRIPCIÓN + RUTAS RELACIONADAS ================= #}
+  <section class="cat-layout cat-layout--narrow">
+    <div class="cat-layout__wrap">
+
+      <article class="cat-layout__main">
+        {% if node.field_introduccion.0.value or body_sin_estilos or node.body.0.value %}
+        <div class="cat-intro__body cat-intro__body--collapsible" id="catIntroBody">
+          {% if node.field_introduccion.0.value %}
+          <p class="cat-intro__lead">{{ node.field_introduccion.0.value }}</p>
+          {% endif %}
+          {% if node.field_que_vas_a_conocer.0.value %}
+          <p class="cat-intro__accent">{{ node.field_que_vas_a_conocer.0.value }}</p>
+          {% endif %}
+          {% if body_sin_estilos %}{{ body_sin_estilos }}{% else %}{{ node.body.0.value|raw }}{% endif %}
+        </div>
+        <button class="cat-intro__toggle" type="button" id="catIntroToggle" aria-expanded="false" aria-controls="catIntroBody">
+          <span class="cat-intro__toggle-label">{{ 'Leer más'|t }}</span>
+          <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        {% endif %}
+      </article>
+
+      {% if rutas is not empty %}
+      <aside class="rutas-sidebar">
+        <h2 class="rutas-sidebar__title">{{ 'Rutas relacionadas'|t }}</h2>
+        <ul class="rutas-sidebar__grid">
+          {% for item in rutas|slice(0, 3) %}
+          <li>
+            <a class="card-ruta" href="{{ item.url }}">
+              <span class="card-ruta__media">
+                <img class="card-ruta__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
+              </span>
+              <span class="card-ruta__title">{{ item.title }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </aside>
+      {% endif %}
+
+    </div>
+  </section>
+
+  {# ================= ATRACTIVOS EN ESTE ITINERARIO ================= #}
+  {% if atractivos is not empty %}
+  <section class="cat-attractions">
+    <div class="cat-attractions__wrap">
+      <div class="cat-attractions__head">
+        <h2 class="cat-attractions__title">{{ 'Atractivos en este itinerario'|t }}</h2>
+        {% if itinerary_cat_tid %}
+        <a class="btn btn--ghost cat-attractions__cta" href="/atractivos/{{ itinerary_cat_tid }}">{{ 'Explorar todos los atractivos'|t }}</a>
+        {% endif %}
+      </div>
+      <ul class="cat-attractions__grid">
+        {% for item in atractivos|slice(0, 8) %}
+        <li>
+          <a class="card-imperdible" href="{{ item.url }}">
+            <span class="card-imperdible__media">
+              <img class="card-imperdible__img" src="{{ item.image_full ?: item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+            </span>
+            <span class="card-imperdible__title">{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
+</div>

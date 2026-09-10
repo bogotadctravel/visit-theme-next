@@ -188,6 +188,27 @@ function visit_theme_next_preprocess_node(array &$variables) {
       : $content_loader->getEventosTeaserByMiceFlag(NULL, 8);
     $variables['#cache']['tags'][] = 'node_list:eventos';
   }
+
+  // Ficha de itinerario (trip.html): sidebar "Rutas relacionadas" + franja
+  // "Atractivos en este itinerario". El tema base no da nada para este bundle.
+  // Si el itinerario tiene categoría (field_turcat) se acota a ella; si no,
+  // se muestran rutas e imperdibles genéricos para que la página no quede vacía.
+  if ($node->bundle() === 'itinerarios') {
+    $tid = ($node->hasField('field_turcat') && !$node->get('field_turcat')->isEmpty())
+      ? (int) $node->get('field_turcat')->target_id
+      : 0;
+    if ($tid) {
+      $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 3);
+      $variables['atractivos'] = $content_loader->getNodesTeaserByCategory('atractivos', $tid, 12);
+      $variables['itinerary_cat_tid'] = $tid;
+    }
+    else {
+      $variables['rutas'] = $content_loader->getNodesTeaser('rutas', 3);
+      $variables['atractivos'] = $content_loader->getImperdibles(8);
+    }
+    $variables['#cache']['tags'][] = 'node_list:rutas';
+    $variables['#cache']['tags'][] = 'node_list:atractivos';
+  }
 }
 
 /**

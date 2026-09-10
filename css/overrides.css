@@ -2005,6 +2005,23 @@ body.nav-open {
   color: var(--vn-rojo-principal);
   text-decoration: underline;
 }
+.vn-cat .cat-intro__body .cat-intro__lead {
+  margin-bottom: 28px;
+  font-size: 19px;
+  line-height: 1.6;
+  font-weight: 600;
+  color: var(--vn-gris-oscuro);
+}
+.vn-cat .cat-intro__body .cat-intro__accent {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--vn-gris-oscuro);
+}
+.vn-cat .cat-intro__body .cat-intro__accent--strong {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--vn-rojo-principal);
+}
 .vn-cat .cat-intro__body--collapsible {
   position: relative;
   max-height: 460px;

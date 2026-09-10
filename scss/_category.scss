@@ -145,6 +145,25 @@
     ul, ol { margin: 0 0 18px; padding-left: 20px; }
     li { margin-bottom: 10px; }
     a { color: var(--vn-rojo-principal); text-decoration: underline; }
+
+    // Párrafos destacados (prototipo: lead de entrada, frases de cierre).
+    .cat-intro__lead {
+      margin-bottom: 28px;
+      font-size: 19px;
+      line-height: 1.6;
+      font-weight: 600;
+      color: var(--vn-gris-oscuro);
+    }
+    .cat-intro__accent {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--vn-gris-oscuro);
+    }
+    .cat-intro__accent--strong {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--vn-rojo-principal);
+    }
   }
   .cat-intro__body--collapsible {
     position: relative;
