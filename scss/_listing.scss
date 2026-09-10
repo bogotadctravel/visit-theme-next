@@ -42,13 +42,8 @@
     color: var(--vn-blanco);
     overflow: hidden;
 
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.28) 100%);
-    }
+    // Sin overlay oscura sobre el hero (prototipo v3, commit d377a61).
+    &::after { display: none; }
 
     &--tall { min-height: min(48vh, 460px); padding: 0; }
   }
@@ -414,8 +409,17 @@
 
   // ── Responsive ──
   @media (max-width: 640px) {
-    .events-filters__row { flex-direction: column; align-items: stretch; }
-    .events-filters__submit { width: 100%; }
     .cat-hero { min-height: 26vh; }
+
+    // Filtros de eventos/guías más compactos en móvil (prototipo v3, commit d377a61).
+    .events-filters { padding: 16px; gap: 10px; }
+    .events-filters__row { flex-direction: column; align-items: stretch; gap: 10px; }
+    // En columna, el flex-basis de 180px se interpreta como alto y estira los
+    // campos; se anula para que cada campo mida solo su contenido.
+    .events-filters__field { flex: 0 0 auto; gap: 3px; }
+    .events-filters__field label { font-size: 11.5px; }
+    .events-filters__field select,
+    .events-filters__field input { height: 40px; }
+    .events-filters__submit { width: 100%; height: 42px; margin-top: 2px; }
   }
 }

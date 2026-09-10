@@ -382,9 +382,8 @@
     try {
       initTrack({
         trackId: 'imperdiblesTrack',
-        dotsId: 'imperdiblesDots',
+        arrowSelector: '.vn-home .imperdibles__arrow',
         itemSelector: '.imperdibles__item',
-        dotLabel: 'Ir al imperdible',
       });
       initTrack({
         trackId: 'eventosTrack',

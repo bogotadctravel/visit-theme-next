@@ -63,9 +63,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.85);
-    font-size: 14px;
+    padding: 13px 15px;
+    background: rgba(242, 234, 223, 0.6);
+    font-size: 13px;
     font-weight: 700;
     line-height: 1.35;
     color: var(--vn-gris-oscuro);
@@ -91,7 +91,7 @@
   @media (max-width: 640px) {
     .blog-grid { column-count: 2; column-gap: 10px; }
     .blog-grid__item { margin-bottom: 10px; }
-    .blog-card__caption { padding: 14px; font-size: 13px; }
+    .blog-card__caption { padding: 11px 13px; font-size: 12px; }
   }
   @media (max-width: 420px) {
     .blog-grid { column-count: 1; }

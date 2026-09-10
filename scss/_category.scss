@@ -19,13 +19,8 @@
     color: var(--vn-blanco);
     overflow: hidden;
 
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.28) 100%);
-    }
+    // Sin overlay oscura sobre el hero (prototipo v3, commit d377a61).
+    &::after { display: none; }
   }
   .cat-hero__bg {
     position: absolute;
@@ -541,6 +536,26 @@
     .cat-hero { min-height: 26vh; }
     .cat-subcats__item { width: min(72vw, 260px); }
     .cat-subcats__arrow { display: none; }
+
+    // "Rutas relacionadas" como carrusel con swipe en móvil
+    // (prototipo v3, commit d377a61).
+    .rutas-sidebar__grid {
+      flex-direction: row;
+      gap: 14px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar { display: none; }
+      > li {
+        flex: 0 0 78%;
+        min-width: 0;
+        scroll-snap-align: start;
+      }
+    }
   }
   @media (max-width: 560px) {
     .cat-blog__grid,

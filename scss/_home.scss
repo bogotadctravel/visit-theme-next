@@ -94,13 +94,8 @@
 
     &.is-active { opacity: 1; visibility: visible; z-index: 1; }
 
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.12) 55%, rgba(0, 0, 0, 0.2) 100%);
-    }
+    // Sin overlay oscura sobre el hero (prototipo v3, commit d377a61).
+    &::after { display: none; }
 
     picture { position: absolute; inset: 0; }
   }
@@ -131,7 +126,6 @@
 
   // ── Bullets (bajo el hero, no sobre la imagen) ──
   .hero__dots,
-  .imperdibles__dots,
   .eventos__dots {
     display: flex;
     align-items: center;
@@ -141,7 +135,6 @@
   }
 
   .hero__dot,
-  .imperdibles__dots button,
   .eventos__dots button {
     width: 9px;
     height: 9px;
@@ -155,6 +148,32 @@
 
     &:hover { background: rgba(255, 49, 8, 0.15); }
     &.is-active { background: var(--vn-rojo-principal); transform: scale(1.3); }
+  }
+
+  // Flechas bajo el carrusel de imperdibles (prototipo v3, commit d377a61):
+  // centradas, borde rojo, se rellenan de rojo con la flecha blanca al hover.
+  .imperdibles__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 24px;
+  }
+  .imperdibles__arrow {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid var(--vn-rojo-principal);
+    color: var(--vn-rojo-principal);
+    cursor: pointer;
+    transition: background var(--vn-transicion), color var(--vn-transicion);
+
+    svg { width: 20px; height: 20px; }
+    &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); }
+    &:disabled { opacity: 0.4; cursor: default; pointer-events: none; }
   }
 
   // =======================================================
@@ -625,7 +644,7 @@
     display: block;
 
     &:hover .blog-home__img { transform: scale(1.04); }
-    &--big .blog-home__caption { font-size: 19px; }
+    &--big .blog-home__caption { font-size: 18px; }
   }
   .blog-home__img {
     position: absolute;
@@ -640,9 +659,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 25px;
-    background: rgba(255, 255, 255, 0.85);
-    font-size: 14px;
+    padding: 16px 18px;
+    background: rgba(242, 234, 223, 0.6);
+    font-size: 13px;
     font-weight: 700;
     line-height: 1.35;
     color: var(--vn-gris-oscuro);
@@ -732,8 +751,8 @@
         height: 260px;
       }
     }
-    .blog-home__item--big .blog-home__caption { font-size: 15px; }
-    .blog-home__caption { padding: 16px; }
+    .blog-home__item--big .blog-home__caption { font-size: 14px; }
+    .blog-home__caption { padding: 12px 14px; }
   }
 }
 

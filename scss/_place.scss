@@ -40,13 +40,8 @@
     color: var(--vn-blanco);
     overflow: hidden;
 
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.28) 100%);
-    }
+    // Sin overlay oscura sobre el hero (prototipo v3, commit d377a61).
+    &::after { display: none; }
   }
   .cat-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .cat-hero__topright {
@@ -94,13 +89,8 @@
     color: var(--vn-blanco);
     overflow: hidden;
 
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.28) 100%);
-    }
+    // Sin overlay oscura sobre el hero (prototipo v3, commit d377a61).
+    &::after { display: none; }
 
     .hero-logo-mark {
       position: absolute;
@@ -834,8 +824,28 @@
     .place-gallery { grid-template-columns: repeat(2, 1fr); }
     .place-map { height: 240px; }
     .place-map--embed { height: 320px; }
-    .cat-related__grid--atractivos,
-    .eventos__grid { grid-template-columns: 1fr 1fr; }
+
+    // Franjas de "relacionados" como carrusel con swipe en móvil
+    // (prototipo v3, commit d377a61).
+    .cat-related__grid,
+    .eventos__grid {
+      display: flex;
+      flex-direction: row;
+      gap: 14px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar { display: none; }
+      > li {
+        flex: 0 0 78%;
+        min-width: 0;
+        scroll-snap-align: start;
+      }
+    }
   }
   @media (max-width: 480px) {
     .place-map__transmi span { display: none; }

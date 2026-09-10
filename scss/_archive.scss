@@ -47,13 +47,8 @@
     background: var(--vn-gris-oscuro);
     overflow: hidden;
 
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.28) 100%);
-    }
+    // Sin overlay oscura sobre el hero (prototipo v3, commit d377a61).
+    &::after { display: none; }
   }
   .cat-hero__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .cat-hero__topright {
