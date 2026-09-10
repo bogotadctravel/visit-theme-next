@@ -139,9 +139,13 @@ Qué hace, en orden:
 
 1. Copia de seguridad de la base de datos de staging (para poder revertir).
 2. Pone staging en modo mantenimiento.
+2b. **Vuelca los ítems de menú propios de staging** (`menu_link_content*`) a
+   `$PRE/staging-menu.sql` — son *contenido*, no config, así que el paso 4 los
+   pisaría.
 3. Respaldo fresco de producción (volcado `--single-transaction`, sin
    interrumpir el sitio) + espejo de la capa de archivos.
 4. Restaura ese contenido en la base de datos de staging.
+4b. **Recarga los ítems de menú de staging** desde el volcado del paso 2b.
 5. `rsync` de los archivos subidos.
 6. `git pull` de este subtema + reaplica `config/deploy/` + reactiva
    `visit_theme_next`.
@@ -149,6 +153,12 @@ Qué hace, en orden:
 8. Si algún paso falla → **revierte** staging a la copia del paso 1.
 
 **Nunca escribe en producción.** Solo lee.
+
+> Los pasos 2b/4b hacen que **todos** los menús de staging queden congelados a
+> su estado actual: los cambios de menú que haga el equipo en producción ya no
+> llegan a staging. Para volver a sincronizar el menú desde producción, editar
+> `/data/backups/bin/refresh-staging.sh` (hay un `.bak-*` al lado) o recargar a
+> mano las tablas `menu_link_content*` desde `dbvisit2`.
 
 ## 7. Reglas
 
