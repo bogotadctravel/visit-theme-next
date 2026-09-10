@@ -1,0 +1,204 @@
+{#
+  Ficha de establecimiento gastronómico ("Dónde comer") — misma estructura que
+  las demás internas del subtema (prototipo v3 single-place.html), bajo .vn-place.
+  Datos: visit_theme_preprocess_node() caso 'establecimientos' (nodos_cercanos,
+  body_sin_estilos, contenidos_relacionados) + campos del nodo.
+#}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
+{% set hero_bg = node.field_mainimg.entity
+    ? file_url(node.field_mainimg.entity.uri.value)
+    : (node.field_cover.entity ? file_url(node.field_cover.entity.uri.value) : '') %}
+{% set cat = node.field_turcat.0.entity %}
+{% set lat = node.field_latlong.0.value %}
+{% set lng = node.field_latlong.1.value %}
+
+<div class="vn-place vn-place--eat">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall cat-hero--light" aria-label="{{ node.getTitle() }}">
+    {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('entity.node.canonical', {'node': 562}) }}">{{ 'ui.where_to_eat'|t }}</a></li>
+          {% if cat %}<li><a href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a></li>{% endif %}
+          <li aria-current="page">{{ node.getTitle() }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner">
+      {% if node.field_categoria_gastronomica.0.entity %}
+      <p class="place-hero__kicker">{{ node.field_categoria_gastronomica.0.entity.name.value }}</p>
+      {% endif %}
+      <h1 class="cat-hero__title">{{ node.getTitle() }}</h1>
+    </div>
+  </section>
+
+  {# ================= CONTENIDO + SIDEBAR ================= #}
+  <section class="place-body">
+    <div class="place-body__wrap">
+
+      <article class="place-content">
+        {% if body_sin_estilos or node.body.0.value %}
+        <div class="place-content__body cat-intro__body--collapsible" id="catIntroBody">
+          {% if body_sin_estilos %}{{ body_sin_estilos }}{% else %}{{ node.body.0.value|raw }}{% endif %}
+        </div>
+        <button class="cat-intro__toggle" type="button" id="catIntroToggle" aria-expanded="false" aria-controls="catIntroBody">
+          <span class="cat-intro__toggle-label">{{ 'Leer más'|t }}</span>
+          <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        {% endif %}
+
+        {% if node.field_recorrido_360.0.value %}
+        <div class="place-block">
+          <h2 class="place-block__title">{{ 'Conoce el ambiente en 360°'|t }}</h2>
+          <div class="place-360">{{ node.field_recorrido_360.0.value|raw }}</div>
+        </div>
+        {% endif %}
+
+        {% if node.field_audio.entity and file_url(node.field_audio.entity.fileuri) %}
+        <div class="place-block">
+          <h2 class="place-block__title">🎧 {{ 'Escuchar reseña gastronómica'|t }}</h2>
+          <div class="place-audio"><audio controls><source src="{{ file_url(node.field_audio.entity.fileuri) }}" type="audio/mpeg"></audio></div>
+        </div>
+        {% endif %}
+      </article>
+
+      <aside class="place-sidebar">
+        <div class="place-sidebar__card">
+
+          {% if node.field_direccion.0.value %}
+          <div class="place-sidebar__row place-sidebar__row--address">
+            <span class="place-sidebar__value">{{ node.field_direccion.0.value }}</span>
+          </div>
+          {% endif %}
+
+          {% if node.field_rango_de_precios.0.entity %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'ui.price_range'|t }}</span>
+            <span class="place-sidebar__value">{{ node.field_rango_de_precios.0.entity.name.value }}</span>
+          </div>
+          {% endif %}
+
+          {% if node.field_horarios.0.value %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'Horarios'|t }}</span>
+            <span class="place-sidebar__value">{{ node.field_horarios.0.value }}</span>
+          </div>
+          {% endif %}
+
+          {% if node.field_idioma_del_servicio|length > 0 %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'Idiomas de atención'|t }}</span>
+            <span class="place-sidebar__value">{% for item in node.field_idioma_del_servicio %}{{ item.entity.name.value }}{% if not loop.last %}, {% endif %}{% endfor %}</span>
+          </div>
+          {% endif %}
+
+          {% if node.field_telefono.0.value or node.field_correo.0.value %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'ui.direct_contact'|t }}</span>
+            {% if node.field_telefono.0.value %}<a class="place-sidebar__link" href="tel:{{ node.field_telefono.0.value }}">{{ node.field_telefono.0.value }}</a>{% endif %}
+            {% if node.field_correo.0.value %}<a class="place-sidebar__link" href="mailto:{{ node.field_correo.0.value }}">{{ node.field_correo.0.value }}</a>{% endif %}
+          </div>
+          {% endif %}
+
+          {% if node.field_zonagast|length > 0 or node.field_turpara|length > 0 or node.field_accesibilidad|length > 0 %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'ui.location_aria'|t }}</span>
+            <span class="place-sidebar__tags">
+              {% for item in node.field_zonagast %}<span class="place-tag">{{ item.entity.name.value }}</span>{% endfor %}
+              {% for item in node.field_turpara %}<span class="place-tag">{{ item.entity.name.value }}</span>{% endfor %}
+              {% for item in node.field_accesibilidad %}<span class="place-tag">{{ item.entity.name.value }}</span>{% endfor %}
+            </span>
+          </div>
+          {% endif %}
+
+          {% if node.field_profilelink|length > 0 %}
+          <div class="place-sidebar__row">
+            <span class="place-sidebar__label">{{ 'Síguenos'|t }}</span>
+            {% for item in node.field_profilelink %}
+            <a class="place-sidebar__link" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title ?: item.uri|split('//')|last|split('/')|first }}</a>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if node.field_menulink.0.url %}
+          <a class="btn btn--primary place-sidebar__btn hasAnalytics" data-event="menu_restaurante" href="{{ node.field_menulink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'Ver menú digital'|t }}</a>
+          {% endif %}
+          {% if node.field_linkreservas.0.url %}
+          <a class="btn btn--primary place-sidebar__btn hasAnalytics" data-event="mesa_restaurante" href="{{ node.field_linkreservas.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'Reservar mesa'|t }}</a>
+          {% endif %}
+          {% if node.field_weblink.0.url %}
+          <a class="btn place-sidebar__btn place-sidebar__btn--secondary" href="{{ node.field_weblink.0.url }}" target="_blank" rel="noopener noreferrer">{{ 'ui.visit_website'|t }}</a>
+          {% endif %}
+
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  {# ================= GALERÍA ================= #}
+  {% if node.field_picgallery|length > 0 %}
+  <section class="place-gallery-section">
+    <div class="place-gallery-section__head"><h2 class="place-gallery-section__title">{{ 'Galería'|t }}</h2></div>
+    <ul class="place-gallery place-gallery-section__wrap">
+      {% for item in node.field_picgallery|slice(0, 8) %}
+      <li>
+        <button class="place-gallery__item" type="button" data-gallery-src="{{ file_url(item.entity.fileuri) }}" aria-label="{{ 'Ver foto'|t }}">
+          <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {# ================= CÓMO LLEGAR ================= #}
+  {% if lat and lng %}
+  <section class="place-map-section">
+    <div class="place-map-section__head"><h2 class="place-map-section__title">{{ 'ui.where_will_you_be'|t }}</h2></div>
+    <div class="place-map-section__wrap">
+      <div class="place-map place-map--embed">
+        <iframe title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q={{ lat }},{{ lng }}&z=15&output=embed"></iframe>
+        <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">
+          <img src="/{{ subtheme_path ?: directory }}/images/transmilenio-logo.png" alt="" aria-hidden="true">
+          <span>{{ 'Cómo llegar en transporte público'|t }}</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= RELACIONADOS ================= #}
+  {% set relacionados = nodos_cercanos ?: contenidos_relacionados %}
+  {% if relacionados is not empty %}
+  <section class="cat-related">
+    <div class="cat-related__head"><h2 class="cat-related__title">{{ 'ui.places_nearby'|t({'@place': node.getTitle()}) }}</h2></div>
+    <div class="cat-related__group">
+      <ul class="cat-related__grid cat-related__grid--atractivos">
+        {% for item in relacionados|slice(0, 4) %}
+        <li>
+          <a class="card-imperdible" href="{{ item.url }}">
+            <span class="card-imperdible__media"><img class="card-imperdible__img" src="{{ item.image_full ?: item.image }}" alt="{{ item.title }}" loading="lazy" decoding="async"></span>
+            <span class="card-imperdible__title">{{ item.title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
+</div>
+
+<div class="vn-modal" id="galleryModal" hidden>
+  <div class="vn-modal__backdrop" data-modal-close></div>
+  <div class="vn-modal__dialog vn-modal__dialog--image" role="dialog" aria-modal="true" aria-label="{{ 'Foto de la galería'|t }}">
+    <button class="vn-modal__close" type="button" data-modal-close aria-label="{{ 'ui.close'|t }}">&times;</button>
+    <img class="vn-modal__image" id="galleryModalImg" src="" alt="">
+  </div>
+</div>

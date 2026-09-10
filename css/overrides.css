@@ -3042,6 +3042,18 @@ body.nav-open {
 .vn-place .place-audio audio {
   width: 100%;
 }
+.vn-place .place-360 {
+  margin-top: 8px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--vn-gris-30);
+}
+.vn-place .place-360 iframe {
+  display: block;
+  width: 100%;
+  min-height: 380px;
+  border: 0;
+}
 .vn-place .place-video {
   position: relative;
   margin-top: 8px;

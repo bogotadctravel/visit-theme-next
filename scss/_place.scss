@@ -449,6 +449,20 @@
 
     audio { width: 100%; }
   }
+  // Recorrido 360° (iframe embebido, campo de texto con markup)
+  .place-360 {
+    margin-top: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--vn-gris-30);
+
+    iframe {
+      display: block;
+      width: 100%;
+      min-height: 380px;
+      border: 0;
+    }
+  }
   // Video con botón de play
   .place-video {
     position: relative;
