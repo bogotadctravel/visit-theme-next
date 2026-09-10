@@ -3,9 +3,8 @@
   (visitbogota3-theme/trip.html). Duplicado de la página de categoría:
   hero + descripción a dos columnas con sidebar "Rutas relacionadas" +
   franja "Atractivos en este itinerario" (sin subcategorías ni blog).
-  Datos: body_sin_estilos + campos del nodo; `rutas` / `atractivos` /
-  `itinerary_cat_tid` los prepara visit_theme_next_preprocess_node()
-  (acotados por field_turcat, o genéricos si el itinerario no tiene categoría).
+  Datos: body_sin_estilos + campos del nodo; visit_theme_next_preprocess_node()
+  prepara `atractivos` (de field_atractivo_asociado), `rutas` y `itinerary_cat_tid`.
   Estilos en css/overrides.css (scss/_category.scss); interacción en js/overrides.js.
 #}
 {% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
@@ -37,9 +36,6 @@
       <article class="cat-layout__main">
         {% if node.field_introduccion.0.value or body_sin_estilos or node.body.0.value %}
         <div class="cat-intro__body cat-intro__body--collapsible" id="catIntroBody">
-          {% if node.field_introduccion.0.value %}
-          <p class="cat-intro__lead">{{ node.field_introduccion.0.value }}</p>
-          {% endif %}
           {% if node.field_que_vas_a_conocer.0.value %}
           <p class="cat-intro__accent">{{ node.field_que_vas_a_conocer.0.value }}</p>
           {% endif %}

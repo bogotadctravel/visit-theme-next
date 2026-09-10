@@ -191,21 +191,33 @@ function visit_theme_next_preprocess_node(array &$variables) {
 
   // Ficha de itinerario (trip.html): sidebar "Rutas relacionadas" + franja
   // "Atractivos en este itinerario". El tema base no da nada para este bundle.
-  // Si el itinerario tiene categoría (field_turcat) se acota a ella; si no,
-  // se muestran rutas e imperdibles genéricos para que la página no quede vacía.
   if ($node->bundle() === 'itinerarios') {
     $tid = ($node->hasField('field_turcat') && !$node->get('field_turcat')->isEmpty())
       ? (int) $node->get('field_turcat')->target_id
       : 0;
-    if ($tid) {
-      $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 3);
+
+    // Atractivos: el campo `field_atractivo_asociado` (referencia a nodos
+    // atractivos) es la fuente. Respaldo: por categoría, o imperdibles.
+    if ($node->hasField('field_atractivo_asociado') && !$node->get('field_atractivo_asociado')->isEmpty()) {
+      $variables['atractivos'] = $content_loader->getTeasersFromEntities(
+        $node->get('field_atractivo_asociado')->referencedEntities()
+      );
+    }
+    elseif ($tid) {
       $variables['atractivos'] = $content_loader->getNodesTeaserByCategory('atractivos', $tid, 12);
-      $variables['itinerary_cat_tid'] = $tid;
     }
     else {
-      $variables['rutas'] = $content_loader->getNodesTeaser('rutas', 3);
       $variables['atractivos'] = $content_loader->getImperdibles(8);
     }
+
+    // Rutas relacionadas + botón "Explorar todos" (por categoría del itinerario).
+    $variables['rutas'] = $tid
+      ? $content_loader->getNodesTeaserByCategory('rutas', $tid, 3)
+      : $content_loader->getNodesTeaser('rutas', 3);
+    if ($tid) {
+      $variables['itinerary_cat_tid'] = $tid;
+    }
+
     $variables['#cache']['tags'][] = 'node_list:rutas';
     $variables['#cache']['tags'][] = 'node_list:atractivos';
   }
