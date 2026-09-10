@@ -1,0 +1,15 @@
+{#
+  Aviso legal reutilizable para las franjas de establecimientos ("Dónde comer")
+  de las páginas de categoría y subcategoría.
+
+  Se parte en cadenas independientes SIN HTML embebido: al guardar una traducción
+  en Drupal, `locale_string_is_safe()` rechaza atributos como target/rel/style
+  dentro de un `<a>` ("The submitted string contains disallowed HTML"). Así cada
+  frase se traduce por separado y el enlace (con target/estilo) queda fuera del
+  texto traducible; el rótulo del enlace es una frase completa para no romper el
+  orden de palabras en otros idiomas.
+#}
+<div class="disclaimer" style="padding: 20px; background-color: #f9f9f9; margin: 20px auto; max-width: 800px; border-radius: 8px;">
+  <p style="margin: 0; font-size: 14px;">{{ 'El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los establecimientos incluidos en visitbogota.co, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas.'|t }}</p>
+  <p style="margin: 12px 0 0; font-size: 14px;">{{ '¿No ves tu establecimiento aquí?'|t }} <a href="https://forms.gle/2zfNkZ34hz1P2ppi7" target="_blank" rel="noopener noreferrer" style="color: #007bff; text-decoration: underline;">{{ 'Regístralo en este enlace'|t }}</a></p>
+</div>

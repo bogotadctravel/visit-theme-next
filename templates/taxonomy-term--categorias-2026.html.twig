@@ -141,12 +141,7 @@
   </section>
   {% endif %}
 
-  {# Aviso legal traducible: una sola cadena para t(). El enlace va inline con el
-     placeholder :url (Drupal permite HTML literal en el texto fuente de t()).
-     La versión EN se gestiona en admin/config/regional/translate o en un .po. #}
-  <div class="disclaimer" style="padding: 20px; background-color: #f9f9f9; margin: 20px auto; max-width: 800px; border-radius: 8px;">
-    <p style="margin: 0; font-size: 14px;">{{ 'El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los establecimientos incluidos en visitbogota.co, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas. ¿No ves tu establecimiento aquí? Puedes registrarlo en <a href=":url" target="_blank" rel="noopener noreferrer" style="color: #007bff; text-decoration: underline;">este enlace</a>.'|t({':url': 'https://forms.gle/2zfNkZ34hz1P2ppi7'}) }}</p>
-  </div>
+  {% include "@visit_theme_next/includes/_disclaimer_establecimientos.html.twig" %}
 
   {# ================= ATRACTIVOS ================= #}
   {% if atractivos is not empty %}
