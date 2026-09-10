@@ -173,7 +173,7 @@
       <li>
         <a class="card-evento" href="{{ item.url }}">
           <span class="card-evento__media">
-            <img class="card-evento__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
+            <img class="card-evento__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="" loading="lazy" decoding="async">
             <span class="card-evento__caption">
               <span class="card-evento__banner">
                 <span class="card-evento__title">{{ item.title }}</span>

@@ -42,7 +42,7 @@
       {% for item in article %}
       <li class="blog-grid__item">
         <a class="blog-card blog-card--{{ ratios[loop.index0 % ratios|length] }}" href="{{ item.url }}">
-          <img class="blog-card__img" src="{{ item.image_full ?: item.image }}" alt="" loading="lazy" decoding="async">
+          <img class="blog-card__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="" loading="lazy" decoding="async">
           <span class="blog-card__caption">{{ item.title }}</span>
         </a>
       </li>
