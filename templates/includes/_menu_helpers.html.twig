@@ -1,0 +1,12 @@
+{#
+  Helpers de menú del subtema visit_theme_next.
+
+  ext_attrs(url): devuelve ` target="_blank" rel="noopener noreferrer"` cuando el
+  enlace apunta fuera del dominio (cualquier host que no contenga visitbogota.co).
+  `url` es el objeto Drupal\Core\Url del ítem de menú (item.url / subitem.url).
+  El `and` de Twig corta en corto: getUri() solo se llama si isExternal() es true
+  (para rutas internas getUri() lanzaría excepción).
+#}
+{%- macro ext_attrs(url) -%}
+{%- if url.isExternal is defined and url.isExternal() and 'visitbogota.co' not in url.getUri() %} target="_blank" rel="noopener noreferrer"{% endif -%}
+{%- endmacro -%}

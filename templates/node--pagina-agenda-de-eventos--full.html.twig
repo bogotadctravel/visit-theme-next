@@ -22,10 +22,11 @@
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
           <li><a href="/">{{ 'Inicio'|t }}</a></li>
-          <li aria-current="page">{{ 'Eventos'|t }}</li>
+          {% if agenda_title %}<li><a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ node.label }}</a></li>{% endif %}
+          <li aria-current="page">{{ agenda_title ?: node.label }}</li>
         </ol>
       </nav>
-      <h1 class="cat-hero__title">{{ node.label }}</h1>
+      <h1 class="cat-hero__title">{{ agenda_title ?: node.label }}</h1>
     </div>
   </section>
 

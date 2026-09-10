@@ -140,25 +140,28 @@ Qué hace, en orden:
 1. Copia de seguridad de la base de datos de staging (para poder revertir).
 2. Pone staging en modo mantenimiento.
 2b. **Vuelca los ítems de menú propios de staging** (`menu_link_content*`) a
-   `$PRE/staging-menu.sql` — son *contenido*, no config, así que el paso 4 los
+   `$PRE/staging-menu.sql` — son *contenido*, no config, así que el restore los
    pisaría.
-3. Respaldo fresco de producción (volcado `--single-transaction`, sin
-   interrumpir el sitio) + espejo de la capa de archivos.
-4. Restaura ese contenido en la base de datos de staging.
-4b. **Recarga los ítems de menú de staging** desde el volcado del paso 2b.
-5. `rsync` de los archivos subidos.
-6. `git pull` de este subtema + reaplica `config/deploy/` + reactiva
-   `visit_theme_next`.
-7. Quita el modo mantenimiento y valida (staging responde, producción intacta).
-8. Si algún paso falla → **revierte** staging a la copia del paso 1.
+3. Respaldo fresco de producción + restaura ese contenido en la BD de staging.
+3b. **Recarga los ítems de menú de staging** desde el volcado del paso 2b.
+4. `rsync` de los archivos subidos.
+5. `drush cr` / `updb`.
+5-bis. **Reconstruye `menu_tree`** (tabla derivada): borra las filas
+   `menu_link_content:%` (quedan huérfanas de prod), re-guarda cada entity de
+   menú y llama a `menu.link->rebuild()`. Sin esto → 500 en todas las páginas.
+5a. `git pull` del subtema + reaplica `config/deploy/`.
+5b/5c. Reactiva `visit_theme_next` + sanea la BD.
+6. Quita el modo mantenimiento y valida (staging responde, producción intacta).
+   Si `/es` no da 200, guarda evidencia en `$PRE/` antes del rollback.
+7. Si algún paso falla → **revierte** staging a la copia del paso 1.
 
 **Nunca escribe en producción.** Solo lee.
 
-> Los pasos 2b/4b hacen que **todos** los menús de staging queden congelados a
-> su estado actual: los cambios de menú que haga el equipo en producción ya no
-> llegan a staging. Para volver a sincronizar el menú desde producción, editar
-> `/data/backups/bin/refresh-staging.sh` (hay un `.bak-*` al lado) o recargar a
-> mano las tablas `menu_link_content*` desde `dbvisit2`.
+> Los pasos 2b/3b/5-bis hacen que **todos** los menús de staging queden
+> congelados a su estado actual (submenús incluidos): los cambios de menú que
+> haga el equipo en producción ya no llegan a staging. Para volver a
+> sincronizar el menú desde producción, comentar esos tres pasos en
+> `/data/backups/bin/refresh-staging.sh` (hay `.bak-*` al lado) para una corrida.
 
 ## 7. Reglas
 

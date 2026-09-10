@@ -209,6 +209,80 @@ function visit_theme_next_preprocess_node(array &$variables) {
     $variables['#cache']['tags'][] = 'node_list:rutas';
     $variables['#cache']['tags'][] = 'node_list:atractivos';
   }
+
+  // Agenda de eventos (events.html): los ítems del submenú "Agenda" (Hoy /
+  // Esta semana / Este fin de semana) llegan con ?rango=…. Se calcula el rango
+  // real de fechas, se re-consultan los eventos y se cambia el título.
+  if ($node->bundle() === 'pagina_agenda_de_eventos') {
+    $rango = _visit_theme_next_agenda_rango(\Drupal::request());
+    if ($rango) {
+      // getEventosTeaserByMiceFlag() lee fecha_desde/fecha_hasta de la request.
+      $query = \Drupal::request()->query;
+      $query->set('fecha_desde', $rango['desde']);
+      $query->set('fecha_hasta', $rango['hasta']);
+      $variables['eventosVisit'] = $content_loader->getEventosTeaserByMiceFlag(NULL, 16, TRUE, 2);
+      $variables['pager_eventos'] = ['#type' => 'pager', '#element' => 2];
+      $variables['current_fecha_desde'] = $rango['desde'];
+      $variables['current_fecha_hasta'] = $rango['hasta'];
+      $variables['agenda_title'] = $rango['label'];
+      $variables['#cache']['contexts'][] = 'url.query_args:rango';
+    }
+  }
+}
+
+/**
+ * Traduce el parámetro ?rango= de la agenda de eventos a un rango de fechas.
+ *
+ * @return array|null
+ *   ['desde' => 'Y-m-d', 'hasta' => 'Y-m-d', 'label' => TranslatableMarkup]
+ *   o NULL si no hay un ?rango= reconocido.
+ */
+function _visit_theme_next_agenda_rango(\Symfony\Component\HttpFoundation\Request $request): ?array {
+  $rango = $request->query->get('rango');
+  if (!in_array($rango, ['hoy', 'semana', 'finde'], TRUE)) {
+    return NULL;
+  }
+
+  $hoy = new \DateTimeImmutable('today');
+
+  if ($rango === 'hoy') {
+    return ['desde' => $hoy->format('Y-m-d'), 'hasta' => $hoy->format('Y-m-d'), 'label' => t('Eventos hoy')];
+  }
+
+  if ($rango === 'semana') {
+    $fin = new \DateTimeImmutable('sunday this week');
+    return ['desde' => $hoy->format('Y-m-d'), 'hasta' => $fin->format('Y-m-d'), 'label' => t('Eventos esta semana')];
+  }
+
+  // finde: sábado–domingo de esta semana (o el próximo si ya pasó).
+  $sab = new \DateTimeImmutable('saturday this week');
+  $dom = new \DateTimeImmutable('sunday this week');
+  if ($dom < $hoy) {
+    $sab = $sab->modify('+7 days');
+    $dom = $dom->modify('+7 days');
+  }
+  $desde = $sab < $hoy ? $hoy : $sab;
+  return ['desde' => $desde->format('Y-m-d'), 'hasta' => $dom->format('Y-m-d'), 'label' => t('Eventos este fin de semana')];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for html.
+ *
+ * Cambia el <title> del navegador en la agenda de eventos según ?rango=.
+ */
+function visit_theme_next_preprocess_html(array &$variables) {
+  $route_match = \Drupal::routeMatch();
+  if ($route_match->getRouteName() !== 'entity.node.canonical') {
+    return;
+  }
+  $node = $route_match->getParameter('node');
+  if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() === 'pagina_agenda_de_eventos') {
+    $rango = _visit_theme_next_agenda_rango(\Drupal::request());
+    if ($rango && isset($variables['head_title']['title'])) {
+      $variables['head_title']['title'] = $rango['label'];
+      $variables['#cache']['contexts'][] = 'url.query_args:rango';
+    }
+  }
 }
 
 /**

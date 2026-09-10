@@ -10,6 +10,7 @@
   Estilos en css/overrides.css (scss/_header.scss); interacción en js/overrides.js.
 #}
 {% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
+{% import "@visit_theme_next/includes/_menu_helpers.html.twig" as h %}
 <a href="#main-content" class="skip-link">{{ 'ui.skip_to_content'|t }}</a>
 
 {{ page.bannersHeader }}
@@ -136,6 +137,7 @@
           {% set item_href = 'corporativa' in item.title|lower ? '/conecta' : item.url %}
           <li class="mainnav__item {{ item_classes }}{% if item.below %} dropdown{% endif %}">
             <a class="mainnav__link{% if item.below %} dropdown__toggle{% endif %}" href="{{ item_href }}"
+              {% if 'corporativa' not in item.title|lower %}{{ h.ext_attrs(item.url) }}{% endif %}
               {% if item.below %}aria-expanded="false" aria-controls="dd-{{ loop.index }}"{% endif %}>
               {{ item.title }}
               {% if item.below %}
@@ -148,9 +150,9 @@
             {% if item.below %}
             <ul class="dropdown__menu" id="dd-{{ loop.index }}" hidden>
               {% for subitem in item.below %}
-              <li><a href="{{ conecta.subcat_href(subitem.title, subitem.url, item.title) }}">{{ subitem.title }}</a></li>
+              <li><a href="{{ conecta.subcat_href(subitem.title, subitem.url, item.title) }}" {{ h.ext_attrs(subitem.url) }}>{{ subitem.title }}</a></li>
               {% for nested in subitem.below %}
-              <li><a href="{{ nested.url }}">{{ nested.title }}</a></li>
+              <li><a href="{{ nested.url }}" {{ h.ext_attrs(nested.url) }}>{{ nested.title }}</a></li>
               {% endfor %}
               {% endfor %}
             </ul>
@@ -164,11 +166,11 @@
             <ul class="mainnav__topbar-list">
               {% for item in menu_topbar_visit['#items'] %}
               <li>
-                <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.title }}</a>
+                <a href="{{ item.url }}" {{ h.ext_attrs(item.url) }}>{{ item.title }}</a>
                 {% if item.below %}
                 <ul>
                   {% for subitem in item.below %}
-                  <li><a href="{{ subitem.url }}" target="_blank" rel="noopener noreferrer">{{ subitem.title }}</a></li>
+                  <li><a href="{{ subitem.url }}" {{ h.ext_attrs(subitem.url) }}>{{ subitem.title }}</a></li>
                   {% endfor %}
                 </ul>
                 {% endif %}
