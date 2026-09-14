@@ -4761,6 +4761,16 @@ body.nav-open {
 .vn-cat.vn-blog-single .breadcrumb ol {
   margin: 0 0 18px;
 }
+.vn-cat.vn-blog-single .cat-intro__body img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.vn-cat.vn-blog-single img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
 .vn-cat.vn-blog-single .single-blog__title {
   margin: 0 0 10px;
   font-size: clamp(28px, 4vw, 42px);
