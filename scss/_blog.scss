@@ -109,6 +109,12 @@
   .breadcrumb--dark li[aria-current='page'] { color: var(--vn-gris-oscuro); }
 
   .breadcrumb ol { margin: 0 0 18px; }
+  img{
+    
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
 
   .single-blog__title {
     margin: 0 0 10px;

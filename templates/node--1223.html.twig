@@ -55,7 +55,7 @@
     </div>
     <div class="imperdibles__viewport">
       <ul class="imperdibles__track" id="imperdiblesTrack">
-        {% for item in imperdibles %}
+        {% for item in imperdibles|shuffle %}
         <li class="imperdibles__item">
           <a class="card-imperdible" href="{{ item.url }}">
             <span class="card-imperdible__media">
