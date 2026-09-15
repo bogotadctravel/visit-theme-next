@@ -2912,6 +2912,7 @@ body.nav-open {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   gap: 8px;
 }
 .vn-place .place-sidebar__row--address {
