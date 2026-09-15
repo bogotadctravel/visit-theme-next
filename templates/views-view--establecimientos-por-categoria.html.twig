@@ -1,0 +1,57 @@
+{#
+  Vista "establecimientos_por_categoria" — listado tipo archive-places.html,
+  igual que "atractivos_por_categoria" pero para establecimientos ("Dónde
+  comer"). El hero (nombre del término, imagen, breadcrumb) lo alimenta
+  visit_theme_next_preprocess_views_view(). Ver docs/VISTA-ESTABLECIMIENTOS.md.
+#}
+<div class="vn-archive">
+
+  <section class="cat-hero cat-hero--tall" aria-label="{{ 'ui.where_to_eat'|t }}">
+    {% if vn_term_img_uri %}
+    <img class="cat-hero__bg" src="{{ file_url(vn_term_img_uri) }}" alt="" aria-hidden="true">
+    {% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          {% if vn_term_name %}
+          <li><a href="{{ path('entity.node.canonical', {'node': 562}) }}">{{ 'ui.where_to_eat'|t }}</a></li>
+          <li aria-current="page">{{ vn_term_name }}</li>
+          {% else %}
+          <li aria-current="page">{{ 'ui.where_to_eat'|t }}</li>
+          {% endif %}
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner">
+      <h1 class="cat-hero__title">{{ 'ui.where_to_eat'|t }}{% if vn_term_name %} {{ 'de'|t }} {{ vn_term_name }}{% endif %}</h1>
+    </div>
+  </section>
+
+  <section class="archive">
+    <div class="archive__wrap{% if not exposed %} archive__wrap--full{% endif %}">
+
+      {% if exposed %}
+      <aside class="archive__filters">
+        <h2 class="archive__filters-title">{{ 'Filtros'|t }}</h2>
+        {{ exposed }}
+      </aside>
+      {% endif %}
+
+      <div class="archive__results">
+        {% if header %}<div class="archive__results-head"><p class="archive__count">{{ header }}</p></div>{% endif %}
+
+        {% if rows %}
+          {{ rows }}
+        {% elseif empty %}
+          <div class="archive__empty">{{ empty }}</div>
+        {% endif %}
+
+        {% if pager %}<div class="archive__pager">{{ pager }}</div>{% endif %}
+      </div>
+
+    </div>
+  </section>
+
+</div>

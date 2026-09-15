@@ -71,6 +71,42 @@
           <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         {% endif %}
+
+        {# Galería y mapa viven aquí (no como secciones aparte a ancho completo)
+           para que el sidebar sticky tenga contenido al lado y no quede un
+           hueco en blanco cuando el cuerpo de texto es corto. #}
+        {% if node.hasField('field_picgallery') and node.field_picgallery|length > 0 %}
+        <div class="place-block">
+          <h2 class="place-block__title">{{ 'Galería'|t }}</h2>
+          <ul class="place-gallery">
+            {% for item in node.field_picgallery|slice(0, 8) %}
+            <li>
+              <button class="place-gallery__item" type="button"
+                data-gallery-src="{{ file_url(item.entity.fileuri) }}"
+                aria-label="{{ 'Ver foto'|t }}: {{ item.alt ?: node.getTitle() }}">
+                <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+              </button>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        {# "Cómo llegar" deshabilitado (WIP), ver commit sin publicar en eventos.
+        {% if lat and lng %}
+        <div class="place-block">
+          <h2 class="place-block__title">{{ 'ui.how_to_get_there'|t }}</h2>
+          <div class="place-map place-map--embed">
+            <iframe title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q={{ lat }},{{ lng }}&z=15&output=embed"></iframe>
+            <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">
+              <img src="/{{ subtheme_path ?: directory }}/images/transmilenio-logo.png" alt="" aria-hidden="true">
+              <span>{{ 'Cómo llegar en transporte público'|t }}</span>
+            </a>
+          </div>
+        </div>
+        {% endif %} #}
       </article>
 
       <aside class="place-sidebar">
@@ -115,46 +151,6 @@
 
     </div>
   </section>
-
-  {# ================= GALERÍA ================= #}
-  {% if node.hasField('field_picgallery') and node.field_picgallery|length > 0 %}
-  <section class="place-gallery-section">
-    <div class="place-gallery-section__head">
-      <h2 class="place-gallery-section__title">{{ 'Galería'|t }}</h2>
-    </div>
-    <ul class="place-gallery place-gallery-section__wrap">
-      {% for item in node.field_picgallery|slice(0, 8) %}
-      <li>
-        <button class="place-gallery__item" type="button"
-          data-gallery-src="{{ file_url(item.entity.fileuri) }}"
-          aria-label="{{ 'Ver foto'|t }}: {{ item.alt ?: node.getTitle() }}">
-          <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
-        </button>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endif %}
-
-  {# ================= CÓMO LLEGAR ================= #}
-  {% if lat and lng %}
-  <section class="place-map-section">
-    <div class="place-map-section__head">
-      <h2 class="place-map-section__title">{{ 'ui.how_to_get_there'|t }}</h2>
-    </div>
-    <div class="place-map-section__wrap">
-      <div class="place-map place-map--embed">
-        <iframe title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen
-          referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q={{ lat }},{{ lng }}&z=15&output=embed"></iframe>
-        <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">
-          <img src="/{{ subtheme_path ?: directory }}/images/transmilenio-logo.png" alt="" aria-hidden="true">
-          <span>{{ 'Cómo llegar en transporte público'|t }}</span>
-        </a>
-      </div>
-    </div>
-  </section>
-  {% endif %}
 
   {# ================= EVENTOS RELACIONADOS ================= #}
   {% set eventos_rel = [] %}

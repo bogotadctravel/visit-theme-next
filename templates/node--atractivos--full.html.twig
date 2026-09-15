@@ -53,6 +53,50 @@
           <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         {% endif %}
+
+        {# Galería y mapa viven aquí (no como secciones aparte a ancho completo)
+           para que el sidebar sticky tenga contenido al lado y no quede un
+           hueco en blanco cuando el cuerpo de texto es corto. #}
+        {% if node.field_picgallery|length > 0 %}
+        <div class="place-block">
+          <h2 class="place-block__title">{{ 'Galería'|t }}</h2>
+          <ul class="place-gallery">
+            {% for item in node.field_picgallery|slice(0, 8) %}
+            <li>
+              <button class="place-gallery__item" type="button"
+                data-gallery-src="{{ file_url(item.entity.fileuri) }}"
+                aria-label="{{ 'Ver foto'|t }}: {{ item.alt ?: node.getTitle() }}">
+                <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+              </button>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        {% set arcgis_url = arcgis_experience_url(node.id()) %}
+        {% if arcgis_url or (lat and lng) %}
+        <div class="place-block">
+          <h2 class="place-block__title">{{ 'ui.how_to_get_there'|t }}</h2>
+          <div class="place-map{% if arcgis_url %} place-map--embed hasAnalytics{% endif %}"{% if arcgis_url %} data-event="google_maps_iframe_loaded"{% else %} role="img" aria-label="{{ 'Ubicación de'|t }} {{ node.getTitle() }}"{% endif %}>
+            {% if arcgis_url %}
+            <iframe src="{{ arcgis_url }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen></iframe>
+            {% else %}
+            <div class="place-map__grid" aria-hidden="true"></div>
+            <div class="place-map__pin" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.3-7-11.5A7 7 0 0 1 19 9.5C19 14.7 12 21 12 21Z" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.6"/></svg>
+            </div>
+            {% if node.field_direccion.0.value %}<span class="place-map__label">{{ node.field_direccion.0.value }}</span>{% endif %}
+            {% endif %}
+            {% if lat and lng %}
+            <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">
+              <img src="/{{ subtheme_path ?: directory }}/images/transmilenio-logo.png" alt="" aria-hidden="true">
+              <span>{{ 'Cómo llegar en transporte público'|t }}</span>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
       </article>
 
       <aside class="place-sidebar">
@@ -101,55 +145,6 @@
 
     </div>
   </section>
-
-  {# ================= GALERÍA ================= #}
-  {% if node.field_picgallery|length > 0 %}
-  <section class="place-gallery-section">
-    <div class="place-gallery-section__head">
-      <h2 class="place-gallery-section__title">{{ 'Galería'|t }}</h2>
-    </div>
-    <ul class="place-gallery place-gallery-section__wrap">
-      {% for item in node.field_picgallery|slice(0, 8) %}
-      <li>
-        <button class="place-gallery__item" type="button"
-          data-gallery-src="{{ file_url(item.entity.fileuri) }}"
-          aria-label="{{ 'Ver foto'|t }}: {{ item.alt ?: node.getTitle() }}">
-          <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
-        </button>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endif %}
-
-  {# ================= CÓMO LLEGAR ================= #}
-  {% set arcgis_url = arcgis_experience_url(node.id()) %}
-  {% if arcgis_url or (lat and lng) %}
-  <section class="place-map-section">
-    <div class="place-map-section__head">
-      <h2 class="place-map-section__title">{{ 'ui.how_to_get_there'|t }}</h2>
-    </div>
-    <div class="place-map-section__wrap">
-      <div class="place-map{% if arcgis_url %} place-map--embed hasAnalytics{% endif %}"{% if arcgis_url %} data-event="google_maps_iframe_loaded"{% else %} role="img" aria-label="{{ 'Ubicación de'|t }} {{ node.getTitle() }}"{% endif %}>
-        {% if arcgis_url %}
-        <iframe src="{{ arcgis_url }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen></iframe>
-        {% else %}
-        <div class="place-map__grid" aria-hidden="true"></div>
-        <div class="place-map__pin" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.3-7-11.5A7 7 0 0 1 19 9.5C19 14.7 12 21 12 21Z" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.6"/></svg>
-        </div>
-        {% if node.field_direccion.0.value %}<span class="place-map__label">{{ node.field_direccion.0.value }}</span>{% endif %}
-        {% endif %}
-        {% if lat and lng %}
-        <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">
-          <img src="/{{ subtheme_path ?: directory }}/images/transmilenio-logo.png" alt="" aria-hidden="true">
-          <span>{{ 'Cómo llegar en transporte público'|t }}</span>
-        </a>
-        {% endif %}
-      </div>
-    </div>
-  </section>
-  {% endif %}
 
   {# ================= LUGARES RELACIONADOS ================= #}
   {% set relacionados = nodos_cercanos ?: contenidos_relacionados %}

@@ -33,12 +33,29 @@ plantillas y los estilos; solo falta la vista.
 ## Ajustes del display de página
 
 ### Contextual filters (argumentos)
-- Añadir **`Content: Categorías turísticas (field_turcat)`** — el campo de referencia a
-  taxonomía que usan los atractivos (si el machine name real es otro, usar ese).
+- Añadir **`Content: Has taxonomy term ID (with depth)`** — **no** uses el filtro
+  ligado a un campo (`Content: Categorías turísticas (field_turcat)`). Motivo: el
+  botón "Explorar todo" se pinta tanto en la página de **categoría** como en la de
+  **subcategoría**, y en cada una `term.id()` es el TID de ESE término. Los
+  atractivos guardan la categoría en `field_turcat` y la subcategoría en
+  `field_tursubcat` (dos campos distintos) — un contextual filter atado a un solo
+  campo (`field_turcat`) solo encuentra resultados cuando el argumento es una
+  categoría; en subcategoría siempre da "página no encontrada" o vacío. El filtro
+  "Has taxonomy term ID" no está atado a un campo: usa el índice de taxonomía del
+  nodo (`taxonomy_index`, que Drupal llena automáticamente para **cualquier**
+  campo de referencia a término, sea `field_turcat` o `field_tursubcat`), así que
+  el mismo argumento funciona venga de categoría o de subcategoría.
+  - **Depth:** `0` (coincidencia exacta con ese término, sin arrastrar hijos/nietos).
   - *When the filter value is NOT available:* **Display "Page not found"** (o "Hide view").
   - *When the filter value IS available:* **Specify validation criteria → Taxonomy term**,
     vocabularios: `categorias_2026` y `subcategorias_2026`, *Filter value type:* **Term ID**.
   - *Especificar cómo se transforma:* dejar por defecto (el `%` de la ruta = el TID).
+
+  > **Si ya creaste la vista con el filtro atado a `field_turcat`** (como decía esta
+  > guía antes): en `/admin/structure/views/view/atractivos_por_categoria`, pestaña
+  > **Contextual filters** → click en el filtro existente → **Remove** → añade
+  > "Has taxonomy term ID (with depth)" como arriba. Vuelve a exportar el YAML
+  > (ver comando al inicio de este documento).
 
 ### Fields
 Añadir los dos con **"Exclude from display"** activado (se pintan desde la plantilla

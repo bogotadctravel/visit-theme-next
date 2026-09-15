@@ -110,7 +110,19 @@ function visit_theme_next_preprocess_taxonomy_term(array &$variables) {
   $variables['establecimientos'] = $content_loader->getNodesTeaserByCategory('establecimientos', $tid, 12);
   $variables['article']         = $content_loader->getNodesTeaserByCategory('article', $tid, 8);
   if ($term->bundle() === 'categorias_2026') {
-    $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 6);
+    // "Rutas relacionadas" (sidebar de la categoría): orden personalizado si el
+    // editor curó rutas en field_rutas_destacadas (referencia a nodos `rutas`,
+    // respeta el orden en que se arrastraron en el widget — mismo patrón que
+    // field_atractivo_asociado en itinerarios, más abajo). Sin ese campo (o
+    // vacío), cae al orden automático por categoría de siempre.
+    if ($term->hasField('field_rutas_destacadas') && !$term->get('field_rutas_destacadas')->isEmpty()) {
+      $variables['rutas'] = $content_loader->getTeasersFromEntities(
+        $term->get('field_rutas_destacadas')->referencedEntities()
+      );
+    }
+    else {
+      $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 6);
+    }
   }
   if ($term->bundle() === 'subcategorias_2026') {
     // Franja "También te puede interesar" del prototipo (subcategory.html):
@@ -343,13 +355,16 @@ function visit_theme_next_preprocess_html(array &$variables) {
 /**
  * Implements hook_preprocess_HOOK() for views_view.
  *
- * Vista `atractivos_por_categoria` (listado archive-places): el argumento de la
- * ruta `/atractivos/%` es el TID de la categoría; se carga el término para
- * alimentar el hero (nombre, URL y imagen). Ver docs/VISTA-ATRACTIVOS.md.
+ * Vistas `atractivos_por_categoria` (`/atractivos/%`) y
+ * `establecimientos_por_categoria` (`/establecimientos/%`), listados tipo
+ * archive-places: el argumento de la ruta es el TID de la categoría o
+ * subcategoría; se carga el término para alimentar el hero (nombre, URL,
+ * imagen). Ver docs/VISTA-ATRACTIVOS.md y docs/VISTA-ESTABLECIMIENTOS.md.
  */
 function visit_theme_next_preprocess_views_view(array &$variables) {
   $view = $variables['view'] ?? NULL;
-  if (!$view || $view->id() !== 'atractivos_por_categoria') {
+  $por_categoria_views = ['atractivos_por_categoria', 'establecimientos_por_categoria'];
+  if (!$view || !in_array($view->id(), $por_categoria_views, TRUE)) {
     return;
   }
 

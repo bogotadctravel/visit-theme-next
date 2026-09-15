@@ -503,29 +503,10 @@
   }
 
   // ── Galería ──
-  .place-gallery-section {
-    padding: clamp(24px, 3vw, 36px) 0;
-    background: var(--vn-blanco);
-  }
-  .place-gallery-section__head,
-  .place-gallery-section__wrap {
-    max-width: var(--vn-max);
-    margin: 0 auto;
-    padding-inline: var(--vn-pad);
-  }
-  .place-gallery-section__title,
-  .place-map-section__title {
-    margin: 0 0 24px;
-    font-size: clamp(22px, 2.9vw, 29px);
-    font-weight: 700;
-    line-height: 1.125;
-    letter-spacing: -0.01em;
-    color: var(--vn-gris-oscuro);
-  }
+  // Vive dentro de .place-content (un .place-block más), no como sección
+  // aparte: así el sidebar sticky tiene contenido real al lado en vez de un
+  // hueco en blanco cuando el texto del cuerpo es corto (2026-09-15).
   .place-gallery {
-    // Sin `margin` ni `padding` propios: pisarían el `margin:0 auto` y el
-    // `padding-inline` de .place-gallery-section__wrap (misma especificidad) y
-    // la galería quedaría descentrada / pegada al borde de los 1280px seguros.
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 4px;
@@ -554,12 +535,7 @@
   }
 
   // ── Cómo llegar ──
-  .place-map-section {
-    padding: clamp(24px, 3vw, 36px) 0;
-    background: var(--vn-blanco);
-  }
-  .place-map-section__head { max-width: var(--vn-max); margin: 0 auto 24px; padding-inline: var(--vn-pad); }
-  .place-map-section__wrap { max-width: var(--vn-max); margin: 0 auto; padding-inline: var(--vn-pad); }
+  // También dentro de .place-content, mismo motivo que la galería arriba.
   .place-map {
     position: relative;
     height: 320px;
