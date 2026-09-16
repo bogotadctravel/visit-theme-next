@@ -24,14 +24,32 @@
       ? file_url(node.field_poster_video_movil.entity.uri.value)
       : hero_desktop %}
 
+  {# Slider del banner: field_imagen_campana (multivalor). Si no hay imágenes
+     cargadas ahí, el hero se queda con una sola diapositiva — el campo de
+     siempre (field_poster_video_escritorio/movil, con su fallback fijo). #}
+  {% set hero_slides = [] %}
+  {% for item in node.field_imagen_campana %}
+    {% if item.entity %}
+      {% set hero_slides = hero_slides|merge([file_url(item.entity.uri.value)]) %}
+    {% endif %}
+  {% endfor %}
+
   <section class="hero" aria-label="Bogotá">
     <div class="hero__track">
+      {% if hero_slides is not empty %}
+        {% for src in hero_slides %}
+        <div class="hero__slide{% if loop.first %} is-active{% endif %}">
+          <img class="hero__bg" src="{{ src }}" alt=""{% if loop.first %} fetchpriority="high"{% endif %} decoding="async">
+        </div>
+        {% endfor %}
+      {% else %}
       <div class="hero__slide is-active">
         <picture>
           <source media="(max-width: 768px)" srcset="{{ hero_mobile }}">
           <img class="hero__bg" src="{{ hero_desktop }}" alt="" fetchpriority="high" decoding="async">
         </picture>
       </div>
+      {% endif %}
     </div>
     <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
     {# {% if node.field_link_cta_banner.0.value and node.field_texto_cta_banner.0.value %}
@@ -41,6 +59,10 @@
     </div>
     {% endif %} #}
   </section>
+
+  {% if hero_slides|length > 1 %}
+  <div class="hero__dots" id="heroDots" role="tablist" aria-label="{{ 'Seleccionar slide'|t }}"></div>
+  {% endif %}
 
   {# {% if banners_home %}<div class="vn-home__banners">{{ banners_home }}</div>{% endif %} #}
 
