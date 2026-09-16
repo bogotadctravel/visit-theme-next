@@ -78,15 +78,11 @@
         {% if arcgis_url or (lat and lng) %}
         <div class="place-block">
           <h2 class="place-block__title">{{ 'ui.how_to_get_there'|t }}</h2>
-          <div class="place-map{% if arcgis_url %} place-map--embed hasAnalytics{% endif %}"{% if arcgis_url %} data-event="google_maps_iframe_loaded"{% else %} role="img" aria-label="{{ 'Ubicación de'|t }} {{ node.getTitle() }}"{% endif %}>
+          <div class="place-map place-map--embed{% if arcgis_url %} hasAnalytics{% endif %}"{% if arcgis_url %} data-event="google_maps_iframe_loaded"{% endif %}>
             {% if arcgis_url %}
             <iframe src="{{ arcgis_url }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen></iframe>
             {% else %}
-            <div class="place-map__grid" aria-hidden="true"></div>
-            <div class="place-map__pin" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.3-7-11.5A7 7 0 0 1 19 9.5C19 14.7 12 21 12 21Z" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.6"/></svg>
-            </div>
-            {% if node.field_direccion.0.value %}<span class="place-map__label">{{ node.field_direccion.0.value }}</span>{% endif %}
+            <iframe src="https://lab.visitbogota.co/iframeMap/?lat={{ lat }}&lon={{ lng }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
             {% endif %}
             {% if lat and lng %}
             <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">

@@ -88,7 +88,7 @@
           <h2 class="place-block__title">{{ 'ui.where_will_you_be'|t }}</h2>
           <div class="place-map place-map--embed">
             <iframe title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps?q={{ lat }},{{ lng }}&z=15&output=embed"></iframe>
+              src="https://lab.visitbogota.co/iframeMap/?lat={{ lat }}&lon={{ lng }}"></iframe>
             <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">
               <img src="/{{ subtheme_path ?: directory }}/images/transmilenio-logo.png" alt="" aria-hidden="true">
               <span>{{ 'Cómo llegar en transporte público'|t }}</span>

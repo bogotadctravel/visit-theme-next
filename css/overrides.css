@@ -3189,39 +3189,6 @@ body.nav-open {
   border: 0;
   display: block;
 }
-.vn-place .place-map__grid {
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 64px), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px 64px);
-}
-.vn-place .place-map__pin {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -100%);
-  width: 40px;
-  height: 40px;
-  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
-}
-.vn-place .place-map__pin svg path {
-  fill: var(--vn-amarillo);
-  stroke: var(--vn-negro);
-}
-.vn-place .place-map__pin svg circle {
-  fill: var(--vn-negro);
-}
-.vn-place .place-map__label {
-  position: absolute;
-  left: 14px;
-  bottom: 14px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: var(--vn-blanco);
-  color: var(--vn-gris-oscuro);
-  font-size: 12.5px;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(16, 27, 48, 0.15);
-}
 .vn-place .cat-related {
   padding: clamp(20px, 3vw, 32px) 0 clamp(40px, 5vw, 56px);
   background: var(--vn-gris-10);
