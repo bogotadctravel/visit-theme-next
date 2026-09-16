@@ -157,7 +157,7 @@
                   </span>
                   <span class="card-evento__info">
                     <span class="card-evento__info-date">
-                      {% if fecha_ini < hoy %}
+                      {% if fecha_ini <= hoy %}
                       <span class="card-evento__info-month">{{ 'Hasta'|t }} {{ item.field_fecha_de_finalizacion|date('d') }} {{ meses[item.field_fecha_de_finalizacion|date('M')] ?? item.field_fecha_de_finalizacion|date('M') }}</span>
                       {% else %}
                       <span class="card-evento__info-day">{{ dia_ini }}</span>
