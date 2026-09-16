@@ -73,8 +73,6 @@
           </ul>
         </div>
         {% endif %}
-
-        {% set arcgis_url = arcgis_experience_url(node.id()) %}
         {% if arcgis_url or (lat and lng) %}
         <div class="place-block">
           <h2 class="place-block__title">{{ 'ui.how_to_get_there'|t }}</h2>
