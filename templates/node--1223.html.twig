@@ -144,6 +144,7 @@
 
         <ul class="eventos__track" id="eventosTrack">
           {% for item in eventosVisit|slice(0, 12) %}
+          {% set fecha_ini = item.field_fecha_de_inicio|date('Y-m-d') %}
           {% set mes_ini = item.field_fecha_de_inicio|date('M') %}
           {% set dia_ini = item.field_fecha_de_inicio|date('d') %}
           <li class="eventos__item">
@@ -156,8 +157,12 @@
                   </span>
                   <span class="card-evento__info">
                     <span class="card-evento__info-date">
+                      {% if fecha_ini < hoy %}
+                      <span class="card-evento__info-month">{{ 'Hasta'|t }} {{ item.field_fecha_de_finalizacion|date('d') }} {{ meses[item.field_fecha_de_finalizacion|date('M')] ?? item.field_fecha_de_finalizacion|date('M') }}</span>
+                      {% else %}
                       <span class="card-evento__info-day">{{ dia_ini }}</span>
                       <span class="card-evento__info-month">{{ meses[mes_ini] ?? mes_ini }}</span>
+                      {% endif %}
                     </span>
                     <span class="card-evento__info-venue">{{ item['field_lugar_del_evento'] }}</span>
                   </span>
