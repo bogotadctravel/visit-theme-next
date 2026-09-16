@@ -226,6 +226,12 @@ function visit_theme_next_preprocess_node(array &$variables) {
     if (empty($variables['eventosVisit'])) {
       $variables['eventosVisit'] = $content_loader->getEventosTeaserByMiceFlag(NULL, 12);
     }
+    // La agenda de eventos (visit_theme.theme) solo fija 'hoy' para el bundle
+    // pagina_agenda_de_eventos; el home la necesita también para mostrar
+    // "Hasta [fecha_fin]" en los eventos ya iniciados.
+    if (empty($variables['hoy'])) {
+      $variables['hoy'] = date('Y-m-d');
+    }
 
     $variables['#cache']['tags'][] = 'node_list:atractivos';
     $variables['#cache']['tags'][] = 'node_list:eventos';
