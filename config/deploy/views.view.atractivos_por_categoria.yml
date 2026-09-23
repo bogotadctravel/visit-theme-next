@@ -6,9 +6,11 @@ dependencies:
     - field.storage.node.field_mainimg
     - image.style.large
     - node.type.atractivos
+    - node.type.establecimientos
   module:
     - image
     - node
+    - taxonomy
     - user
 id: atractivos_por_categoria
 label: 'Atractivos por categoría'
@@ -214,15 +216,16 @@ display:
             field_identifier: ''
           exposed: false
       arguments:
-        field_turcat_target_id:
-          id: field_turcat_target_id
-          table: node__field_turcat
-          field: field_turcat_target_id
+        term_node_tid_depth:
+          id: term_node_tid_depth
+          table: node_field_data
+          field: term_node_tid_depth
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: entity_target_id
-          default_action: 'not found'
+          entity_type: node
+          plugin_id: taxonomy_index_tid_depth
+          default_action: ignore
           exception:
             value: all
             title_enable: false
@@ -247,7 +250,8 @@ display:
             fail: 'not found'
           validate_options: {  }
           break_phrase: false
-          not: false
+          depth: 0
+          use_taxonomy_term_path: false
       filters:
         status:
           id: status
@@ -309,6 +313,92 @@ display:
           tokenize: false
         simple_sitemap_display_extender: {  }
       path: atractivos/%
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_mainimg'
+  page_2:
+    id: page_2
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      title: 'establecimientos por categoría'
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          operator: in
+          value:
+            establecimientos: establecimientos
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        title: false
+        filters: false
+        filter_groups: false
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+        simple_sitemap_display_extender: {  }
+      path: establecimientos/%
     cache_metadata:
       max-age: -1
       contexts:
