@@ -1,4 +1,8 @@
-section{
+// Reset de <section> solo para páginas "visit" (header/footer del subtema next).
+// Sin este scope pisaba también el `section{max-width:1200px; margin:0 auto;
+// padding:3rem 20px;}` del tema base que usan las páginas "conecta"
+// (header_conecta/footer_conecta), que siguen dependiendo de ese estilo.
+.site-content--visit section{
     max-width: 100%;
     padding: 0;
     margin: 0;

@@ -312,7 +312,7 @@ function visit_theme_next_preprocess_node(array &$variables) {
  */
 function _visit_theme_next_agenda_rango(\Symfony\Component\HttpFoundation\Request $request): ?array {
   $rango = $request->query->get('rango');
-  if (!in_array($rango, ['hoy', 'semana', 'finde'], TRUE)) {
+  if (!in_array($rango, ['hoy', 'semana', 'finde', 'mes'], TRUE)) {
     return NULL;
   }
 
@@ -325,6 +325,11 @@ function _visit_theme_next_agenda_rango(\Symfony\Component\HttpFoundation\Reques
   if ($rango === 'semana') {
     $fin = new \DateTimeImmutable('sunday this week');
     return ['desde' => $hoy->format('Y-m-d'), 'hasta' => $fin->format('Y-m-d'), 'label' => t('Eventos esta semana')];
+  }
+
+  if ($rango === 'mes') {
+    $fin = new \DateTimeImmutable('last day of this month');
+    return ['desde' => $hoy->format('Y-m-d'), 'hasta' => $fin->format('Y-m-d'), 'label' => t('Eventos este mes')];
   }
 
   // finde: sábado–domingo de esta semana (o el próximo si ya pasó).
