@@ -84,8 +84,8 @@
               <th>{{ 'Idioma'|t }}</th>
               <th>{{ 'Sector'|t }}</th>
               <th>RNT</th>
-              <th>{{ 'Teléfono'|t }}</th>
-              <th>{{ 'Correo'|t }}</th>
+              <th>{{ 'Datos de contacto'|t }}</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -102,8 +102,11 @@
                 {% for s in guide.field_sector %}<span class="guias-table__tag">{{ s }}</span>{% else %}<span class="guias-table__tag">—</span>{% endfor %}
               </td>
               <td>{{ guide.field_rnt ?: '—' }}</td>
-              <td>{% if guide.field_telefono %}<a href="tel:+57{{ guide.field_telefono }}">+57 {{ guide.field_telefono }}</a>{% else %}—{% endif %}</td>
-              <td>{% if guide.field_correo %}<a href="mailto:{{ guide.field_correo }}">{{ guide.field_correo }}</a>{% else %}—{% endif %}</td>
+              <td>
+              {% if guide.field_telefono %}<a href="tel:+57{{ guide.field_telefono }}" style="display:block;">+57 {{ guide.field_telefono }}</a>{% else %}—{% endif %}
+              {% if guide.field_correo %}<a href="mailto:{{ guide.field_correo }}" style="display:block;">{{ guide.field_correo }}</a>{% else %}—{% endif %}
+              </td>
+             
             </tr>
             {% endfor %}
           </tbody>
