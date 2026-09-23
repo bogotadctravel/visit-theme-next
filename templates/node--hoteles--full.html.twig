@@ -44,7 +44,7 @@
         <div class="place-content__body cat-intro__body--collapsible" id="catIntroBody">
           {% if body_sin_estilos %}{{ body_sin_estilos }}{% else %}{{ node.body.0.value|raw }}{% endif %}
         </div>
-        <button class="cat-intro__toggle" type="button" id="catIntroToggle" aria-expanded="false" aria-controls="catIntroBody">
+        <button class="cat-intro__toggle hasAnalytics" data-event="leer_mas_hotel" type="button" id="catIntroToggle" aria-expanded="false" aria-controls="catIntroBody">
           <span class="cat-intro__toggle-label">{{ 'Leer más'|t }}</span>
           <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>

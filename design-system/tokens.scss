@@ -1,0 +1,46 @@
+// ============================================================================
+// Design tokens — visit_theme_next (subtema Visit Bogotá, port del prototipo v3)
+// ----------------------------------------------------------------------------
+// Este archivo es de REFERENCIA. Es una copia documentada del bloque :root
+// real que vive en `scss/_header.scss` (líneas ~20-42). No está importado
+// desde `scss/overrides.scss` y no afecta el build — si lo tocás, no cambia
+// nada en el sitio. Para tocar los tokens de verdad, editá `_header.scss`.
+//
+// Snapshot tomado: 2026-09-16.
+// ============================================================================
+
+:root {
+  // ---- Paleta de marca v3 --------------------------------------------------
+  --vn-azul-marino:      #1A2B4A; // no se usa en ningún componente actual (reservado)
+  --vn-rojo-principal:   #FF3108; // color de acento principal: botones, hover, activo, focus de marca
+  --vn-rojo-principal-h: #E22B07; // hover/estado oscurecido de --vn-rojo-principal
+  --vn-negro:            #222222; // declarado pero sin uso detectado fuera de --vn-gris-oscuro
+  --vn-amarillo:         #FBB018; // acento secundario: focus-visible, kicker de evento, texto sobre hero oscuro
+  --vn-blanco:           #FFFFFF;
+  --vn-tinta:             #1C1F26; // texto de cuerpo sobre fondo claro
+  --vn-gris-oscuro:      #1D1D1D; // texto de títulos / fondo de fallback en heros
+  --vn-gris-10:          #F5F6F8; // fondo sutil (filtros, franjas de card-evento, hover de filas)
+  --vn-gris-30:          #D8DCE3; // bordes por defecto
+  --vn-gris-60:          #6B7280; // texto secundario / placeholder / labels
+  --vn-sombra-menu:      0 12px 32px rgba(16, 27, 48, .18); // única sombra tokenizada (dropdowns/menú)
+
+  // ---- Medidas estructurales -----------------------------------------------
+  --vn-bar1-h:   64px;   // alto barra superior del header
+  --vn-bar2-h:   44px;   // alto barra de navegación del header; reusado como offset de sidebars sticky
+  --vn-max:      1280px; // max-width de contenedor, estándar en toda la home/categoría/ficha/listado
+  --vn-pad:      clamp(16px, 4vw, 40px); // padding lateral de contenedor, estándar en todo el sitio
+  --vn-radio:    6px;    // radio "oficial", aunque casi ningún componente lo usa (ver componentes.md)
+  --vn-transicion: 200ms cubic-bezier(.4, 0, .2, 1); // transición estándar (color/background/transform)
+}
+
+// ============================================================================
+// Colores usados en el código pero SIN tokenizar (hex crudo, no --vn-*)
+// Quedan acá documentados para que si se decide tokenizarlos, se sepa de dónde
+// salen y dónde reemplazar.
+// ============================================================================
+//
+// #cbbba0  → fondo de la fila "Dirección" en .place-sidebar__row--address (_place.scss)
+// #111     → texto sobre esa fila de dirección (.place-sidebar__value ahí dentro)
+// #000     → texto sobre esa misma fila (.place-sidebar__label ahí dentro)
+// #706F6F / #707070 → separadores de lista en el megamenú (_header.scss)
+// #142140  → hover del botón "Cómo llegar / TransMilenio" sobre el mapa (_place.scss)

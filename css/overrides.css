@@ -1023,7 +1023,8 @@ body.nav-open {
 .vn-home .imperdibles__title::after,
 .vn-home .que-hacer__title::after,
 .vn-home .eventos__title::after,
-.vn-home .planea-viaje__title::after {
+.vn-home .planea-viaje__title::after,
+.vn-home .blog-home__title::after {
   content: "";
   display: block;
   width: 32px;
@@ -1536,19 +1537,79 @@ body.nav-open {
   background: var(--vn-rojo-principal-h);
 }
 .vn-home .planea-viaje {
+  position: relative;
   padding: clamp(48px, 7vw, 80px) var(--vn-pad);
   background: var(--vn-gris-10);
+}
+.vn-home .planea-viaje__info {
+  position: absolute;
+  top: clamp(24px, 3vw, 40px);
+  right: var(--vn-pad);
+  width: 60%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 24px;
+}
+.vn-home .planea-viaje__info-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border-radius: 8px;
+  background: var(--vn-blanco);
+  border: 1.5px solid var(--vn-rojo-principal);
+  color: var(--vn-rojo-principal);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--vn-transicion), color var(--vn-transicion), transform var(--vn-transicion);
+}
+.vn-home .planea-viaje__info-btn svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.vn-home .planea-viaje__info-btn:hover {
+  background: var(--vn-rojo-principal);
+  color: var(--vn-blanco);
+  transform: translateY(-4px);
+}
+.vn-home .planea-viaje__info-illustration {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+}
+@media (max-width: 900px) {
+  .vn-home .planea-viaje__info {
+    display: none;
+  }
 }
 .vn-home .planea-viaje__wrap {
   max-width: var(--vn-max);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 28px;
 }
 .vn-home .planea-viaje__intro {
   max-width: 640px;
+}
+.vn-home .planea-viaje__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 40px;
+}
+.vn-home .planea-viaje__illustration {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 .vn-home .planea-viaje__title {
   margin: 0 0 8px;
@@ -1573,14 +1634,16 @@ body.nav-open {
 }
 .vn-home .planea-viaje__actions {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 28px;
+  justify-content: center;
+  gap: 10px;
 }
 .vn-home .planea-viaje__badge {
   display: block;
-  width: 100%;
+  flex: 0 0 25%;
+  max-width: 25%;
   transition: transform var(--vn-transicion);
 }
 .vn-home .planea-viaje__badge img {
@@ -1589,37 +1652,22 @@ body.nav-open {
   height: auto;
 }
 .vn-home .planea-viaje__badge:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
-.vn-home .planea-viaje__info-btn {
-  height: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px 22px;
-  border-radius: 8px;
-  background: var(--vn-blanco);
-  border: 1.5px solid var(--vn-rojo-principal);
-  color: var(--vn-rojo-principal);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  text-align: center;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: background var(--vn-transicion), color var(--vn-transicion), transform var(--vn-transicion);
-}
-.vn-home .planea-viaje__info-btn svg {
-  width: 24px;
-  height: 24px;
-  flex: none;
-}
-.vn-home .planea-viaje__info-btn:hover {
-  background: var(--vn-rojo-principal);
-  color: var(--vn-blanco);
-  transform: translateY(-4px);
+@media (max-width: 900px) {
+  .vn-home .planea-viaje__row {
+    grid-template-columns: 1fr;
+  }
+  .vn-home .planea-viaje__illustration {
+    margin-inline: auto;
+  }
+  .vn-home .planea-viaje__actions {
+    flex-wrap: wrap;
+  }
+  .vn-home .planea-viaje__badge {
+    flex-basis: 72px;
+    max-width: 72px;
+  }
 }
 .vn-home .blog-home {
   padding: clamp(56px, 8vw, 96px) 0;
@@ -1769,12 +1817,6 @@ body.nav-open {
     align-items: center;
     text-align: center;
   }
-  .vn-home .planea-viaje__actions {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .vn-home .planea-viaje__info-btn {
-    white-space: normal;
-  }
 }
 @media (max-width: 640px) {
   .vn-home .imperdibles__item {
@@ -1813,17 +1855,17 @@ body.nav-open {
     gap: 12px;
   }
   .vn-home .planea-viaje__actions {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 14px;
   }
   .vn-home .planea-viaje__badge {
-    max-width: 200px;
-    margin-inline: auto;
+    flex-basis: 70px;
+    max-width: 70px;
+    margin-inline: 0;
   }
-  .vn-home .planea-viaje__info-btn {
-    max-width: 260px;
-    margin-inline: auto;
-    min-height: 72px;
+  .vn-home .planea-viaje__wrap {
+    align-items: stretch;
+    text-align: left;
   }
   .vn-home .blog-home__mosaic {
     display: flex;

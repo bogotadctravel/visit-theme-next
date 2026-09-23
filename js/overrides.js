@@ -415,6 +415,18 @@
       var expanded = body.classList.toggle('is-expanded');
       toggle.setAttribute('aria-expanded', String(expanded));
       if (label) label.textContent = expanded ? 'Leer menos' : 'Leer más';
+
+      // Analytics (GTM): el botón trae `hasAnalytics` + `data-event="leer_mas_*"`
+      // y GTM registra el evento en cada clic. Solo la expansión significa que
+      // el usuario "vio más contenido"; al colapsar no debe contar. La clase se
+      // quita tras expandir y se repone al colapsar. Va en un setTimeout para
+      // cambiarla DESPUÉS de que termine este clic, así el resultado no depende
+      // de en qué fase del clic GTM lea el elemento.
+      if (toggle.dataset.event) {
+        setTimeout(function () {
+          toggle.classList.toggle('hasAnalytics', !expanded);
+        }, 0);
+      }
     });
   }
 

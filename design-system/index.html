@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System — visit_theme_next</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vn-azul-marino:      #1A2B4A;
+    --vn-rojo-principal:   #FF3108;
+    --vn-rojo-principal-h: #E22B07;
+    --vn-negro:            #222222;
+    --vn-amarillo:         #FBB018;
+    --vn-blanco:           #FFFFFF;
+    --vn-tinta:            #1C1F26;
+    --vn-gris-oscuro:      #1D1D1D;
+    --vn-gris-10:          #F5F6F8;
+    --vn-gris-30:          #D8DCE3;
+    --vn-gris-60:          #6B7280;
+    --vn-sombra-menu:      0 12px 32px rgba(16, 27, 48, .18);
+
+    --vn-bar1-h:   64px;
+    --vn-bar2-h:   44px;
+    --vn-max:      1280px;
+    --vn-pad:      clamp(16px, 4vw, 40px);
+    --vn-radio:    6px;
+    --vn-transicion: 200ms cubic-bezier(.4, 0, .2, 1);
+
+    --doc-bg: var(--vn-blanco);
+    --doc-fg: var(--vn-tinta);
+    --doc-nav-w: 240px;
+  }
+
+  * , *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Lato', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--doc-fg);
+    background: var(--doc-bg);
+    -webkit-font-smoothing: antialiased;
+  }
+  code, pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+
+  /* ---- shell: sidenav + contenido ---- */
+  .shell { display: flex; min-height: 100vh; }
+
+  .sidenav {
+    width: var(--doc-nav-w); flex: none;
+    position: sticky; top: 0; align-self: flex-start;
+    height: 100vh; overflow-y: auto;
+    background: var(--vn-gris-oscuro); color: var(--vn-blanco);
+    padding: 28px 20px 40px;
+  }
+  .sidenav__brand { display: block; font-size: 15px; font-weight: 800; letter-spacing: .01em; margin-bottom: 4px; }
+  .sidenav__sub { display: block; font-size: 12px; color: rgba(255,255,255,.55); margin-bottom: 28px; }
+  .sidenav__group { margin: 0 0 6px; }
+  .sidenav__title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: rgba(255,255,255,.4); margin: 22px 0 8px; }
+  .sidenav a {
+    display: block; padding: 7px 10px; margin: 0 -10px;
+    border-radius: 6px; font-size: 13.5px; font-weight: 600;
+    color: rgba(255,255,255,.75); text-decoration: none;
+    transition: background var(--vn-transicion), color var(--vn-transicion);
+  }
+  .sidenav a:hover { background: rgba(255,255,255,.08); color: var(--vn-blanco); }
+
+  .content { flex: 1; min-width: 0; padding: 48px clamp(20px, 4vw, 64px) 120px; max-width: 1180px; }
+
+  .page-header { margin-bottom: 56px; }
+  .page-header__eyebrow { font-size: 13px; font-weight: 700; color: var(--vn-rojo-principal); text-transform: uppercase; letter-spacing: .06em; }
+  .page-header h1 { font-size: clamp(30px, 4vw, 42px); font-weight: 800; line-height: 1.1; margin: 10px 0 12px; letter-spacing: -.01em; }
+  .page-header p { font-size: 16px; line-height: 1.6; color: var(--vn-gris-60); max-width: 62ch; }
+  .page-header__meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+  .badge-meta {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; color: var(--vn-gris-60);
+    background: var(--vn-gris-10); border: 1px solid var(--vn-gris-30);
+    padding: 5px 11px; border-radius: 999px;
+  }
+
+  section.doc-section { margin-bottom: 72px; scroll-margin-top: 24px; }
+  .doc-section__head { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--vn-gris-30); }
+  .doc-section__head h2 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 700; margin: 0 0 6px; letter-spacing: -.01em; }
+  .doc-section__head p { margin: 0; color: var(--vn-gris-60); font-size: 14.5px; line-height: 1.55; max-width: 68ch; }
+
+  .subhead { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--vn-gris-60); margin: 32px 0 14px; }
+  .subhead:first-child { margin-top: 0; }
+
+  .swatch-note {
+    font-size: 13px; line-height: 1.6; color: var(--vn-gris-60);
+    background: var(--vn-gris-10); border: 1px solid var(--vn-gris-30);
+    border-radius: 8px; padding: 12px 16px; margin: 16px 0 0;
+  }
+  .swatch-note code { background: var(--vn-blanco); border: 1px solid var(--vn-gris-30); border-radius: 4px; padding: 1px 5px; font-size: 12px; }
+
+  /* ---- paleta ---- */
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+  .swatch {
+    border: 1px solid var(--vn-gris-30); border-radius: 10px; overflow: hidden;
+    background: var(--vn-blanco);
+  }
+  .swatch__color { height: 84px; }
+  .swatch__body { padding: 12px 14px; }
+  .swatch__name { font-size: 13px; font-weight: 700; }
+  .swatch__hex { font-size: 12px; color: var(--vn-gris-60); margin-top: 2px; }
+  .swatch__use { font-size: 12px; color: var(--vn-gris-60); margin-top: 6px; line-height: 1.4; }
+
+  .swatch-grid--raw .swatch__name { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+
+  /* ---- tipografia ---- */
+  .type-row { display: flex; align-items: baseline; gap: 24px; padding: 20px 0; border-top: 1px solid var(--vn-gris-30); }
+  .type-row:first-of-type { border-top: none; }
+  .type-row__meta { width: 190px; flex: none; }
+  .type-row__role { font-size: 13px; font-weight: 700; }
+  .type-row__spec { font-size: 12px; color: var(--vn-gris-60); margin-top: 3px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .type-row__sample { flex: 1; min-width: 0; color: var(--vn-gris-oscuro); overflow-wrap: anywhere; }
+
+  .t-hero { font-size: clamp(30px, 3.4vw, 40px); font-weight: 700; line-height: 1.08; letter-spacing: -.02em; }
+  .t-section-lg { font-size: clamp(24px, 2.6vw, 30px); font-weight: 700; line-height: 1.15; }
+  .t-section-md { font-size: 24px; font-weight: 700; line-height: 1.2; }
+  .t-h2 { font-size: 19px; font-weight: 700; }
+  .t-lead { font-size: 18px; font-weight: 600; line-height: 1.6; }
+  .t-body { font-size: 16px; line-height: 1.75; }
+  .t-card-desc { font-size: 18px; line-height: 1.5; color: var(--vn-gris-60); }
+  .t-card-title { font-size: 17px; font-weight: 600; }
+  .t-nav { font-size: 18px; }
+  .t-btn { font-size: 15px; font-weight: 600; }
+
+  /* ---- botones ---- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 14px 30px; border-radius: 8px;
+    font-size: 15px; font-weight: 600;
+    text-decoration: none; cursor: pointer; border: 0;
+    transition: transform var(--vn-transicion), background var(--vn-transicion), box-shadow var(--vn-transicion);
+  }
+  .btn--primary { background: var(--vn-rojo-principal); color: var(--vn-blanco); box-shadow: 0 6px 22px rgba(255,49,49,.35); }
+  .btn--primary:hover { transform: translateY(-2px); background: var(--vn-rojo-principal-h); }
+  .btn--outline { background: var(--vn-blanco); color: var(--vn-rojo-principal); border: 1px solid var(--vn-rojo-principal); }
+  .btn--outline:hover { transform: translateY(-2px); background: var(--vn-rojo-principal); color: var(--vn-blanco); }
+  .btn--ghost { background: transparent; color: var(--vn-rojo-principal); border: 1px solid var(--vn-rojo-principal); padding: 12px 26px; }
+  .btn--ghost:hover { background: rgba(255,49,8,.08); }
+  .btn--secondary { background: var(--vn-blanco); color: var(--vn-rojo-principal); border: 1px solid var(--vn-rojo-principal); }
+  .btn--secondary:hover { background: var(--vn-gris-10); }
+  .btn-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+  /* ---- cards ---- */
+  .card-demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 24px; }
+
+  .card-imperdible { display: flex; flex-direction: column; gap: 12px; text-decoration: none; transition: transform var(--vn-transicion); }
+  .card-imperdible__media {
+    display: block; aspect-ratio: 3/4; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--vn-gris-30); box-shadow: 0 10px 24px rgba(16,27,48,.12);
+    transition: box-shadow var(--vn-transicion), border-color var(--vn-transicion);
+  }
+  .card-imperdible__img { width: 100%; height: 100%; object-fit: cover; transition: transform 420ms cubic-bezier(.25,.8,.25,1); }
+  .card-imperdible__title { text-align: center; font-size: 17px; font-weight: 600; color: var(--vn-gris-oscuro); transition: color var(--vn-transicion); }
+  .card-imperdible:hover { transform: translateY(-6px); }
+  .card-imperdible:hover .card-imperdible__img { transform: scale(1.05); }
+  .card-imperdible:hover .card-imperdible__media { border-color: var(--vn-rojo-principal); }
+  .card-imperdible:hover .card-imperdible__title { color: var(--vn-rojo-principal); }
+
+  .card-evento { display: flex; flex-direction: column; gap: 12px; text-decoration: none; transition: transform var(--vn-transicion); }
+  .card-evento__media {
+    position: relative; aspect-ratio: 3/4; border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--vn-gris-30); box-shadow: 0 10px 24px rgba(16,27,48,.12);
+  }
+  .card-evento__img { width: 100%; height: 100%; object-fit: cover; transition: transform 420ms cubic-bezier(.25,.8,.25,1); }
+  .card-evento__banner {
+    position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    background: var(--vn-rojo-principal); color: var(--vn-blanco); border-radius: 8px;
+    padding: 12px 14px; margin-bottom: -10px; text-align: center; transition: background var(--vn-transicion);
+  }
+  .card-evento__title { font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .card-evento__info { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(0,0,0,.9); color: var(--vn-blanco); margin: 0 -14px -14px; padding: 18px 14px 12px; }
+  .card-evento__info-day { font-size: 26px; font-weight: 700; line-height: 1; }
+  .card-evento__info-month { font-size: 15px; font-weight: 600; color: rgba(255,255,255,.8); }
+  .card-evento:hover { transform: translateY(-6px); }
+  .card-evento:hover .card-evento__media { border-color: var(--vn-rojo-principal); }
+  .card-evento:hover .card-evento__img { transform: scale(1.08); }
+  .card-evento:hover .card-evento__banner { background: var(--vn-rojo-principal-h); }
+
+  .card-categoria { position: relative; display: block; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 20px rgba(16,27,48,.1); text-decoration: none; }
+  .card-categoria img { width: 100%; height: 100%; object-fit: cover; transition: transform 420ms cubic-bezier(.25,.8,.25,1); }
+  .card-categoria:hover img { transform: scale(1.06); }
+  .card-categoria__label {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 16px;
+    background: linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,0));
+    color: var(--vn-blanco); font-size: 18px; font-weight: 600;
+  }
+
+  /* ---- hero / cat-hero ---- */
+  .demo-hero { position: relative; display: flex; align-items: flex-end; min-height: 280px; border-radius: 12px; overflow: hidden; color: var(--vn-blanco); background: linear-gradient(135deg, var(--vn-azul-marino), var(--vn-gris-oscuro)); }
+  .demo-hero__banner { position: relative; width: 100%; padding: 20px var(--vn-pad); background: rgba(255,49,8,.65); text-align: center; }
+  .demo-hero__title { font-size: clamp(26px, 4vw, 40px); font-weight: 700; line-height: 1.05; letter-spacing: -.02em; margin: 0; }
+  .demo-hero__crumb { font-size: 12px; opacity: .85; margin: 0 0 6px; }
+
+  .demo-hero--light .demo-hero__banner { background: rgba(255,255,255,.65); text-align: left; }
+  .demo-hero--light .demo-hero__title { color: var(--vn-gris-oscuro); }
+  .demo-hero--light .demo-hero__crumb { color: var(--vn-gris-oscuro); opacity: .7; }
+
+  .hero-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 720px) { .hero-pair { grid-template-columns: 1fr; } }
+
+  /* ---- breadcrumb ---- */
+  .breadcrumb-demo { padding: 20px; border-radius: 10px; background: var(--vn-gris-oscuro); }
+  .breadcrumb ol { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .breadcrumb li { display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,.75); }
+  .breadcrumb li + li::before { content: '/'; color: rgba(255,255,255,.45); }
+  .breadcrumb li[aria-current='page'] { color: var(--vn-blanco); font-weight: 600; }
+  .breadcrumb a { text-decoration: none; color: inherit; transition: color var(--vn-transicion); }
+  .breadcrumb a:hover { color: var(--vn-blanco); text-decoration: underline; }
+
+  .breadcrumb-demo--dark { background: var(--vn-blanco); border: 1px solid var(--vn-gris-30); }
+  .breadcrumb--dark li { color: var(--vn-gris-60); }
+  .breadcrumb--dark li + li::before { color: var(--vn-gris-30); }
+  .breadcrumb--dark li[aria-current='page'] { color: var(--vn-gris-oscuro); }
+  .breadcrumb--dark a:hover { color: var(--vn-rojo-principal); }
+
+  /* ---- modal ---- */
+  .modal-trigger-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .vn-modal { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px; }
+  .vn-modal[hidden] { display: none; }
+  .vn-modal__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.75); }
+  .vn-modal__dialog { position: relative; z-index: 1; width: 100%; max-width: 420px; max-height: 88vh; background: var(--vn-blanco); border-radius: 12px; overflow: hidden; padding: 28px; }
+  .vn-modal__dialog h3 { margin: 0 0 10px; font-size: 19px; }
+  .vn-modal__dialog p { margin: 0; color: var(--vn-gris-60); font-size: 14.5px; line-height: 1.6; }
+  .vn-modal__close {
+    position: fixed; top: 16px; right: 16px; z-index: 3;
+    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(0,0,0,.55); border: 0; cursor: pointer; color: var(--vn-blanco);
+    font-size: 22px; line-height: 1; transition: background var(--vn-transicion), transform var(--vn-transicion);
+  }
+  .vn-modal__close:hover { background: var(--vn-rojo-principal); transform: scale(1.05); }
+
+  /* ---- pager ---- */
+  .pager__items { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .pager__item > a, .pager__item > span {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 40px; height: 40px; padding: 0 12px; border-radius: 6px;
+    background: var(--vn-blanco); border: 1px solid var(--vn-gris-30);
+    color: var(--vn-gris-oscuro); font-size: 14px; font-weight: 600; line-height: 1;
+    text-decoration: none; transition: background var(--vn-transicion), border-color var(--vn-transicion), color var(--vn-transicion);
+  }
+  .pager__item > a:hover { background: var(--vn-gris-10); border-color: var(--vn-gris-60); }
+  .pager__item.is-active > span { background: var(--vn-rojo-principal); border-color: var(--vn-rojo-principal); color: var(--vn-blanco); }
+
+  /* ---- carrusel ---- */
+  .carousel-demo { position: relative; padding: 0 52px; }
+  .carousel-demo__track { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 0 18px; }
+  .carousel-demo__track::-webkit-scrollbar { display: none; }
+  .carousel-demo__track .card-imperdible { flex: 0 0 160px; scroll-snap-align: start; }
+  .carousel-arrow {
+    position: absolute; top: 40%; z-index: 5; display: grid; place-items: center;
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,.9); border: 1px solid var(--vn-gris-30); cursor: pointer;
+    color: var(--vn-gris-oscuro); box-shadow: 0 6px 16px rgba(16,27,48,.2);
+    transform: translateY(-50%); transition: background var(--vn-transicion), color var(--vn-transicion);
+  }
+  .carousel-arrow--prev { left: 0; } .carousel-arrow--next { right: 0; }
+  .carousel-arrow:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); }
+  .carousel-arrow--outline { width: 44px; height: 44px; background: transparent; border: 2px solid var(--vn-rojo-principal); color: var(--vn-rojo-principal); }
+  .carousel-arrow--outline:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); }
+
+  .dots-row { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+  .dots-row button { width: 9px; height: 9px; border-radius: 50%; padding: 0; background: var(--vn-blanco); border: 1.5px solid var(--vn-rojo-principal); cursor: pointer; transition: background var(--vn-transicion), transform var(--vn-transicion); }
+  .dots-row button.is-active { background: var(--vn-rojo-principal); transform: scale(1.3); }
+
+  /* ---- filtros ---- */
+  .filters-demo { max-width: 640px; padding: 24px; border-radius: 10px; background: var(--vn-gris-10); display: flex; flex-direction: column; gap: 16px; }
+  .filters-demo__row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .filters-demo__field { display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px; }
+  .filters-demo__field label { font-size: 12.5px; font-weight: 600; color: var(--vn-gris-60); }
+  .filters-demo__field select, .filters-demo__field input {
+    height: 44px; padding: 0 14px; border-radius: 6px; border: 1px solid var(--vn-gris-30);
+    background: var(--vn-blanco); color: var(--vn-tinta); font-size: 14px; font-family: inherit;
+  }
+  .filters-demo__field select:focus, .filters-demo__field input:focus { outline: 2px solid var(--vn-rojo-principal); outline-offset: 1px; }
+
+  .checkbox-filters { max-width: 280px; border: 1px solid var(--vn-gris-30); border-radius: 12px; padding: 24px; }
+  .checkbox-filters h4 { margin: 0 0 14px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--vn-gris-60); }
+  .checkbox-filters label { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14.5px; color: var(--vn-tinta); cursor: pointer; }
+  .checkbox-filters input { width: 17px; height: 17px; accent-color: var(--vn-rojo-principal); cursor: pointer; }
+
+  /* ---- sidebar ---- */
+  .sidebar-demo { max-width: 300px; display: flex; flex-direction: column; gap: 10px; }
+  .sidebar-demo__row { padding: 18px 20px; border: 1px solid var(--vn-gris-30); border-radius: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .sidebar-demo__row--address { background: #cbbba0; border-color: #cbbba0; }
+  .sidebar-demo__row--address .sidebar-demo__label, .sidebar-demo__row--address .sidebar-demo__value { color: #000; }
+  .sidebar-demo__label { font-size: 15px; font-weight: 700; color: var(--vn-gris-60); }
+  .sidebar-demo__value { font-size: 16px; line-height: 1.55; font-weight: 500; color: #111; }
+  .sidebar-demo__badge { display: inline-block; align-self: flex-start; padding: 6px 14px; border-radius: 8px; background: var(--vn-rojo-principal); color: var(--vn-blanco); font-size: 14px; font-weight: 700; }
+
+  /* ---- tags ---- */
+  .tag-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .place-tag { display: inline-block; padding: 4px 12px; border-radius: 999px; background: var(--vn-gris-10); border: 1px solid var(--vn-gris-30); font-size: 12.5px; font-weight: 600; color: var(--vn-gris-oscuro); text-decoration: none; transition: border-color var(--vn-transicion), color var(--vn-transicion); }
+  a.place-tag:hover { border-color: var(--vn-rojo-principal); color: var(--vn-rojo-principal); }
+  .place-tag--outline { background: var(--vn-blanco); padding: 6px 14px; font-size: 13px; color: var(--vn-gris-60); }
+  .guias-tag { display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--vn-gris-10); font-size: 12px; font-weight: 600; color: var(--vn-gris-oscuro); }
+
+  /* ---- colapsable ---- */
+  .collapsible-demo { max-width: 640px; }
+  .cat-intro__body--collapsible { position: relative; max-height: 130px; overflow: hidden; font-size: 16px; line-height: 1.75; color: var(--vn-tinta); }
+  .cat-intro__body--collapsible::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 60px; background: linear-gradient(to bottom, rgba(255,255,255,0), var(--vn-blanco)); pointer-events: none; }
+  .cat-intro__body--collapsible.is-expanded { max-height: none; }
+  .cat-intro__body--collapsible.is-expanded::after { display: none; }
+  .cat-intro__toggle {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 11px 22px;
+    border: 1px solid var(--vn-gris-30); border-radius: 999px; background: var(--vn-blanco); cursor: pointer;
+    font-size: 14px; font-weight: 700; color: var(--vn-rojo-principal); font-family: inherit;
+    transition: background var(--vn-transicion), border-color var(--vn-transicion);
+  }
+  .cat-intro__toggle:hover { background: var(--vn-gris-10); border-color: var(--vn-rojo-principal); }
+  .cat-intro__toggle svg { width: 11px; height: 7px; flex: none; transition: transform var(--vn-transicion); }
+  .cat-intro__toggle[aria-expanded='true'] svg { transform: rotate(180deg); }
+
+  /* ---- utilidades doc ---- */
+  .placeholder-img {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--vn-gris-30), var(--vn-gris-10));
+    color: var(--vn-gris-60); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  }
+
+  footer.doc-footer { border-top: 1px solid var(--vn-gris-30); padding-top: 24px; margin-top: 80px; font-size: 12.5px; color: var(--vn-gris-60); }
+
+  @media (max-width: 860px) {
+    .sidenav { position: fixed; left: 0; top: 0; z-index: 50; transform: translateX(-100%); transition: transform var(--vn-transicion); box-shadow: 0 0 40px rgba(0,0,0,.3); }
+    .sidenav.is-open { transform: translateX(0); }
+    .content { padding-left: 20px; padding-right: 20px; }
+    .nav-toggle { display: inline-flex; }
+  }
+  .nav-toggle {
+    display: none; position: fixed; bottom: 20px; right: 20px; z-index: 60;
+    width: 52px; height: 52px; border-radius: 50%; background: var(--vn-rojo-principal); color: var(--vn-blanco);
+    border: 0; align-items: center; justify-content: center; font-size: 22px; cursor: pointer;
+    box-shadow: 0 10px 24px rgba(16,27,48,.3);
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <nav class="sidenav" id="sidenav">
+    <span class="sidenav__brand">Design System</span>
+    <span class="sidenav__sub">visit_theme_next</span>
+
+    <div class="sidenav__group">
+      <p class="sidenav__title">Fundamentos</p>
+      <a href="#paleta">Paleta de color</a>
+      <a href="#tipografia">Tipografía</a>
+      <a href="#tokens">Tokens estructurales</a>
+    </div>
+    <div class="sidenav__group">
+      <p class="sidenav__title">Componentes</p>
+      <a href="#botones">Botones</a>
+      <a href="#cards">Cards</a>
+      <a href="#hero">Hero / cat-hero</a>
+      <a href="#breadcrumb">Breadcrumb</a>
+      <a href="#modal">Modal</a>
+      <a href="#pager">Pager</a>
+      <a href="#carrusel">Carrusel</a>
+      <a href="#filtros">Filtros</a>
+      <a href="#sidebar">Sidebar de ficha</a>
+      <a href="#tags">Tags / badges</a>
+      <a href="#colapsable">Leer más</a>
+    </div>
+  </nav>
+
+  <main class="content">
+    <header class="page-header">
+      <span class="page-header__eyebrow">Visit Bogotá</span>
+      <h1>Design System — visit_theme_next</h1>
+      <p>Referencia visual de los tokens y componentes portados del prototipo v3 al subtema. Cada muestra usa el CSS real documentado en <code>components.md</code> — esta página es de consulta, no está conectada al build del tema.</p>
+      <div class="page-header__meta">
+        <span class="badge-meta">Snapshot 2026-09-16</span>
+        <span class="badge-meta">Fuente: scss/*.scss</span>
+        <span class="badge-meta">No afecta el build</span>
+      </div>
+    </header>
+
+    <!-- ===================== PALETA ===================== -->
+    <section class="doc-section" id="paleta">
+      <div class="doc-section__head">
+        <h2>Paleta de color</h2>
+        <p>Tokens declarados en <code>:root</code> (scss/_header.scss) más los colores que se usan en el código pero sin tokenizar.</p>
+      </div>
+
+      <p class="subhead">Tokens --vn-*</p>
+      <div class="swatch-grid" id="swatch-tokens"></div>
+
+      <p class="subhead">Colores sin tokenizar (hex crudo)</p>
+      <div class="swatch-grid swatch-grid--raw" id="swatch-raw"></div>
+      <p class="swatch-note">Aparecen en el sidebar de ficha (<code>#cbbba0</code>, <code>#111</code>, <code>#000</code>), en separadores del megamenú (<code>#706F6F</code> / <code>#707070</code>) y en el hover del botón TransMilenio sobre el mapa (<code>#142140</code>).</p>
+    </section>
+
+    <!-- ===================== TIPOGRAFIA ===================== -->
+    <section class="doc-section" id="tipografia">
+      <div class="doc-section__head">
+        <h2>Tipografía</h2>
+        <p>Familia única: <strong>Lato</strong> (400 / 600 / 700 / 800), forzada sobre el Poppins del tema base con un selector universal en <code>_header.scss</code>. No hay escala con variables — cada componente fija su tamaño a mano.</p>
+      </div>
+
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Hero / título de página</div><div class="type-row__spec">clamp(30–32,5–5.5vw,50–56) · 700</div></div>
+        <div class="type-row__sample t-hero">Bogotá, tu casa.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Título de sección grande</div><div class="type-row__spec">clamp(26,3.5vw,37) · 700</div></div>
+        <div class="type-row__sample t-section-lg">Imperdibles de Bogotá</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Título de sección media</div><div class="type-row__spec">clamp(22,2.6–3vw,26–30) · 700</div></div>
+        <div class="type-row__sample t-section-md">Rutas relacionadas</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">H2/H3 en texto enriquecido</div><div class="type-row__spec">19px · 700</div></div>
+        <div class="type-row__sample t-h2">Cómo llegar</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Lead / bajada</div><div class="type-row__spec">17–19px · 600</div></div>
+        <div class="type-row__sample t-lead">Un recorrido de 72 horas por los imperdibles de la ciudad, pensado para quienes tienen poco tiempo.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Cuerpo de texto</div><div class="type-row__spec">16px / 1.75 · 400</div></div>
+        <div class="type-row__sample t-body">Bogotá combina historia colonial, arte urbano y una escena gastronómica en constante crecimiento. Cada localidad tiene su propio carácter, desde La Candelaria hasta Usaquén.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Descripción de card grande</div><div class="type-row__spec">18–19px · 400</div></div>
+        <div class="type-row__sample t-card-desc">Los planes que no te podés perder este mes en la ciudad.</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Título de card</div><div class="type-row__spec">15–19px (inconsistente) · 600</div></div>
+        <div class="type-row__sample t-card-title">Monserrate</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Navegación</div><div class="type-row__spec">18px (↓15–17 mobile) · 400</div></div>
+        <div class="type-row__sample t-nav">Qué hacer</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row__meta"><div class="type-row__role">Botón</div><div class="type-row__spec">15px · 600</div></div>
+        <div class="type-row__sample t-btn">Ver más</div>
+      </div>
+    </section>
+
+    <!-- ===================== TOKENS ESTRUCTURALES ===================== -->
+    <section class="doc-section" id="tokens">
+      <div class="doc-section__head">
+        <h2>Tokens estructurales</h2>
+        <p>Medidas de layout, radios, sombra y transición declaradas en <code>:root</code>.</p>
+      </div>
+      <div class="swatch-grid" id="swatch-structural"></div>
+    </section>
+
+    <!-- ===================== BOTONES ===================== -->
+    <section class="doc-section" id="botones">
+      <div class="doc-section__head">
+        <h2>Botones</h2>
+        <p><code>.btn</code> base + variantes. <code>--outline</code> solo existe en home; <code>--ghost</code> solo en archive; <code>--secondary</code> es del sidebar de ficha.</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="#">.btn--primary</a>
+        <a class="btn btn--outline" href="#">.btn--outline</a>
+        <a class="btn btn--ghost" href="#">.btn--ghost</a>
+        <a class="btn btn--secondary" href="#">.btn--secondary</a>
+      </div>
+    </section>
+
+    <!-- ===================== CARDS ===================== -->
+    <section class="doc-section" id="cards">
+      <div class="doc-section__head">
+        <h2>Cards</h2>
+        <p>Tres patrones de card recurrentes en el sitio: imperdible/ruta/blog, evento, y categoría.</p>
+      </div>
+
+      <p class="subhead">.card-imperdible</p>
+      <div class="card-demo-grid">
+        <a class="card-imperdible" href="#">
+          <span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span>
+          <span class="card-imperdible__title">Monserrate</span>
+        </a>
+        <a class="card-imperdible" href="#">
+          <span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span>
+          <span class="card-imperdible__title">La Candelaria</span>
+        </a>
+        <a class="card-imperdible" href="#">
+          <span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span>
+          <span class="card-imperdible__title">Museo del Oro</span>
+        </a>
+      </div>
+
+      <p class="subhead">.card-evento</p>
+      <div class="card-demo-grid">
+        <a class="card-evento" href="#">
+          <span class="card-evento__media"><span class="placeholder-img">3:4</span></span>
+          <span class="card-evento__banner"><span class="card-evento__title">Festival de Jazz al Parque</span></span>
+          <span class="card-evento__info"><span class="card-evento__info-day">18</span><span class="card-evento__info-month">Septiembre</span></span>
+        </a>
+        <a class="card-evento" href="#">
+          <span class="card-evento__media"><span class="placeholder-img">3:4</span></span>
+          <span class="card-evento__banner"><span class="card-evento__title">Feria del Libro</span></span>
+          <span class="card-evento__info"><span class="card-evento__info-day">24</span><span class="card-evento__info-month">Septiembre</span></span>
+        </a>
+      </div>
+
+      <p class="subhead">.card-categoria</p>
+      <div class="card-demo-grid">
+        <a class="card-categoria" href="#">
+          <span class="placeholder-img" style="position:absolute;inset:0;">4:3</span>
+          <span class="card-categoria__label">Cultura y patrimonio</span>
+        </a>
+        <a class="card-categoria" href="#">
+          <span class="placeholder-img" style="position:absolute;inset:0;">4:3</span>
+          <span class="card-categoria__label">Naturaleza</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="doc-section" id="hero">
+      <div class="doc-section__head">
+        <h2>Hero / cat-hero</h2>
+        <p>Sin overlay oscura sobre la imagen (port del commit <code>d377a61</code>): el contraste lo da el cajón de color. Variante <code>--light</code> para categoría/atractivo.</p>
+      </div>
+      <div class="hero-pair">
+        <div class="demo-hero">
+          <div class="demo-hero__banner">
+            <p class="demo-hero__crumb">Inicio / Qué hacer</p>
+            <h3 class="demo-hero__title">Cultura y patrimonio</h3>
+          </div>
+        </div>
+        <div class="demo-hero demo-hero--light">
+          <div class="demo-hero__banner">
+            <p class="demo-hero__crumb">Inicio / Atractivos / Monserrate</p>
+            <h3 class="demo-hero__title">Monserrate</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== BREADCRUMB ===================== -->
+    <section class="doc-section" id="breadcrumb">
+      <div class="doc-section__head">
+        <h2>Breadcrumb</h2>
+        <p>Pensado por defecto para ir sobre imagen (blanco translúcido). Variante <code>--dark</code> para fondo blanco (blog).</p>
+      </div>
+      <div class="breadcrumb-demo">
+        <nav class="breadcrumb">
+          <ol>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Qué hacer</a></li>
+            <li aria-current="page">Cultura y patrimonio</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="breadcrumb-demo breadcrumb-demo--dark" style="margin-top:14px;">
+        <nav class="breadcrumb breadcrumb--dark">
+          <ol>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Blog</a></li>
+            <li aria-current="page">5 planes para el fin de semana</li>
+          </ol>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ===================== MODAL ===================== -->
+    <section class="doc-section" id="modal">
+      <div class="doc-section__head">
+        <h2>Modal — .vn-modal</h2>
+        <p>Único componente reutilizado para la galería (lightbox de foto) y el embed de Instagram.</p>
+      </div>
+      <div class="modal-trigger-row">
+        <button class="btn btn--primary" type="button" onclick="document.getElementById('demoModal').removeAttribute('hidden')">Abrir modal de ejemplo</button>
+      </div>
+      <div class="vn-modal" id="demoModal" hidden>
+        <div class="vn-modal__backdrop" onclick="document.getElementById('demoModal').setAttribute('hidden','')"></div>
+        <button class="vn-modal__close" type="button" onclick="document.getElementById('demoModal').setAttribute('hidden','')" aria-label="Cerrar">×</button>
+        <div class="vn-modal__dialog">
+          <h3>.vn-modal__dialog</h3>
+          <p>Mismo contenedor para la galería de fotos (variante <code>--image</code>, ancho automático) y el embed de Instagram (400px, con <code>iframe</code> dentro de <code>.vn-modal__body</code>).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PAGER ===================== -->
+    <section class="doc-section" id="pager">
+      <div class="doc-section__head">
+        <h2>Pager</h2>
+        <p>Único componente ya compartido vía mixin Sass (<code>pager.base</code>) — no duplicado a mano como el resto.</p>
+      </div>
+      <ul class="pager__items">
+        <li class="pager__item"><a href="#">‹</a></li>
+        <li class="pager__item is-active"><span>1</span></li>
+        <li class="pager__item"><a href="#">2</a></li>
+        <li class="pager__item"><a href="#">3</a></li>
+        <li class="pager__item"><a href="#">4</a></li>
+        <li class="pager__item"><a href="#">›</a></li>
+      </ul>
+    </section>
+
+    <!-- ===================== CARRUSEL ===================== -->
+    <section class="doc-section" id="carrusel">
+      <div class="doc-section__head">
+        <h2>Carrusel / track</h2>
+        <p>Scroll-snap con flechas + dots. Variante circular blanca (categoría/eventos) y variante outline roja (imperdibles en home).</p>
+      </div>
+
+      <p class="subhead">Flecha circular (default)</p>
+      <div class="carousel-demo">
+        <button class="carousel-arrow carousel-arrow--prev" type="button" aria-label="Anterior">‹</button>
+        <div class="carousel-demo__track" id="track1">
+          <div class="card-imperdible"><span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span><span class="card-imperdible__title">Ítem 1</span></div>
+          <div class="card-imperdible"><span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span><span class="card-imperdible__title">Ítem 2</span></div>
+          <div class="card-imperdible"><span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span><span class="card-imperdible__title">Ítem 3</span></div>
+          <div class="card-imperdible"><span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span><span class="card-imperdible__title">Ítem 4</span></div>
+          <div class="card-imperdible"><span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span><span class="card-imperdible__title">Ítem 5</span></div>
+        </div>
+        <button class="carousel-arrow carousel-arrow--next" type="button" aria-label="Siguiente">›</button>
+      </div>
+      <div class="dots-row" id="dots1">
+        <button class="is-active" type="button" aria-label="Ir a 1"></button>
+        <button type="button" aria-label="Ir a 2"></button>
+        <button type="button" aria-label="Ir a 3"></button>
+      </div>
+
+      <p class="subhead">Flecha outline (home / imperdibles)</p>
+      <div class="carousel-demo">
+        <button class="carousel-arrow carousel-arrow--outline carousel-arrow--prev" type="button" aria-label="Anterior">‹</button>
+        <div class="carousel-demo__track">
+          <div class="card-imperdible"><span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span><span class="card-imperdible__title">Ítem 1</span></div>
+          <div class="card-imperdible"><span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span><span class="card-imperdible__title">Ítem 2</span></div>
+          <div class="card-imperdible"><span class="card-imperdible__media"><span class="placeholder-img">3:4</span></span><span class="card-imperdible__title">Ítem 3</span></div>
+        </div>
+        <button class="carousel-arrow carousel-arrow--outline carousel-arrow--next" type="button" aria-label="Siguiente">›</button>
+      </div>
+    </section>
+
+    <!-- ===================== FILTROS ===================== -->
+    <section class="doc-section" id="filtros">
+      <div class="doc-section__head">
+        <h2>Filtros</h2>
+        <p>Barra horizontal (agenda/guías) y sidebar de checkboxes (archivo de hoteles/atractivos/restaurantes).</p>
+      </div>
+
+      <p class="subhead">.events-filters</p>
+      <div class="filters-demo">
+        <div class="filters-demo__row">
+          <div class="filters-demo__field"><label>Mes</label><select><option>Septiembre</option></select></div>
+          <div class="filters-demo__field"><label>Categoría</label><select><option>Todas</option></select></div>
+          <div class="filters-demo__field"><label>Desde</label><input type="date"></div>
+          <div class="filters-demo__field"><label>Hasta</label><input type="date"></div>
+        </div>
+        <button class="btn btn--primary" type="button" style="align-self:flex-start;">Filtrar</button>
+      </div>
+
+      <p class="subhead">.filters (checkboxes)</p>
+      <div class="checkbox-filters">
+        <h4>Tipo de alojamiento</h4>
+        <label><input type="checkbox" checked> Hotel</label>
+        <label><input type="checkbox"> Hostal</label>
+        <label><input type="checkbox"> Apart-hotel</label>
+      </div>
+    </section>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <section class="doc-section" id="sidebar">
+      <div class="doc-section__head">
+        <h2>Sidebar de ficha — .place-sidebar</h2>
+        <p>Bloques apilados de información con fila destacada para la dirección (fondo <code>#cbbba0</code>) y badge de descuento.</p>
+      </div>
+      <div class="sidebar-demo">
+        <div class="sidebar-demo__row sidebar-demo__row--address">
+          <span class="sidebar-demo__label">Dirección</span>
+          <span class="sidebar-demo__value">Cra. 2 Este #21-48, La Candelaria</span>
+        </div>
+        <div class="sidebar-demo__row">
+          <span class="sidebar-demo__label">Horario</span>
+          <span class="sidebar-demo__value">Lun a dom · 9:00 a 18:00</span>
+        </div>
+        <div class="sidebar-demo__row">
+          <span class="sidebar-demo__label">Precio</span>
+          <span class="sidebar-demo__value">Desde $15.000 COP</span>
+          <span class="sidebar-demo__badge">-20% hoy</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TAGS ===================== -->
+    <section class="doc-section" id="tags">
+      <div class="doc-section__head">
+        <h2>Tags / badges</h2>
+        <p><code>.place-tag</code> pill genérica del sidebar de ficha, su variante outline (blog) y el tag de la tabla de guías.</p>
+      </div>
+      <div class="tag-row">
+        <a class="place-tag" href="#">Gratis</a>
+        <a class="place-tag" href="#">Accesible</a>
+        <a class="place-tag place-tag--outline" href="#">Cultura</a>
+        <span class="guias-tag">Español</span>
+        <span class="guias-tag">Inglés</span>
+      </div>
+    </section>
+
+    <!-- ===================== COLAPSABLE ===================== -->
+    <section class="doc-section" id="colapsable">
+      <div class="doc-section__head">
+        <h2>Leer más — .cat-intro__body--collapsible</h2>
+        <p>Intro colapsable con degradé de fade y botón "Leer más" que rota la flecha al expandir.</p>
+      </div>
+      <div class="collapsible-demo">
+        <div class="cat-intro__body--collapsible" id="collapsibleDemo">
+          <p>Bogotá combina historia colonial, arte urbano y una escena gastronómica en constante crecimiento. Cada localidad tiene su propio carácter, desde La Candelaria hasta Usaquén. La ciudad ofrece museos de talla mundial, un sistema de ciclorrutas premiado internacionalmente y una vida nocturna diversa que se extiende por zonas como la G, el Chapinero Alto y la Zona T.</p>
+          <p>Además de su oferta cultural, Bogotá es punto de partida ideal para conocer los alrededores: Zipaquirá y su catedral de sal, el páramo de Sumapaz o los pueblos patrimonio de Cundinamarca quedan a menos de dos horas de distancia.</p>
+        </div>
+        <button class="cat-intro__toggle" type="button" aria-expanded="false" onclick="toggleCollapsible(this)">
+          <span data-label>Leer más</span>
+          <svg viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <footer class="doc-footer">
+      Design System — visit_theme_next · generado a partir de <code>scss/*.scss</code> el 2026-09-16. Ver <a href="./README.md">README.md</a> y <a href="./components.md">components.md</a> para el detalle escrito.
+    </footer>
+  </main>
+</div>
+
+<button class="nav-toggle" id="navToggle" aria-label="Abrir menú" type="button">☰</button>
+
+<script>
+  // Paleta: tokens
+  var tokens = [
+    ['--vn-rojo-principal', '#FF3108', 'Acento principal: botones, hover de marca, activos, focus'],
+    ['--vn-rojo-principal-h', '#E22B07', 'Hover/oscurecido del rojo principal'],
+    ['--vn-amarillo', '#FBB018', 'Acento secundario: focus-visible, kicker de evento'],
+    ['--vn-azul-marino', '#1A2B4A', 'Reservado, sin uso activo detectado'],
+    ['--vn-negro', '#222222', 'Reservado, sin uso activo fuera de gris-oscuro'],
+    ['--vn-blanco', '#FFFFFF', 'Fondos claros, texto sobre fondo oscuro'],
+    ['--vn-tinta', '#1C1F26', 'Texto de cuerpo sobre fondo claro'],
+    ['--vn-gris-oscuro', '#1D1D1D', 'Títulos, fallback de hero'],
+    ['--vn-gris-10', '#F5F6F8', 'Fondos sutiles: filtros, franjas'],
+    ['--vn-gris-30', '#D8DCE3', 'Bordes por defecto'],
+    ['--vn-gris-60', '#6B7280', 'Texto secundario, labels']
+  ];
+  var raw = [
+    ['#cbbba0', '#cbbba0', 'Fondo de la fila "Dirección" en sidebar de ficha'],
+    ['#111 / #000', '#111111', 'Texto sobre esa fila de dirección'],
+    ['#706F6F', '#706F6F', 'Separadores de lista en el megamenú'],
+    ['#142140', '#142140', 'Hover del botón TransMilenio sobre el mapa']
+  ];
+  var structural = [
+    ['--vn-max', '1280px', 'Max-width de contenedor'],
+    ['--vn-pad', 'clamp(16px,4vw,40px)', 'Padding lateral de contenedor'],
+    ['--vn-radio', '6px', '"Oficial" pero poco usado; radios reales: 8/10/12/16/999px'],
+    ['--vn-bar1-h', '64px', 'Alto barra superior del header'],
+    ['--vn-bar2-h', '44px', 'Alto barra de nav; offset de sidebars sticky'],
+    ['--vn-transicion', '200ms cubic-bezier(.4,0,.2,1)', 'Transición estándar'],
+    ['--vn-sombra-menu', '0 12px 32px rgba(16,27,48,.18)', 'Única sombra tokenizada']
+  ];
+
+  function renderSwatches(target, list, isColor) {
+    var el = document.getElementById(target);
+    el.innerHTML = list.map(function (row) {
+      var name = row[0], value = row[1], use = row[2];
+      var colorBlock = isColor
+        ? '<div class="swatch__color" style="background:' + value + '"></div>'
+        : '<div class="swatch__color" style="background:var(--vn-gris-10);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--vn-gris-60);">' + value + '</div>';
+      return '<div class="swatch">' + colorBlock +
+        '<div class="swatch__body"><div class="swatch__name">' + name + '</div>' +
+        (isColor ? '<div class="swatch__hex">' + value + '</div>' : '') +
+        '<div class="swatch__use">' + use + '</div></div></div>';
+    }).join('');
+  }
+  renderSwatches('swatch-tokens', tokens, true);
+  renderSwatches('swatch-raw', raw, true);
+  renderSwatches('swatch-structural', structural, false);
+
+  // Colapsable
+  function toggleCollapsible(btn) {
+    var body = document.getElementById('collapsibleDemo');
+    var expanded = body.classList.toggle('is-expanded');
+    btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    btn.querySelector('[data-label]').textContent = expanded ? 'Leer menos' : 'Leer más';
+  }
+
+  // Dots demo
+  document.querySelectorAll('#dots1 button').forEach(function (btn, i) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('#dots1 button').forEach(function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      var track = document.getElementById('track1');
+      track.scrollTo({ left: i * 190, behavior: 'smooth' });
+    });
+  });
+
+  // Nav mobile
+  var navToggle = document.getElementById('navToggle');
+  var sidenav = document.getElementById('sidenav');
+  navToggle.addEventListener('click', function () { sidenav.classList.toggle('is-open'); });
+  sidenav.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () { sidenav.classList.remove('is-open'); });
+  });
+
+  // Cerrar modal con Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var m = document.getElementById('demoModal');
+      if (!m.hasAttribute('hidden')) m.setAttribute('hidden', '');
+    }
+  });
+</script>
+</body>
+</html>

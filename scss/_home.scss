@@ -53,7 +53,8 @@
   .imperdibles__title::after,
   .que-hacer__title::after,
   .eventos__title::after,
-  .planea-viaje__title::after {
+  .planea-viaje__title::after,
+  .blog-home__title::after {
     content: '';
     display: block;
     width: 32px;
@@ -515,18 +516,70 @@
   //  PLANEA TU VIAJE
   // =======================================================
   .planea-viaje {
+    position: relative;
     padding: clamp(48px, 7vw, 80px) var(--vn-pad);
     background: var(--vn-gris-10);
   }
+
+  // Bloque "Información al viajero": esquina superior derecha, solo desktop
+  .planea-viaje__info {
+    position: absolute;
+    top: clamp(24px, 3vw, 40px);
+    right: var(--vn-pad);
+    width: 60%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    gap: 24px;
+  }
+  .planea-viaje__info-btn {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 8px;
+    background: var(--vn-blanco);
+    border: 1.5px solid var(--vn-rojo-principal);
+    color: var(--vn-rojo-principal);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background var(--vn-transicion), color var(--vn-transicion), transform var(--vn-transicion);
+
+    svg { width: 22px; height: 22px; flex: none; }
+    &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); transform: translateY(-4px); }
+  }
+  .planea-viaje__info-illustration { flex: 1 1 auto; width: 100%; max-width: 440px; height: auto; }
+
+  @media (max-width: 900px) {
+    .planea-viaje__info { display: none; }
+  }
+
   .planea-viaje__wrap {
     max-width: var(--vn-max);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: 28px;
   }
   .planea-viaje__intro { max-width: 640px; }
+
+  .planea-viaje__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    gap: 40px;
+  }
+  .planea-viaje__illustration {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
   .planea-viaje__title {
     margin: 0 0 8px;
     font-size: clamp(26px, 3.5vw, 37px);
@@ -550,41 +603,27 @@
   }
   .planea-viaje__actions {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    align-items: center;
-    gap: 28px;
-  }
-  .planea-viaje__badge {
-    display: block;
-    width: 100%;
-    transition: transform var(--vn-transicion);
-
-    img { display: block; width: 100%; height: auto; }
-    &:hover { transform: translateY(-4px); }
-  }
-  .planea-viaje__info-btn {
-    height: 100%;
-    display: inline-flex;
+    display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 16px 22px;
-    border-radius: 8px;
-    background: var(--vn-blanco);
-    border: 1.5px solid var(--vn-rojo-principal);
-    color: var(--vn-rojo-principal);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    text-align: center;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: background var(--vn-transicion), color var(--vn-transicion), transform var(--vn-transicion);
+  }
+  .planea-viaje__badge {
+    display: block;
+    flex: 0 0 25%;
+    max-width: 25%;
+    transition: transform var(--vn-transicion);
 
-    svg { width: 24px; height: 24px; flex: none; }
-    &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); transform: translateY(-4px); }
+    img { display: block; width: 100%; height: auto; }
+    &:hover { transform: translateY(-6px); }
+  }
+
+  @media (max-width: 900px) {
+    .planea-viaje__row { grid-template-columns: 1fr; }
+    .planea-viaje__illustration { margin-inline: auto; }
+    .planea-viaje__actions { flex-wrap: wrap; }
+    .planea-viaje__badge { flex-basis: 72px; max-width: 72px; }
   }
 
   // =======================================================
@@ -695,8 +734,6 @@
 
   @media (max-width: 720px) {
     .planea-viaje__wrap { align-items: center; text-align: center; }
-    .planea-viaje__actions { grid-template-columns: repeat(2, 1fr); }
-    .planea-viaje__info-btn { white-space: normal; }
   }
 
   @media (max-width: 640px) {
@@ -723,9 +760,9 @@
     .eventos__arrow { display: none; }
     .imperdibles__head { flex-direction: column; align-items: flex-start; gap: 12px; }
 
-    .planea-viaje__actions { grid-template-columns: 1fr; gap: 20px; }
-    .planea-viaje__badge { max-width: 200px; margin-inline: auto; }
-    .planea-viaje__info-btn { max-width: 260px; margin-inline: auto; min-height: 72px; }
+    .planea-viaje__actions { flex-wrap: wrap; gap: 14px; }
+    .planea-viaje__badge { flex-basis: 70px; max-width: 70px; margin-inline: 0; }
+    .planea-viaje__wrap { align-items: stretch; text-align: left; }
 
     .blog-home__mosaic {
       display: flex;
