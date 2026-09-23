@@ -25,19 +25,12 @@
     </div>
   </section>
 
-  {# ================= INTRO + AVISO LEGAL ================= #}
+  {# ================= INTRO ================= #}
   <section class="guias">
     <div class="guias__wrap">
       {% if node.body.0.value %}
       <div class="guias__intro">{{ node.body.0.value|raw }}</div>
       {% endif %}
-
-      <div class="guias__notice">
-        <p>{{ 'El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los guías incluidos en este directorio, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas.'|t }}
-          <a href="/{{ subtheme_path ?: directory }}/docs/Aviso_legal_Directorio_guias.pdf" target="_blank" rel="noopener noreferrer">{{ 'Revisa nuestro aviso legal'|t }}</a>.</p>
-      </div>
-
-      <a class="btn btn--primary guias__register" href="https://forms.gle/2BgMA8ScdRMcaa5z7" target="_blank" rel="noopener noreferrer">{{ 'Registrarse como Guía Turístico'|t }}</a>
     </div>
   </section>
 
@@ -71,46 +64,48 @@
     </form>
   </section>
 
-  {# ================= TABLA ================= #}
+  {# ================= TARJETAS DE GUÍAS ================= #}
   <section class="guias-table-section">
     <div class="guias-table-section__wrap">
       <p class="guias-table__count" id="guias-count">{{ guides|length }} {{ 'guías encontrados'|t }}</p>
-      <div class="guias-table__scroll">
-        <table class="guias-table" id="guias-table">
-          <thead>
-            <tr>
-              <th>{{ 'Nombre'|t }}</th>
-              <th>{{ 'Especialidad'|t }}</th>
-              <th>{{ 'Idioma'|t }}</th>
-              <th>{{ 'Sector'|t }}</th>
-              <th>RNT</th>
-              <th>{{ 'Teléfono'|t }}</th>
-              <th>{{ 'Correo'|t }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for guide in guides %}
-            <tr class="guias-row"
-              data-languages="{% for l in guide.field_idiomas_que_maneja %}{{ l|lower|replace({', ':'-', ' ':'-'}) }} {% endfor %}"
-              data-sector="{% for s in guide.field_sector %}{{ s|lower|replace({', ':'-', ' ':'-'}) }} {% endfor %}">
-              <td>{{ guide.label }}</td>
-              <td>{{ guide.field_especialidad ?: '—' }}</td>
-              <td>
-                {% for l in guide.field_idiomas_que_maneja %}<span class="guias-table__tag">{{ l }}</span>{% else %}<span class="guias-table__tag">—</span>{% endfor %}
-              </td>
-              <td>
-                {% for s in guide.field_sector %}<span class="guias-table__tag">{{ s }}</span>{% else %}<span class="guias-table__tag">—</span>{% endfor %}
-              </td>
-              <td>{{ guide.field_rnt ?: '—' }}</td>
-              <td>{% if guide.field_telefono %}<a href="tel:+57{{ guide.field_telefono }}">+57 {{ guide.field_telefono }}</a>{% else %}—{% endif %}</td>
-              <td>{% if guide.field_correo %}<a href="mailto:{{ guide.field_correo }}">{{ guide.field_correo }}</a>{% else %}—{% endif %}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <div class="guias-cards" id="guias-cards">
+        {% for guide in guides %}
+        <article class="guias-card guias-row"
+          data-languages="{% for l in guide.field_idiomas_que_maneja %}{{ l|lower|replace({', ':'-', ' ':'-'}) }} {% endfor %}"
+          data-sector="{% for s in guide.field_sector %}{{ s|lower|replace({', ':'-', ' ':'-'}) }} {% endfor %}">
+          <h3 class="guias-card__name">{{ guide.label }}</h3>
+          <div class="guias-card__langs">
+            {% for l in guide.field_idiomas_que_maneja %}<span class="guias-table__tag">{{ l }}</span>{% else %}<span class="guias-table__tag">—</span>{% endfor %}
+          </div>
+          <div class="guias-card__sectors">
+            {% for s in guide.field_sector %}<span class="guias-table__tag">{{ s }}</span>{% else %}<span class="guias-table__tag">—</span>{% endfor %}
+          </div>
+          <p class="guias-card__rnt">RNT {{ guide.field_rnt ?: '—' }}</p>
+          <div class="guias-card__contact">
+            {% if guide.field_telefono %}
+            <a href="tel:+57{{ guide.field_telefono }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.5.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.5.1.4 0 .8-.2 1L6.6 10.8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>+57 {{ guide.field_telefono }}</a>
+            {% endif %}
+            {% if guide.field_correo %}
+            <a href="mailto:{{ guide.field_correo }}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 6.5l8 6 8-6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>{{ guide.field_correo }}</a>
+            {% endif %}
+          </div>
+        </article>
+        {% endfor %}
       </div>
     </div>
   </section>
   {% endif %}
+
+  {# ================= AVISO LEGAL + REGISTRO ================= #}
+  <section class="guias guias--footer">
+    <div class="guias__wrap">
+      <div class="guias__notice">
+        <p>{{ 'El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los guías incluidos en este directorio, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas.'|t }}
+          <a href="/{{ subtheme_path ?: directory }}/docs/Aviso_legal_Directorio_guias.pdf" target="_blank" rel="noopener noreferrer">{{ 'Revisa nuestro aviso legal'|t }}</a>.</p>
+      </div>
+
+      <a class="btn btn--primary guias__register" href="https://forms.gle/2BgMA8ScdRMcaa5z7" target="_blank" rel="noopener noreferrer">{{ 'Registrarse como Guía Turístico'|t }}</a>
+    </div>
+  </section>
 
 </div>

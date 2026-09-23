@@ -537,14 +537,14 @@
   //  DIRECTORIO DE GUÍAS — filtro por idioma / sector (client-side)
   // =========================================================
   function initGuias() {
-    var table = document.getElementById('guias-table');
-    if (!table || table.dataset.vnInit) return;
-    table.dataset.vnInit = '1';
+    var cards = document.getElementById('guias-cards');
+    if (!cards || cards.dataset.vnInit) return;
+    cards.dataset.vnInit = '1';
 
     var fLang = document.getElementById('f-idioma');
     var fSector = document.getElementById('f-sector');
     var count = document.getElementById('guias-count');
-    var rows = [].slice.call(table.querySelectorAll('.guias-row'));
+    var rows = [].slice.call(cards.querySelectorAll('.guias-row'));
     if (!fLang || !fSector || !rows.length) return;
 
     var countTpl = count ? count.textContent.replace(/^\d+\s*/, '') : '';
