@@ -107,6 +107,25 @@
           </div>
           {% endif %}
 
+          {% set galardonado = node.hasField('field_restaurante_galardonado') and node.field_restaurante_galardonado.value %}
+          {% set vegetariano = node.hasField('field_restaurante_vegetariano') and node.field_restaurante_vegetariano.value %}
+          {% if galardonado or vegetariano %}
+          <ul class="place-sidebar__badges">
+            {% if galardonado %}
+            <li class="place-badge place-badge--award" title="{{ 'Restaurante galardonado'|t }}">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.3l-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9z" fill="currentColor"/></svg>
+              <span class="visually-hidden">{{ 'Restaurante galardonado'|t }}</span>
+            </li>
+            {% endif %}
+            {% if vegetariano %}
+            <li class="place-badge place-badge--veggie" title="{{ 'Restaurante vegetariano'|t }}">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5C11 3.5 5 8 5 14.5c0 1.6.4 3 1.1 4.2L3.5 21.3l1.2 1.2 2.6-2.6c1.2.7 2.6 1.1 4.2 1.1 6.5 0 9-6 9-17.5zM8.3 17.6c2-3.8 5-6.8 8.7-8.9-2.4 2.6-4.9 5.6-7.3 9.9l-1.4-1z" fill="currentColor"/></svg>
+              <span class="visually-hidden">{{ 'Restaurante vegetariano'|t }}</span>
+            </li>
+            {% endif %}
+          </ul>
+          {% endif %}
+
           {% if node.field_rango_de_precios.0.entity %}
           <div class="place-sidebar__row">
             <span class="place-sidebar__label">{{ 'ui.price_range'|t }}</span>

@@ -2980,6 +2980,29 @@ body.nav-open {
 .vn-place .place-sidebar__row--address .place-sidebar__value {
   color: #000;
 }
+.vn-place .place-sidebar__badges {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 2px 0;
+}
+.vn-place .place-badge {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+}
+.vn-place .place-badge svg {
+  width: 100%;
+  height: 100%;
+}
+.vn-place .place-badge--award {
+  color: #e8891c;
+}
+.vn-place .place-badge--veggie {
+  color: #2e8b3d;
+}
 .vn-place .place-sidebar__label {
   font-size: 15px;
   font-weight: 700;
