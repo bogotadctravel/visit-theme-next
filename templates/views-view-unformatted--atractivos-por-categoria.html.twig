@@ -1,8 +1,25 @@
 {#
   Filas de la vista "atractivos_por_categoria" — grilla de tarjetas.
+  En page_2 (establecimientos) cada <li> lleva .card + data-* con los tids
+  de precio / categoría gastronómica / zona para el filtro client-side
+  ("idt-gastro-filter" busca #cardsList .card).
 #}
-<ul class="archive__grid">
+{% set is_eat = view.current_display == 'page_2' %}
+<ul class="archive__grid"{% if is_eat %} id="cardsList"{% endif %}>
   {% for row in rows %}
-    <li class="archive__item">{{ row.content }}</li>
+    {% if is_eat %}
+      {% set node = view.result[loop.index0]._entity %}
+      {% set data = {'precios': 'field_rango_de_precios', 'categoria': 'field_categoria_gastronomica', 'zona': 'field_zonagast'} %}
+      <li class="archive__item card"
+        {%- for key, field in data %}
+          {%- set tids = [] %}
+          {%- if node and node.hasField(field) %}
+            {%- for item in node.get(field) %}{% set tids = tids|merge([item.target_id]) %}{% endfor %}
+          {%- endif %}
+          data-{{ key }}="{{ tids|join(',') }}"
+        {%- endfor %}>{{ row.content }}</li>
+    {% else %}
+      <li class="archive__item">{{ row.content }}</li>
+    {% endif %}
   {% endfor %}
 </ul>

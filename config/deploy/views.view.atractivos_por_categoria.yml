@@ -389,10 +389,15 @@ display:
         operator: AND
         groups:
           1: AND
+      pager:
+        type: none
+        options:
+          offset: 0
       defaults:
         title: false
         filters: false
         filter_groups: false
+        pager: false
       display_extenders:
         metatag_display_extender:
           metatags: {  }

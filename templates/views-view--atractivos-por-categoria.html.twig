@@ -1,11 +1,19 @@
 {#
   Vista "atractivos_por_categoria" — listado tipo archive-places.html.
+  Dos displays comparten esta plantilla:
+    · page_1 (/atractivos/%)       — atractivos, con el pager de la vista.
+    · page_2 (/establecimientos/%) — establecimientos ("Dónde comer"), sin
+      pager y con filtros client-side (behavior "idt-gastro-filter" del tema
+      base: .filters + #cardsList + .card[data-*], igual que el nodo 562).
   El hero (nombre del término, imagen, breadcrumb) lo alimenta
   visit_theme_next_preprocess_views_view().
 #}
+{% set is_eat = view.current_display == 'page_2' %}
+{% set section_label = is_eat ? 'ui.where_to_eat'|t : 'Atractivos'|t %}
+
 <div class="vn-archive">
 
-  <section class="cat-hero cat-hero--tall" aria-label="{{ 'Atractivos'|t }}">
+  <section class="cat-hero cat-hero--tall" aria-label="{{ section_label }}">
     {% if vn_term_img_uri %}
     <img class="cat-hero__bg" src="{{ file_url(vn_term_img_uri) }}" alt="" aria-hidden="true">
     {% endif %}
@@ -14,21 +22,51 @@
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
           <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          {% if is_eat %}
+          <li><a href="{{ path('entity.node.canonical', {'node': 562}) }}">{{ 'ui.where_to_eat'|t }}</a></li>
+          {% if vn_term_name %}<li><a href="{{ vn_term_url }}">{{ vn_term_name }}</a></li>{% endif %}
+          {% else %}
           <li><a href="/que-hacer-en-bogota">{{ 'Descubre Bogotá'|t }}</a></li>
           {% if vn_term_name %}<li><a href="{{ vn_term_url }}">{{ vn_term_name }}</a></li>{% endif %}
           <li aria-current="page">{{ 'Atractivos'|t }}</li>
+          {% endif %}
         </ol>
       </nav>
     </div>
     <div class="cat-hero__banner">
-      <h1 class="cat-hero__title">{{ 'Atractivos'|t }}{% if vn_term_name %} {{ 'de'|t }} {{ vn_term_name }}{% endif %}</h1>
+      <h1 class="cat-hero__title">{{ section_label }}{% if vn_term_name %} {{ 'de'|t }} {{ vn_term_name }}{% endif %}</h1>
     </div>
   </section>
 
   <section class="archive">
-    <div class="archive__wrap{% if not exposed %} archive__wrap--full{% endif %}">
+    <div class="archive__wrap{% if not exposed and not is_eat %} archive__wrap--full{% endif %}">
 
-      {% if exposed %}
+      {% if is_eat %}
+      <div class="archive__results-head" style="grid-column:1/-1">
+        <p class="archive__count">{{ view.result|length }} {{ 'lugares'|t }}</p>
+      </div>
+
+      <aside>
+        <button class="filter-toggle-btn" type="button" aria-expanded="false" aria-controls="filters-panel">
+          <span>{{ 'Filtros'|t }}</span>
+          <svg class="filter-toggle-btn__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="filters" id="filters-panel">
+          <h3>{{ 'ui.price_range'|t }}</h3>
+          {% for cat in taxonomy('rangos_de_precios') %}
+          <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
+          {% endfor %}
+          <h3>{{ 'ui.gastro_categories'|t }}</h3>
+          {% for cat in taxonomy('categorias_gastronomicas') %}
+          <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
+          {% endfor %}
+          <h3>{{ 'ui.zones'|t }}</h3>
+          {% for cat in taxonomy('zonas_gastronomicas') %}
+          <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
+          {% endfor %}
+        </div>
+      </aside>
+      {% elseif exposed %}
       <aside class="archive__filters">
         <h2 class="archive__filters-title">{{ 'Filtros'|t }}</h2>
         {{ exposed }}
@@ -36,7 +74,7 @@
       {% endif %}
 
       <div class="archive__results">
-        {% if header %}<div class="archive__results-head"><p class="archive__count">{{ header }}</p></div>{% endif %}
+        {% if header and not is_eat %}<div class="archive__results-head"><p class="archive__count">{{ header }}</p></div>{% endif %}
 
         {% if rows %}
           {{ rows }}
