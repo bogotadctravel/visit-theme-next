@@ -17,6 +17,19 @@
 {% set parent_cats = parent_ids is not empty ? taxonomy('categorias_2026', parent_ids) : [] %}
 {% set parent_cat = parent_cats|first %}
 
+{# Hermanas: otras subcategorías de la misma categoría padre, para "Sigue
+   explorando Bogotá" (navegación cruzada al final de la página). #}
+{% set sibling_subcats = [] %}
+{% if parent_cat %}
+  {% for sub in taxonomy('subcategorias_2026') %}
+    {% if sub.tid != term.id() %}
+      {% for rel in sub.cat_rel %}
+        {% if rel.tid == parent_cat.tid %}{% set sibling_subcats = sibling_subcats|merge([sub]) %}{% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
 {# Subcategorías de "Bogotá corporativa" (Proveedores, Venues) viven en el
    micrositio Conecta. Redirección de respaldo (lo ideal: un Redirect de config). #}
 {% set conecta_sub = parent_cat ? conecta.subcat_href(term.name.value, '', parent_cat.name) : '' %}
@@ -134,6 +147,28 @@
               <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
             </span>
           </button>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= SIGUE EXPLORANDO BOGOTÁ (otras subcategorías) ================= #}
+  {% if sibling_subcats is not empty %}
+  <section class="cat-explore">
+    <div class="cat-explore__wrap">
+      <h2 class="cat-explore__title">{{ 'Sigue explorando Bogotá'|t }}</h2>
+      <ul class="cat-explore__grid">
+        {% for sub in sibling_subcats %}
+        <li>
+          <a class="card-imperdible" href="{{ sub.url }}">
+            <span class="card-imperdible__media">
+              <img class="card-imperdible__img" src="{{ sub.image_full ?: sub.image ?: 'https://placehold.co/600x400' }}"
+                alt="{{ sub.name }}" loading="lazy" decoding="async">
+            </span>
+            <span class="card-imperdible__title">{{ sub.name }}</span>
+          </a>
         </li>
         {% endfor %}
       </ul>
