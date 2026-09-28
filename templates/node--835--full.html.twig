@@ -43,7 +43,7 @@
         </button>
         <div class="filters" id="filters-panel">
           <h3>{{ 'ui.category'|t }}</h3>
-          {% for cat in taxonomy('categorias_2026') %}
+          {% for cat in taxonomy('categorias_turisticas') %}
           <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
           {% endfor %}
           <h3>{{ '¿Para quién?'|t }}</h3>
