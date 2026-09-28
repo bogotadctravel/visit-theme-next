@@ -10,9 +10,14 @@
 {% set sub_bg = term.field_imagen_principal.entity
     ? file_url(term.field_imagen_principal.entity.uri.value) : '' %}
 
+{# Categoría padre: field_categoria_superior (dato real) o field_rel_cat (histórico). #}
 {% set parent_ids = [] %}
-{% for rel in term.field_rel_cat %}
-  {% set parent_ids = parent_ids|merge([rel.target_id]) %}
+{% for parent_field in ['field_categoria_superior', 'field_rel_cat'] %}
+  {% if term.hasField(parent_field) %}
+    {% for rel in term.get(parent_field) %}
+      {% if rel.target_id not in parent_ids %}{% set parent_ids = parent_ids|merge([rel.target_id]) %}{% endif %}
+    {% endfor %}
+  {% endif %}
 {% endfor %}
 {% set parent_cats = parent_ids is not empty ? taxonomy('categorias_2026', parent_ids) : [] %}
 {% set parent_cat = parent_cats|first %}
