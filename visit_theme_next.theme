@@ -15,6 +15,59 @@ function _visit_theme_next_path(): string {
 }
 
 /**
+ * URL de un archivo de imagen aplicando un "image style" (redimensiona del
+ * lado del servidor). Si el estilo no existe todavía (p. ej. la config de
+ * config/deploy aún no se ha importado en el servidor) sirve el archivo
+ * original en vez de romper la página.
+ */
+function _visit_theme_next_image_style_url(string $uri, string $style_id): string {
+  $style = \Drupal\image\Entity\ImageStyle::load($style_id);
+  if ($style) {
+    return $style->buildUrl($uri);
+  }
+  return \Drupal::service('file_url_generator')->generateString($uri);
+}
+
+/**
+ * Hero de una ficha (evento/atractivo/hotel/...): primera imagen no vacía de
+ * $fields (en orden de prioridad), redimensionada con el estilo 'vn_hero'.
+ * Replica el fallback que antes vivía duplicado en cada Twig.
+ */
+function _visit_theme_next_hero_bg(\Drupal\node\NodeInterface $node, array $fields): string {
+  foreach ($fields as $field_name) {
+    if ($node->hasField($field_name) && !$node->get($field_name)->isEmpty()) {
+      $file = $node->get($field_name)->entity;
+      if ($file) {
+        return _visit_theme_next_image_style_url($file->getFileUri(), 'vn_hero');
+      }
+    }
+  }
+  return '';
+}
+
+/**
+ * Items de field_picgallery: miniatura redimensionada ('vn_gallery') para el
+ * grid y archivo original para el lightbox (data-gallery-src).
+ */
+function _visit_theme_next_gallery_images(\Drupal\node\NodeInterface $node): array {
+  $file_url_generator = \Drupal::service('file_url_generator');
+  $images = [];
+  foreach ($node->get('field_picgallery') as $item) {
+    $file = $item->entity;
+    if (!$file) {
+      continue;
+    }
+    $uri = $file->getFileUri();
+    $images[] = [
+      'thumb' => _visit_theme_next_image_style_url($uri, 'vn_gallery'),
+      'full' => $file_url_generator->generateString($uri),
+      'alt' => $item->alt,
+    ];
+  }
+  return $images;
+}
+
+/**
  * Implements hook_preprocess_HOOK() for page.
  *
  * 1. Expone la ruta del subtema al header (que se incluye desde page.html.twig).
@@ -218,6 +271,26 @@ function visit_theme_next_preprocess_node(array &$variables) {
 
   /** @var \Drupal\idt_theme_support\Service\ContentLoader $content_loader */
   $content_loader = \Drupal::service('idt_theme_support.content_loader');
+
+  // Hero + galería de las fichas (eventos/atractivos/hoteles/...): se sirven
+  // con "image style" en vez del archivo original (algunos superan 1-4MB),
+  // que era la causa del LCP alto detectado por Lighthouse. El fallback de
+  // campo replica el que antes vivía duplicado en el `{% set hero_bg %}` de
+  // cada Twig.
+  $hero_field_priority = [
+    'eventos' => ['field_mainimg'],
+    'rutas' => ['field_mainimg'],
+    'hoteles' => ['field_mainimg', 'field_cover'],
+    'establecimientos' => ['field_mainimg', 'field_cover'],
+    'atractivos' => ['field_cover', 'field_mainimg'],
+    'experiencias' => ['field_banner', 'field_cover', 'field_mainimg'],
+  ];
+  if (isset($hero_field_priority[$node->bundle()])) {
+    $variables['hero_bg'] = _visit_theme_next_hero_bg($node, $hero_field_priority[$node->bundle()]);
+    if ($node->hasField('field_picgallery')) {
+      $variables['vn_gallery_images'] = _visit_theme_next_gallery_images($node);
+    }
+  }
 
   if ((int) $node->id() === 1223) {
     if (empty($variables['imperdibles'])) {

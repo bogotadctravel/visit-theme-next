@@ -1,0 +1,15 @@
+uuid: 76607d99-474e-4834-bbee-f79df745e331
+langcode: en
+status: true
+dependencies: {  }
+name: vn_hero
+label: 'VN — Hero (1600x800)'
+effects:
+  33fce9ec-63e5-4e49-9c46-d76fdd369586:
+    uuid: 33fce9ec-63e5-4e49-9c46-d76fdd369586
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1600
+      height: 800
+      anchor: 'center-center'

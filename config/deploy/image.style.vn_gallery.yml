@@ -1,0 +1,15 @@
+uuid: c61fafda-2984-41ce-8d63-2a71a8259c90
+langcode: en
+status: true
+dependencies: {  }
+name: vn_gallery
+label: 'VN — Galería (880x496)'
+effects:
+  7edf55b6-1d65-467b-a53a-fd209c9b8ade:
+    uuid: 7edf55b6-1d65-467b-a53a-fd209c9b8ade
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 880
+      height: 496
+      anchor: 'center-center'

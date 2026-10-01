@@ -4,9 +4,6 @@
   (nodos_cercanos, body_sin_estilos, contenidos_relacionados) + campos del nodo.
 #}
 {% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
-{% set hero_bg = node.field_mainimg.entity
-    ? file_url(node.field_mainimg.entity.uri.value)
-    : (node.field_cover.entity ? file_url(node.field_cover.entity.uri.value) : '') %}
 {% set cat = node.field_turcat.0.entity %}
 {% set lat = node.field_latlong.0.value %}
 {% set lng = node.field_latlong.1.value %}
@@ -73,10 +70,10 @@
         <div class="place-block">
           <h2 class="place-block__title">{{ 'Galería'|t }}</h2>
           <ul class="place-gallery">
-            {% for item in node.field_picgallery|slice(0, 8) %}
+            {% for item in vn_gallery_images|default([])|slice(0, 8) %}
             <li>
-              <button class="place-gallery__item" type="button" data-gallery-src="{{ file_url(item.entity.fileuri) }}" aria-label="{{ 'Ver foto'|t }}">
-                <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+              <button class="place-gallery__item" type="button" data-gallery-src="{{ item.full }}" aria-label="{{ 'Ver foto'|t }}">
+                <img src="{{ item.thumb }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
               </button>
             </li>
             {% endfor %}

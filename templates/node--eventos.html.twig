@@ -16,7 +16,6 @@
   1:'Lunes', 2:'Martes', 3:'Miércoles', 4:'Jueves', 5:'Viernes', 6:'Sábado', 7:'Domingo'
 } %}
 
-{% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
 {% set cat_evento = node.field_categoria_de_evento.0.entity.name.value %}
 {% set raw_inicio = node.field_fecha_de_inicio.0.value %}
 {% set raw_fin = node.field_fecha_de_finalizacion.0.value %}
@@ -79,12 +78,12 @@
         <div class="place-block">
           <h2 class="place-block__title">{{ 'Galería'|t }}</h2>
           <ul class="place-gallery">
-            {% for item in node.field_picgallery|slice(0, 8) %}
+            {% for item in vn_gallery_images|default([])|slice(0, 8) %}
             <li>
               <button class="place-gallery__item" type="button"
-                data-gallery-src="{{ file_url(item.entity.fileuri) }}"
+                data-gallery-src="{{ item.full }}"
                 aria-label="{{ 'Ver foto'|t }}: {{ item.alt ?: node.getTitle() }}">
-                <img src="{{ file_url(item.entity.uri.value) }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+                <img src="{{ item.thumb }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
               </button>
             </li>
             {% endfor %}
