@@ -125,6 +125,7 @@
   <section class="cat-blog">
     <div class="cat-blog__wrap">
       <h2 class="cat-blog__title">{{ term.field_titulo_cronicas.value ?: 'Crónicas'|t }}</h2>
+      {{ term.field_descripcion_de_cronicas.value }}
       <ul class="cat-blog__grid">
         {% for item in article|slice(0, 4) %}
         <li>
