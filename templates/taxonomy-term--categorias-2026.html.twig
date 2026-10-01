@@ -46,7 +46,7 @@
 
       <article class="cat-layout__main">
         {% if term.field_intro_cat.value %}
-        <p class="cat-intro__lead">{{ term.field_intro_cat.value }}</p>
+        <p class="cat-intro__lead">{{ term.field_intro_cat.value|raw }}</p>
         {% endif %}
         {% if term.description.value %}
         <div class="cat-intro__body cat-intro__body--collapsible" id="catIntroBody">
