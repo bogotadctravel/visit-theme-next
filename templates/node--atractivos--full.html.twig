@@ -78,9 +78,9 @@
           <h2 class="place-block__title">{{ 'ui.how_to_get_there'|t }}</h2>
           <div class="place-map place-map--embed{% if arcgis_url %} hasAnalytics{% endif %}"{% if arcgis_url %} data-event="google_maps_iframe_loaded"{% endif %}>
             {% if arcgis_url %}
-            <iframe src="{{ arcgis_url }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen></iframe>
+            <iframe data-src="{{ arcgis_url }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen></iframe>
             {% else %}
-            <iframe src="https://lab.visitbogota.co/iframeMap/?lat={{ lat }}&lon={{ lng }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe data-src="https://lab.visitbogota.co/iframeMap/?lat={{ lat }}&lon={{ lng }}" title="{{ 'Mapa'|t }}: {{ node.getTitle() }}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
             {% endif %}
             {% if lat and lng %}
             <a class="place-map__transmi" href="https://lab.visitbogota.co/transmilenio/?latdestino={{ lat }}&longdestino={{ lng }}&title={{ node.getTitle()|url_encode }}" target="_blank" rel="noopener noreferrer">
@@ -170,7 +170,7 @@
 <div class="vn-modal" id="galleryModal" hidden>
   <div class="vn-modal__backdrop" data-modal-close></div>
   <div class="vn-modal__dialog vn-modal__dialog--image" role="dialog" aria-modal="true" aria-label="{{ 'Foto de la galería'|t }}">
-    <button class="vn-modal__close" type="button" data-modal-close aria-label="{{ 'ui.close'|t }}">&times;</button>
+    <button class="vn-modal__close" type="button" data-modal-close aria-label="{{ 'ui.close'|t }}"><span aria-hidden="true">&times;</span></button>
     <img class="vn-modal__image" id="galleryModalImg" src="" alt="">
   </div>
 </div>

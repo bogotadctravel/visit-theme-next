@@ -488,7 +488,7 @@
     var open = function (url) {
       if (!body) return;
       var embedSrc = url.replace(/\/?$/, '/') + 'embed';
-      body.innerHTML = '<iframe src="' + embedSrc + '" loading="lazy" allowtransparency="true"></iframe>';
+      body.innerHTML = '<iframe src="' + embedSrc + '" title="Publicación de Instagram" loading="lazy" allowtransparency="true"></iframe>';
       modal.hidden = false;
       document.body.style.overflow = 'hidden';
     };
@@ -545,6 +545,35 @@
 
     initCollapsible(place);
     initGalleryModal();
+    initPlaceMap();
+  }
+
+  // Mapa embebido (ArcGIS, lab.visitbogota.co/iframeMap): pesa varios MB en
+  // JS/WASM, así que se difiere con IntersectionObserver en vez de cargarlo
+  // en el render inicial (el `loading="lazy"` nativo no basta porque el
+  // bloque suele quedar cerca del viewport inicial).
+  function initPlaceMap() {
+    var frames = [].slice.call(document.querySelectorAll('.place-map--embed iframe[data-src]'));
+    if (!frames.length) return;
+
+    var load = function (iframe) {
+      if (iframe.dataset.loaded) return;
+      iframe.dataset.loaded = '1';
+      iframe.src = iframe.dataset.src;
+    };
+
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries, o) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          load(entry.target);
+          o.unobserve(entry.target);
+        });
+      }, { rootMargin: '300px 0px' });
+      frames.forEach(function (f) { obs.observe(f); });
+    } else {
+      frames.forEach(load);
+    }
   }
 
   // =========================================================
