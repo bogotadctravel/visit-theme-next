@@ -65,8 +65,16 @@
     line-height: 1.05;
     color: var(--vn-blanco);
   }
+  .cat-hero__subtitle {
+    margin: 10px 0 0;
+    font-size: clamp(15px, 1.6vw, 18px);
+    font-weight: 500;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.88);
+  }
   .cat-hero--light .cat-hero__banner { background: rgba(255, 255, 255, 0.65); text-align: left; }
   .cat-hero--light .cat-hero__title { color: var(--vn-gris-oscuro); }
+  .cat-hero--light .cat-hero__subtitle { color: var(--vn-gris-oscuro); opacity: 0.75; }
 
   // ── Breadcrumb ──
   .breadcrumb ol {
@@ -348,6 +356,18 @@
     line-height: 1.125;
     letter-spacing: -0.01em;
     color: var(--vn-gris-oscuro);
+  }
+  .cat-blog__desc {
+    margin: -12px 0 24px;
+    max-width: 760px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--vn-tinta);
+
+    > :first-child { margin-top: 0; }
+    > :last-child { margin-bottom: 0; }
+    p { margin: 0 0 14px; }
+    a { color: var(--vn-rojo-principal); text-decoration: underline; }
   }
   .cat-blog__grid,
   .cat-attractions__grid,

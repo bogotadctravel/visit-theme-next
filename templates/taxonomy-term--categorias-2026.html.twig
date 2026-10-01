@@ -34,6 +34,9 @@
     </div>
     <div class="cat-hero__banner" style="background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), rgba(66, 57, 38, 0.5);">
       <h1 class="cat-hero__title">{{ term.name.value }}</h1>
+      {% if term.field_subt_cat.value %}
+      <p class="cat-hero__subtitle">{{ term.field_subt_cat.value }}</p>
+      {% endif %}
     </div>
   </section>
 
@@ -42,6 +45,9 @@
     <div class="cat-layout__wrap">
 
       <article class="cat-layout__main">
+        {% if term.field_intro_cat.value %}
+        <p class="cat-intro__lead">{{ term.field_intro_cat.value }}</p>
+        {% endif %}
         {% if term.description.value %}
         <div class="cat-intro__body cat-intro__body--collapsible" id="catIntroBody">
           {{ term.description.value|raw }}
@@ -125,7 +131,9 @@
   <section class="cat-blog">
     <div class="cat-blog__wrap">
       <h2 class="cat-blog__title">{{ term.field_titulo_cronicas.value ?: 'Crónicas'|t }}</h2>
-      {{ term.field_descripcion_de_cronicas.value }}
+      {% if term.field_descripcion_de_cronicas.value %}
+      <div class="cat-blog__desc">{{ term.field_descripcion_de_cronicas.value|raw }}</div>
+      {% endif %}
       <ul class="cat-blog__grid">
         {% for item in article|slice(0, 4) %}
         <li>
