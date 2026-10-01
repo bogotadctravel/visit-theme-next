@@ -234,6 +234,17 @@
       document.addEventListener('click', function (e) {
         if (!searchComp.contains(e.target)) closeResults();
       });
+
+      // #search-results es role="listbox": sus <li> los inyecta el behavior
+      // del tema base sin role="option", lo que rompe aria-required-children.
+      // Se etiquetan aquí al vuelo sin tocar ese behavior.
+      if (results && window.MutationObserver) {
+        new MutationObserver(function () {
+          [].slice.call(results.children).forEach(function (li) {
+            if (!li.hasAttribute('role')) li.setAttribute('role', 'option');
+          });
+        }).observe(results, { childList: true });
+      }
     }
   }
 
@@ -367,11 +378,14 @@
           var dot = document.createElement('button');
           dot.type = 'button';
           dot.className = 'hero__dot' + (i === 0 ? ' is-active' : '');
+          dot.setAttribute('role', 'tab');
+          dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
           dot.setAttribute('aria-label', 'Ir al slide ' + (i + 1));
           dot.addEventListener('click', function () {
             slides.forEach(function (s, j) { s.classList.toggle('is-active', i === j); });
             [].slice.call(heroDots.children).forEach(function (d, j) {
               d.classList.toggle('is-active', i === j);
+              d.setAttribute('aria-selected', i === j ? 'true' : 'false');
             });
           });
           heroDots.appendChild(dot);

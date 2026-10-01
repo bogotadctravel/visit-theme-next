@@ -69,7 +69,9 @@
     z-index: 2;
     width: 100%;
     padding: 20px var(--vn-pad);
-    background: rgba(255, 49, 8, 0.65);
+    // Capa oscura fija debajo del tinte: garantiza contraste del título blanco
+    // sin depender del brillo de la foto de fondo.
+    background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), rgba(255, 49, 8, 0.65);
     text-align: center;
   }
   .cat-hero__title {
