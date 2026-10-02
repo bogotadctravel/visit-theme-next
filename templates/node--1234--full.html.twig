@@ -1,9 +1,10 @@
 {#
   Información al viajero (nodo 1234) — réplica, con el diseño de Visit
-  Bogotá, de https://www.idt.gov.co/informacion-al-viajero: intro + acordeón
-  de info_util agrupado por categoría (field_categoria_viajero).
+  Bogotá, de https://www.idt.gov.co/informacion-al-viajero: intro centrada y,
+  por categoría (field_categoria_viajero), una grilla de tarjetas con imagen y
+  título; cada tarjeta abre un <dialog> con el contenido del info_util.
   Datos: visit_theme_next_preprocess_node() → info_util_categorias.
-  Sin JS: el acordeón usa <details>/<summary> nativos.
+  JS: initInfoViajero() en js/overrides.js (showModal / cierre).
 #}
 <div class="vn-info-viajero">
 
@@ -22,26 +23,33 @@
   {% if info_util_categorias is not empty %}
   <section class="info-viajero__categorias" aria-label="{{ 'Información útil por categoría'|t }}">
     {% for categoria in info_util_categorias %}
+    {% set cat_index = loop.index %}
     <div class="info-cat">
       <h2 class="info-cat__title">{{ categoria.name }}</h2>
-      <div class="info-cat__grid">
+      <ul class="info-cat__grid">
         {% for item in categoria.items %}
-        <details class="info-card">
-          <summary class="info-card__summary">
-            <span class="info-card__media">
-              <img class="info-card__img" src="{{ item.image_url ?: 'https://placehold.co/240x240' }}" alt="" loading="lazy" decoding="async">
-            </span>
-            <span class="info-card__head">
-              <span class="info-card__title">{{ item.title }}</span>
-              <svg class="info-card__chevron" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </summary>
-          <div class="info-card__body">{{ item.body|raw }}</div>
-        </details>
+        {% set dialog_id = 'info-util-' ~ cat_index ~ '-' ~ loop.index %}
+        <li>
+          <button type="button" class="vn-info-card" data-info-dialog="{{ dialog_id }}" aria-haspopup="dialog">
+            <img class="vn-info-card__img" src="{{ item.image_url ?: 'https://placehold.co/800x500' }}" alt="" loading="lazy" decoding="async">
+            <span class="vn-info-card__title">{{ item.title }}</span>
+          </button>
+
+          <dialog class="info-modal" id="{{ dialog_id }}" aria-labelledby="{{ dialog_id }}-title">
+            <div class="info-modal__header">
+              <h3 class="info-modal__title" id="{{ dialog_id }}-title">{{ item.title }}</h3>
+              <button type="button" class="info-modal__close" data-info-close aria-label="{{ 'Cerrar'|t }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            {% if item.image_url %}
+              <img class="info-modal__img" src="{{ item.image_url }}" alt="" loading="lazy" decoding="async">
+            {% endif %}
+            <div class="info-modal__body">{{ item.body|raw }}</div>
+          </dialog>
+        </li>
         {% endfor %}
-      </div>
+      </ul>
     </div>
     {% endfor %}
   </section>

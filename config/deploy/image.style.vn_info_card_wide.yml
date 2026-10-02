@@ -1,0 +1,15 @@
+uuid: 559dafd6-0c0e-4fdb-881f-4d0972e2b4c0
+langcode: en
+status: true
+dependencies: {  }
+name: vn_info_card_wide
+label: 'VN — Tarjeta info útil ancha (800x500)'
+effects:
+  2837a0ec-4bff-4a7d-af3a-fddc350069ef:
+    uuid: 2837a0ec-4bff-4a7d-af3a-fddc350069ef
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 800
+      height: 500
+      anchor: 'center-center'

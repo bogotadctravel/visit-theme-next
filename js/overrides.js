@@ -610,12 +610,44 @@
     fSector.addEventListener('change', apply);
   }
 
+  // =========================================================
+  //  INFORMACIÓN AL VIAJERO (nodo 1234): tarjeta → <dialog>
+  // =========================================================
+  // Esc y el foco los maneja el <dialog> nativo; aquí solo abrir, cerrar con
+  // la X y cerrar al hacer clic en el fondo (fuera de la caja del modal).
+  function initInfoViajero() {
+    var root = document.querySelector('.vn-info-viajero');
+    if (!root || root.dataset.vnInit) return;
+    root.dataset.vnInit = '1';
+
+    root.querySelectorAll('[data-info-dialog]').forEach(function (btn) {
+      var dialog = document.getElementById(btn.dataset.infoDialog);
+      if (!dialog || typeof dialog.showModal !== 'function') return;
+
+      btn.addEventListener('click', function () {
+        dialog.showModal();
+        var body = dialog.querySelector('.info-modal__body');
+        if (body) body.scrollTop = 0;
+      });
+      dialog.querySelectorAll('[data-info-close]').forEach(function (el) {
+        el.addEventListener('click', function () { dialog.close(); });
+      });
+      dialog.addEventListener('click', function (e) {
+        if (e.target !== dialog) return;
+        var r = dialog.getBoundingClientRect();
+        var inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+        if (!inside) dialog.close();
+      });
+    });
+  }
+
   function init() {
     initHeader();
     initHome();
     initCat();
     initPlace();
     initGuias();
+    initInfoViajero();
   }
 
   if (document.readyState === 'loading') {

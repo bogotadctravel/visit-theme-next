@@ -120,7 +120,7 @@ function _visit_theme_next_get_info_util_por_categoria(): array {
       if ($info_node->hasField('field_image') && !$info_node->get('field_image')->isEmpty()) {
         $file = $info_node->get('field_image')->entity;
         if ($file) {
-          $image_url = _visit_theme_next_image_style_url($file->getFileUri(), 'vn_info_card');
+          $image_url = _visit_theme_next_image_style_url($file->getFileUri(), 'vn_info_card_wide');
         }
       }
 
