@@ -68,6 +68,86 @@ function _visit_theme_next_gallery_images(\Drupal\node\NodeInterface $node): arr
 }
 
 /**
+ * Carga los nodos `info_util` publicados, agrupados por término de
+ * `categoria_viajero` (en el orden/weight configurado del vocabulario) y
+ * ordenados dentro de cada grupo por `field_peso`. Alimenta el acordeón de
+ * "Información al viajero" (nodo 1234).
+ *
+ * @return array
+ *   Lista de ['name' => string, 'items' => array[]], omitiendo categorías
+ *   sin contenido. Cada item: title, body (HTML ya filtrado), introduccion,
+ *   image_url.
+ */
+function _visit_theme_next_get_info_util_por_categoria(): array {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  $terms = $term_storage->loadTree('categoria_viajero', 0, NULL, TRUE);
+  $grupos = [];
+
+  foreach ($terms as $term) {
+    if ($term->hasTranslation($langcode)) {
+      $term = $term->getTranslation($langcode);
+    }
+
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', 'info_util')
+      ->condition('status', 1)
+      ->condition('field_categoria_viajero.target_id', $term->id())
+      ->sort('field_peso', 'ASC')
+      ->accessCheck(TRUE)
+      ->execute();
+
+    if (!$nids) {
+      continue;
+    }
+
+    // loadMultiple() no garantiza preservar el orden de $nids (ya ordenado
+    // por field_peso vía la entity query), así que se recorre $nids a mano.
+    $loaded = $node_storage->loadMultiple($nids);
+    $items = [];
+    foreach ($nids as $nid) {
+      if (!isset($loaded[$nid])) {
+        continue;
+      }
+      $info_node = $loaded[$nid];
+      if ($info_node->hasTranslation($langcode)) {
+        $info_node = $info_node->getTranslation($langcode);
+      }
+
+      $image_url = '';
+      if ($info_node->hasField('field_image') && !$info_node->get('field_image')->isEmpty()) {
+        $file = $info_node->get('field_image')->entity;
+        if ($file) {
+          $image_url = _visit_theme_next_image_style_url($file->getFileUri(), 'vn_info_card');
+        }
+      }
+
+      $body_value = '';
+      if ($info_node->hasField('body') && !$info_node->get('body')->isEmpty()) {
+        $body_item = $info_node->get('body')->first();
+        $body_value = check_markup($body_item->value, $body_item->format ?: 'basic_html');
+      }
+
+      $items[] = [
+        'title' => $info_node->label(),
+        'introduccion' => $info_node->hasField('field_introduccion') ? (string) $info_node->get('field_introduccion')->value : '',
+        'body' => $body_value,
+        'image_url' => $image_url,
+      ];
+    }
+
+    $grupos[] = [
+      'name' => $term->label(),
+      'items' => $items,
+    ];
+  }
+
+  return $grupos;
+}
+
+/**
  * Implements hook_preprocess_HOOK() for page.
  *
  * 1. Expone la ruta del subtema al header (que se incluye desde page.html.twig).
@@ -308,6 +388,14 @@ function visit_theme_next_preprocess_node(array &$variables) {
 
     $variables['#cache']['tags'][] = 'node_list:atractivos';
     $variables['#cache']['tags'][] = 'node_list:eventos';
+  }
+
+  // Información al viajero (nodo 1234): acordeón de info_util agrupado por
+  // field_categoria_viajero. Reemplaza el enlace externo a idt.gov.co.
+  if ((int) $node->id() === 1234) {
+    $variables['info_util_categorias'] = _visit_theme_next_get_info_util_por_categoria();
+    $variables['#cache']['tags'][] = 'node_list:info_util';
+    $variables['#cache']['tags'][] = 'taxonomy_term_list:categoria_viajero';
   }
 
   // Ficha de evento (single-event.html): "Eventos relacionados". El tema base
