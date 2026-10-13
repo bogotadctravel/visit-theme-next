@@ -24,8 +24,12 @@
         </ol>
       </nav>
     </div>
+    {# "Gastronomía" es la categoría genérica (raíz) de este listado — mostrar
+       "¿Dónde comer en Bogotá? de Gastronomía" es redundante, así que el
+       sufijo " de {{ vn_term_name }}" solo se imprime para subcategorías
+       concretas (ej. "Comida internacional"), no para la categoría raíz. #}
     <div class="cat-hero__banner">
-      <h1 class="cat-hero__title">{{ 'ui.where_to_eat'|t }}{% if vn_term_name %} {{ 'de'|t }} {{ vn_term_name }}{% endif %}</h1>
+      <h1 class="cat-hero__title">{{ 'ui.where_to_eat'|t }}{% if vn_term_name and vn_term_name|lower != 'gastronomía' %} {{ 'de'|t }} {{ vn_term_name }}{% endif %}</h1>
     </div>
   </section>
 

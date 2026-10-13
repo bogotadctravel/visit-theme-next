@@ -29,23 +29,23 @@
     color: var(--vn-gris-oscuro);
   }
 
+  // Grid uniforme (mismo alto por tarjeta) — evita huecos en la última fila,
+  // a diferencia del column-count anterior (alturas desiguales por tarjeta).
   .blog-grid {
     max-width: var(--vn-max);
     margin: 0 auto;
     padding-inline: var(--vn-pad);
     list-style: none;
-    column-count: 4;
-    column-gap: 14px;
-  }
-  .blog-grid__item {
-    break-inside: avoid;
-    margin-bottom: 14px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
   }
 
   .blog-card {
     position: relative;
     display: block;
     width: 100%;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
     text-decoration: none;
   }
@@ -71,13 +71,6 @@
     color: var(--vn-gris-oscuro);
   }
 
-  // Proporciones distintas por tarjeta → cuadrícula tipo tablero.
-  .blog-card--a { aspect-ratio: 3 / 4; }
-  .blog-card--b { aspect-ratio: 1 / 1; }
-  .blog-card--c { aspect-ratio: 4 / 5; }
-  .blog-card--d { aspect-ratio: 16 / 9; }
-  .blog-card--e { aspect-ratio: 9 / 16; }
-
   .blog-grid__pager {
     max-width: var(--vn-max);
     margin: 40px auto 0;
@@ -86,15 +79,14 @@
   }
 
   @media (max-width: 960px) {
-    .blog-grid { column-count: 3; }
+    .blog-grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 640px) {
-    .blog-grid { column-count: 2; column-gap: 10px; }
-    .blog-grid__item { margin-bottom: 10px; }
+    .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .blog-card__caption { padding: 11px 13px; font-size: 12px; }
   }
   @media (max-width: 420px) {
-    .blog-grid { column-count: 1; }
+    .blog-grid { grid-template-columns: 1fr; }
   }
 }
 

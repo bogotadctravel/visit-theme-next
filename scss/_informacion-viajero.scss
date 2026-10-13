@@ -2,30 +2,21 @@
 // agrupadas por categoría, cada una abre su contenido en Fancybox. Ver
 // templates/node--1234--full.html.twig.
 
-.vn-info-viajero {
-  --vn-max: 1200px;
-  --vn-pad: clamp(16px, 4vw, 40px);
-  max-width: var(--vn-max);
-  margin: 0 auto;
-  padding-inline: var(--vn-pad);
-}
+// Ojo: este wrapper también lleva la clase .vn-archive (hero + filtros, ver
+// _archive.scss), que es full-bleed — por eso NO se le pone max-width/padding
+// acá arriba; cada sección interna (intro, .archive__wrap) se acota por su
+// cuenta.
 
 // Prefijo .vn-info-viajero: le gana a ".site-content--visit section { padding: 0 }".
+// El título vive ahora en el hero (.cat-hero__title, ver _archive.scss); esta
+// sección es solo el párrafo de intro, alineado a la izquierda y justificado.
 .vn-info-viajero .info-viajero__intro {
-  padding: clamp(40px, 6vw, 64px) 0 clamp(24px, 4vw, 40px);
-  text-align: center;
+  padding: clamp(40px, 6vw, 64px) clamp(16px, 4vw, 40px) clamp(24px, 4vw, 40px);
+  text-align: left;
 
   &-wrap {
     max-width: 900px;
-    margin: 0 auto;
   }
-}
-
-.info-viajero__title {
-  font-size: clamp(30px, 5vw, 50px);
-  font-weight: 700;
-  color: var(--vn-gris-oscuro);
-  margin: 0 0 16px;
 }
 
 .info-viajero__lead {
@@ -33,51 +24,22 @@
   font-weight: 600;
   color: var(--vn-gris-60);
   margin: 0 0 12px;
+  text-align: justify;
 }
 
 .info-viajero__body {
   font-size: 16px;
   line-height: 1.75;
   color: var(--vn-tinta);
+  text-align: justify;
 
   p { margin: 0 0 12px; }
 }
 
-.vn-info-viajero .info-viajero__categorias {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(32px, 5vw, 48px);
-  padding-bottom: clamp(56px, 8vw, 96px);
-}
-
-.info-cat__title {
-  font-size: clamp(22px, 2.6vw, 26px);
-  font-weight: 700;
-  color: var(--vn-gris-oscuro);
-  margin: 0 0 16px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--vn-rojo-principal);
-  display: inline-block;
-}
-
-.info-cat__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @media (max-width: 540px) {
-    grid-template-columns: 1fr;
-  }
-}
-
 // Tarjeta: imagen con el título sobre una franja inferior (como idt.gov.co).
+// Vive dentro de <li class="card"> de .archive__grid (ver _archive.scss) —
+// esa regla solo estiliza los hijos <a>/.image/.title del markup base
+// (hoteles/restaurantes), así que no choca con este botón Fancybox.
 .vn-info-card {
   position: relative;
   display: block;

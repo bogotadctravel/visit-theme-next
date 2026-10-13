@@ -5,8 +5,6 @@
   `pager_article`. Estilos en css/overrides.css (scss/_blog.scss).
 #}
 {% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
-{# Proporciones rotativas: recrean el efecto de tablero desordenado del prototipo. #}
-{% set ratios = ['a', 'b', 'c', 'd', 'b', 'a', 'e', 'c', 'd', 'a', 'b', 'c', 'e', 'a', 'd', 'b'] %}
 
 <div class="vn-cat vn-blog">
 
@@ -18,12 +16,12 @@
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
           <li><a href="/">{{ 'Inicio'|t }}</a></li>
-          <li aria-current="page">{{ 'Blog'|t }}</li>
+          <li aria-current="page">{{ 'Historias de ciudad'|t }}</li>
         </ol>
       </nav>
     </div>
     <div class="cat-hero__banner">
-      <h1 class="cat-hero__title">{{ node.getTitle() ?: 'Blog'|t }}</h1>
+      <h1 class="cat-hero__title">{{ node.getTitle() ?: 'Historias de ciudad'|t }}</h1>
     </div>
   </section>
 
@@ -41,7 +39,7 @@
     <ul class="blog-grid">
       {% for item in article %}
       <li class="blog-grid__item">
-        <a class="blog-card blog-card--{{ ratios[loop.index0 % ratios|length] }}" href="{{ item.url }}">
+        <a class="blog-card" href="{{ item.url }}">
           <img class="blog-card__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="" loading="lazy" decoding="async">
           <span class="blog-card__caption">{{ item.title }}</span>
         </a>

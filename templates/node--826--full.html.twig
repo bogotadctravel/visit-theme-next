@@ -30,6 +30,14 @@
     </div>
   </section>
 
+  {% if node.body.0.value %}
+  <section class="cat-intro">
+    <div class="cat-intro__wrap">
+      <div class="cat-intro__body">{{ node.body.0.value|raw }}</div>
+    </div>
+  </section>
+  {% endif %}
+
   {# ================= LISTADO ================= #}
   <section class="archive">
     <div class="archive__wrap">
@@ -45,7 +53,12 @@
         </button>
         <div class="filters" id="filters-panel">
           <h3>{{ 'ui.category'|t }}</h3>
-          {% for cat in taxonomy('categorias_turisticas') %}
+          {# OJO: antes de usar categorias_2026, confirmar en Drupal que field_turcat
+             de este bundle referencia ese vocabulario — en 2026-09-28 se verificó
+             empíricamente que para rutas/ofertas/experiencias field_turcat seguía
+             apuntando a categorias_turisticas (legacy) y categorias_2026 daba el
+             filtro vacío. Ver plan declarative-sauteeing-axolotl.md, ítem 6. #}
+          {% for cat in taxonomy('categorias_2026') %}
           <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
           {% endfor %}
           <h3>{{ 'ui.zones'|t }}</h3>

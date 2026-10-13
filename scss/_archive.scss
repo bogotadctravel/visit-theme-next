@@ -110,6 +110,19 @@
     &:hover { color: var(--vn-blanco); text-decoration: underline; }
   }
 
+  // ── Intro (texto CMS, ej. node.body en Rutas/Ofertas) ──
+  .cat-intro {
+    padding: clamp(48px, 7vw, 80px) var(--vn-pad) clamp(20px, 3vw, 32px);
+    background: var(--vn-blanco);
+  }
+  .cat-intro__wrap { max-width: 760px; margin: 0 auto; }
+  .cat-intro__body {
+    color: var(--vn-tinta);
+
+    > :first-child { margin-top: 0; }
+    > :last-child { margin-bottom: 0; }
+  }
+
   // ── Layout: sidebar de filtros + resultados ──
   .archive {
     padding: clamp(40px, 6vw, 64px) 0 clamp(56px, 8vw, 96px);

@@ -1,18 +1,37 @@
 {#
-  Información al viajero (nodo 1234) — réplica, con el diseño de Visit
-  Bogotá, de https://www.idt.gov.co/informacion-al-viajero: intro centrada y,
-  por categoría (field_categoria_viajero), una grilla de tarjetas con imagen y
-  título; cada tarjeta abre en Fancybox (contenido inline) el info_util.
+  Información al viajero (nodo 1234) — hero + intro (justificada, alineada a
+  la izquierda) + tarjetas de info_util filtrables por categoría
+  (field_categoria_viajero), estructura ".vn-archive" (hero/filtros/grilla)
+  igual a Hoteles/Dónde comer. El filtrado por checkbox lo hace el behavior
+  "idt-gastro-filter" del tema base (necesita .filters, #cardsList,
+  .card[data-*]). Cada tarjeta abre en Fancybox (contenido inline) el
+  info_util.
   Datos: visit_theme_next_preprocess_node() → info_util_categorias.
   Fancybox: librería visit_theme/fancybox; el bind de [data-fancybox] lo hace
   js/main.js del tema base (mismo patrón que node--549 "modal-itinerario").
 #}
 {{ attach_library('visit_theme/fancybox') }}
-<div class="vn-info-viajero">
+<div class="vn-info-viajero vn-archive">
 
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall" aria-label="{{ node.getTitle() }}">
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li aria-current="page">{{ node.getTitle() }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner" style="background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), rgba(66, 57, 38, 0.5);">
+      <h1 class="cat-hero__title">{{ node.getTitle() }}</h1>
+    </div>
+  </section>
+
+  {# ================= INTRO ================= #}
   <section class="info-viajero__intro">
     <div class="info-viajero__intro-wrap">
-      <h1 class="info-viajero__title">{{ node.getTitle() }}</h1>
       {% if node.field_introduccion.value %}
         <p class="info-viajero__lead">{{ node.field_introduccion.value }}</p>
       {% endif %}
@@ -22,35 +41,58 @@
     </div>
   </section>
 
+  {# ================= LISTADO ================= #}
   {% if info_util_categorias is not empty %}
-  <section class="info-viajero__categorias" aria-label="{{ 'Información útil por categoría'|t }}">
-    {% for categoria in info_util_categorias %}
-    {% set cat_index = loop.index %}
-    <div class="info-cat">
-      <h2 class="info-cat__title">{{ categoria.name }}</h2>
-      <ul class="info-cat__grid">
-        {% for item in categoria.items %}
-        {% set modal_id = 'info-util-' ~ cat_index ~ '-' ~ loop.index %}
-        <li>
-          <button type="button" class="vn-info-card" data-fancybox data-src="#{{ modal_id }}" aria-haspopup="dialog">
-            <img class="vn-info-card__img" src="{{ item.image_url ?: 'https://placehold.co/800x500' }}" alt="" loading="lazy" decoding="async">
-            <span class="vn-info-card__title">{{ item.title }}</span>
-          </button>
+  {% set total_items = 0 %}
+  {% for categoria in info_util_categorias %}{% set total_items = total_items + categoria.items|length %}{% endfor %}
 
-          <div class="info-modal" id="{{ modal_id }}" style="display:none">
-            <div class="info-modal__header">
-              <h3 class="info-modal__title">{{ item.title }}</h3>
+  <section class="archive">
+    <div class="archive__wrap">
+
+      <div class="archive__results-head" style="grid-column:1/-1">
+        <p class="archive__count">{{ total_items }} {{ 'resultados'|t }}</p>
+      </div>
+
+      <aside>
+        <button class="filter-toggle-btn" type="button" aria-expanded="false" aria-controls="filters-panel">
+          <span>{{ 'Filtros'|t }}</span>
+          <svg class="filter-toggle-btn__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="filters" id="filters-panel">
+          <h3>{{ 'ui.category'|t }}</h3>
+          {% for categoria in info_util_categorias %}
+          <label for="f-viajero-{{ categoria.tid }}"><input type="checkbox" id="f-viajero-{{ categoria.tid }}" value="{{ categoria.tid }}"> {{ categoria.name }}</label>
+          {% endfor %}
+        </div>
+      </aside>
+
+      <div class="archive__results">
+        <ul class="archive__grid" id="cardsList">
+          {% for categoria in info_util_categorias %}
+          {% for item in categoria.items %}
+          {% set modal_id = 'info-util-' ~ categoria.tid ~ '-' ~ loop.index %}
+          <li class="card" data-categoria="{{ categoria.tid }}">
+            <button type="button" class="vn-info-card" data-fancybox data-src="#{{ modal_id }}" aria-haspopup="dialog">
+              <img class="vn-info-card__img" src="{{ item.image_url ?: 'https://placehold.co/800x500' }}" alt="" loading="lazy" decoding="async">
+              <span class="vn-info-card__title">{{ item.title }}</span>
+            </button>
+
+            <div class="info-modal" id="{{ modal_id }}" style="display:none">
+              <div class="info-modal__header">
+                <h3 class="info-modal__title">{{ item.title }}</h3>
+              </div>
+              {% if item.image_url %}
+                <img class="info-modal__img" src="{{ item.image_url }}" alt="" loading="lazy" decoding="async">
+              {% endif %}
+              <div class="info-modal__body">{{ item.body|raw }}</div>
             </div>
-            {% if item.image_url %}
-              <img class="info-modal__img" src="{{ item.image_url }}" alt="" loading="lazy" decoding="async">
-            {% endif %}
-            <div class="info-modal__body">{{ item.body|raw }}</div>
-          </div>
-        </li>
-        {% endfor %}
-      </ul>
+          </li>
+          {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+
     </div>
-    {% endfor %}
   </section>
   {% endif %}
 

@@ -24,7 +24,7 @@
         <nav class="breadcrumb breadcrumb--dark" aria-label="{{ 'Ruta de navegación'|t }}">
           <ol>
             <li><a href="/">{{ 'Inicio'|t }}</a></li>
-            <li><a href="{{ path('entity.node.canonical', {'node': 650}) }}">{{ 'Blog'|t }}</a></li>
+            <li><a href="{{ path('entity.node.canonical', {'node': 650}) }}">{{ 'Historias de ciudad'|t }}</a></li>
             <li aria-current="page">{{ node.getTitle() }}</li>
           </ol>
         </nav>
@@ -69,7 +69,7 @@
 
       {% if relacionados_filtrados is not empty %}
       <aside class="rutas-sidebar">
-        <h2 class="rutas-sidebar__title">{{ 'Blogs relacionados'|t }}</h2>
+        <h2 class="rutas-sidebar__title">{{ 'Historias de ciudad relacionadas'|t }}</h2>
         <ul class="rutas-sidebar__grid">
           {% for item in relacionados_filtrados %}
           <li>

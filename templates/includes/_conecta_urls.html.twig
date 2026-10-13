@@ -14,11 +14,16 @@
 {%- endmacro -%}
 
 {%- macro subcat_href(name, fallback, parent_name) -%}
+  {%- set n = name|lower -%}
   {%- if parent_name is defined and 'corporativa' in parent_name|lower -%}
-    {%- set n = name|lower -%}
     {%- if 'proveedor' in n -%}/conecta/proveedores
     {%- elseif 'venue' in n -%}/conecta/venues
     {%- else -%}{{ fallback }}
     {%- endif -%}
+  {%- elseif 'donde comer' in n or 'dónde comer' in n or 'restaurante' in n -%}
+    {#- "Donde comer" va directo al listado de restaurantes (nodo 562), no a
+        la página de la subcategoría de taxonomía. Ajustar el string de match
+        si el nombre real del término en Drupal difiere de estos. -#}
+    {{ path('entity.node.canonical', {'node': 562}) }}
   {%- else -%}{{ fallback }}{%- endif -%}
 {%- endmacro -%}
