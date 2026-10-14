@@ -29,8 +29,10 @@
     color: var(--vn-gris-oscuro);
   }
 
-  // Grid uniforme (mismo alto por tarjeta) — evita huecos en la última fila,
-  // a diferencia del column-count anterior (alturas desiguales por tarjeta).
+  // Grid tipo tablero (alturas variadas por tarjeta, efecto mosaico) con
+  // grid-auto-flow: dense — a diferencia del column-count anterior, el grid
+  // rellena los huecos que deja una tarjeta alta en vez de empujarla entera a
+  // la siguiente columna (así se veían los huecos en blanco).
   .blog-grid {
     max-width: var(--vn-max);
     margin: 0 auto;
@@ -38,14 +40,26 @@
     list-style: none;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 10px;
+    grid-auto-flow: dense;
     gap: 14px;
+  }
+  // Alto de cada tarjeta en "filas" de 10px — aproxima las proporciones del
+  // mosaico original (3/4, 1/1, 4/5, 16/9, 9/16); no necesita ser exacto por
+  // columna/breakpoint porque "dense" reacomoda el flujo igual.
+  .blog-grid__item {
+    &--a { grid-row-end: span 13; } // 3/4
+    &--b { grid-row-end: span 10; } // 1/1
+    &--c { grid-row-end: span 13; } // 4/5
+    &--d { grid-row-end: span 6; }  // 16/9
+    &--e { grid-row-end: span 18; } // 9/16
   }
 
   .blog-card {
     position: relative;
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    height: 100%;
     overflow: hidden;
     text-decoration: none;
   }

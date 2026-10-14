@@ -5,6 +5,11 @@
   `pager_article`. Estilos en css/overrides.css (scss/_blog.scss).
 #}
 {% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
+{# Proporciones rotativas (efecto tablero). El tamaño real de cada tarjeta lo
+   da el grid-row-end: span de .blog-grid__item--a..e (_blog.scss), no un
+   aspect-ratio en la propia tarjeta — así el grid con grid-auto-flow: dense
+   puede reordenar y rellenar huecos en vez de dejarlos en blanco. #}
+{% set ratios = ['a', 'b', 'c', 'd', 'b', 'a', 'e', 'c', 'd', 'a', 'b', 'c', 'e', 'a', 'd', 'b'] %}
 
 <div class="vn-cat vn-blog">
 
@@ -38,7 +43,7 @@
     {% if article is not empty %}
     <ul class="blog-grid">
       {% for item in article %}
-      <li class="blog-grid__item">
+      <li class="blog-grid__item blog-grid__item--{{ ratios[loop.index0 % ratios|length] }}">
         <a class="blog-card" href="{{ item.url }}">
           <img class="blog-card__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="" loading="lazy" decoding="async">
           <span class="blog-card__caption">{{ item.title }}</span>
