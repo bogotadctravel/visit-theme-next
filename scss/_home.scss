@@ -559,23 +559,22 @@
   .planea-viaje__info-illustration { display: block; width: 100%; height: auto; }
   .planea-viaje__info-btn {
     flex: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 22px;
-    border-radius: 8px;
+    display: block;
+    width: 100%;
+    padding: 18px 20px;
+    border-radius: 14px;
     background: var(--vn-blanco);
-    border: 1.5px solid var(--vn-rojo-principal);
+    border: 2px solid #B2B2B2;
     color: var(--vn-rojo-principal);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
+    text-align: center;
     text-transform: uppercase;
     text-decoration: none;
-    white-space: nowrap;
+    line-height: 1.3;
     transition: background var(--vn-transicion), color var(--vn-transicion), transform var(--vn-transicion);
 
-    svg { width: 22px; height: 22px; flex: none; }
     &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); transform: translateY(-4px); }
   }
 
