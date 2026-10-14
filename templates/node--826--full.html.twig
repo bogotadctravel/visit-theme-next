@@ -73,7 +73,8 @@
         <ul class="archive__grid" id="cardsList">
           {% for item in rutas|shuffle %}
           {% set zonas = (item.field_turzone|default([]))|map(t => t.tid)|join(',') %}
-          <li class="card" data-categoria="{{ item.categoria.tid ?? '' }}" data-zona="{{ zonas }}">
+          {% set categorias = (item.field_turcat|default([]))|map(t => t.tid)|join(',') %}
+          <li class="card" data-categoria="{{ categorias }}" data-zona="{{ zonas }}">
             <a href="{{ item.url }}">
               <span class="image"><img src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="{{ item.title }}" loading="lazy" decoding="async"></span>
               <span class="title">{{ item.title }}</span>
