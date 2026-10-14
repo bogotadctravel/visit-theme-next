@@ -74,9 +74,10 @@ function _visit_theme_next_gallery_images(\Drupal\node\NodeInterface $node): arr
  * "Información al viajero" (nodo 1234).
  *
  * @return array
- *   Lista de ['name' => string, 'items' => array[]], omitiendo categorías
- *   sin contenido. Cada item: title, body (HTML ya filtrado), introduccion,
- *   image_url.
+ *   Lista de ['tid' => int, 'name' => string, 'items' => array[]], omitiendo
+ *   categorías sin contenido. Cada item: title, body (HTML ya filtrado),
+ *   introduccion, image_url. `tid` lo usa node--1234--full.html.twig para los
+ *   checkboxes de filtro y el data-categoria de cada tarjeta.
  */
 function _visit_theme_next_get_info_util_por_categoria(): array {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
@@ -139,6 +140,7 @@ function _visit_theme_next_get_info_util_por_categoria(): array {
     }
 
     $grupos[] = [
+      'tid' => $term->id(),
       'name' => $term->label(),
       'items' => $items,
     ];
