@@ -30,6 +30,20 @@
     </div>
   </section>
 
+  {% if node.field_introduccion.0.value or node.body.0.value %}
+  <section class="cat-intro">
+    <div class="cat-intro__wrap">
+      <div class="cat-intro__body">
+        {% if node.field_introduccion.0.value %}
+        {{ node.field_introduccion.0.value }}
+        {% else %}
+        {{ node.body.0.value|raw }}
+        {% endif %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
   {# ================= LISTADO ================= #}
   <section class="archive">
     <div class="archive__wrap">

@@ -28,10 +28,16 @@
     </div>
   </section>
 
-  {% if node.body.0.value %}
+  {% if node.field_introduccion.0.value or node.body.0.value %}
   <section class="cat-intro">
     <div class="cat-intro__wrap">
-      <div class="cat-intro__body">{{ node.body.0.value|raw }}</div>
+      <div class="cat-intro__body">
+        {% if node.field_introduccion.0.value %}
+        {{ node.field_introduccion.0.value }}
+        {% else %}
+        {{ node.body.0.value|raw }}
+        {% endif %}
+      </div>
     </div>
   </section>
   {% endif %}
