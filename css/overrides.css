@@ -1554,16 +1554,21 @@ body.nav-open {
   max-width: var(--vn-max);
   margin: 0 auto;
 }
-.vn-home .planea-viaje__top {
+.vn-home .planea-viaje__layout {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 32px;
-  margin-bottom: clamp(16px, 3vw, 32px);
+}
+.vn-home .planea-viaje__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 3vw, 32px);
 }
 .vn-home .planea-viaje__intro {
   max-width: none;
-  flex: 1 1 auto;
 }
 .vn-home .planea-viaje__info {
   flex: 0 0 auto;
@@ -1659,14 +1664,6 @@ body.nav-open {
   width: clamp(76px, 9vw, 108px);
 }
 @media (max-width: 900px) {
-  .vn-home .planea-viaje__top {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .vn-home .planea-viaje__intro {
-    max-width: none;
-    flex: none;
-  }
   .vn-home .planea-viaje__actions {
     gap: clamp(12px, 5vw, 24px);
   }

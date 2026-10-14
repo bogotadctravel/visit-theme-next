@@ -537,15 +537,21 @@
     margin: 0 auto;
   }
 
-  // ── Fila superior: texto a la izquierda, mapa+botón a la derecha ──
-  .planea-viaje__top {
+  // ── Layout general: bloque principal (texto + ilustración + badges) a la izq., mapa+botón a la der. ──
+  .planea-viaje__layout {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 32px;
-    margin-bottom: clamp(16px, 3vw, 32px);
   }
-  .planea-viaje__intro { max-width: none; flex: 1 1 auto; }
+  .planea-viaje__main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 3vw, 32px);
+  }
+  .planea-viaje__intro { max-width: none; }
 
   .planea-viaje__info {
     flex: 0 0 auto;
@@ -628,8 +634,6 @@
   }
 
   @media (max-width: 900px) {
-    .planea-viaje__top { flex-direction: column; align-items: stretch; }
-    .planea-viaje__intro { max-width: none; flex: none; }
     .planea-viaje__actions { gap: clamp(12px, 5vw, 24px); }
   }
 
