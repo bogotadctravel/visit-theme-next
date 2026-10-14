@@ -528,22 +528,35 @@
   //  PLANEA TU VIAJE
   // =======================================================
   .planea-viaje {
-    position: relative;
-    padding: clamp(48px, 7vw, 80px) var(--vn-pad);
+    padding: clamp(48px, 7vw, 80px) var(--vn-pad) 0;
     background: var(--vn-gris-10);
   }
 
-  // Bloque "Información al viajero": esquina superior derecha, solo desktop
-  .planea-viaje__info {
-    position: absolute;
-    top: clamp(24px, 3vw, 40px);
-    right: var(--vn-pad);
-    width: 60%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    gap: 24px;
+  .planea-viaje__wrap {
+    max-width: var(--vn-max);
+    margin: 0 auto;
   }
+
+  // ── Fila superior: texto a la izquierda, mapa+botón a la derecha ──
+  .planea-viaje__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: clamp(16px, 3vw, 32px);
+  }
+  .planea-viaje__intro { max-width: 500px; flex: 1 1 360px; }
+
+  .planea-viaje__info {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+    width: 100%;
+    max-width: 260px;
+  }
+  .planea-viaje__info-illustration { display: block; width: 100%; height: auto; }
   .planea-viaje__info-btn {
     flex: none;
     display: inline-flex;
@@ -565,31 +578,9 @@
     svg { width: 22px; height: 22px; flex: none; }
     &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); transform: translateY(-4px); }
   }
-  .planea-viaje__info-illustration { flex: 1 1 auto; width: 100%; max-width: 440px; height: auto; }
 
   @media (max-width: 900px) {
     .planea-viaje__info { display: none; }
-  }
-
-  .planea-viaje__wrap {
-    max-width: var(--vn-max);
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-  .planea-viaje__intro { max-width: 640px; }
-
-  .planea-viaje__row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: end;
-    gap: 40px;
-  }
-  .planea-viaje__illustration {
-    display: block;
-    width: 100%;
-    height: auto;
   }
 
   .planea-viaje__title {
@@ -613,29 +604,39 @@
     line-height: 1.6;
     color: var(--vn-gris-60);
   }
-  .planea-viaje__actions {
+
+  // ── Fila inferior: ilustración a todo el ancho con los badges superpuestos ──
+  .planea-viaje__row {
+    position: relative;
+  }
+  .planea-viaje__illustration {
+    display: block;
     width: 100%;
+    height: auto;
+  }
+  .planea-viaje__actions {
+    position: absolute;
+    left: clamp(12px, 3vw, 48px);
+    bottom: clamp(-20px, -3vw, -8px);
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    align-items: flex-end;
+    gap: clamp(16px, 4vw, 40px);
   }
   .planea-viaje__badge {
     display: block;
-    flex: 0 0 25%;
-    max-width: 25%;
+    flex: none;
+    width: clamp(68px, 8vw, 96px);
     transition: transform var(--vn-transicion);
 
     img { display: block; width: 100%; height: auto; }
     &:hover { transform: translateY(-6px); }
+    &:nth-child(2) { width: clamp(76px, 9vw, 108px); }
   }
 
   @media (max-width: 900px) {
-    .planea-viaje__row { grid-template-columns: 1fr; }
-    .planea-viaje__illustration { margin-inline: auto; }
-    .planea-viaje__actions { flex-wrap: wrap; }
-    .planea-viaje__badge { flex-basis: 72px; max-width: 72px; }
+    .planea-viaje__top { flex-direction: column; align-items: stretch; }
+    .planea-viaje__intro { max-width: none; flex: none; }
+    .planea-viaje__actions { gap: clamp(12px, 5vw, 24px); }
   }
 
   // =======================================================
@@ -744,10 +745,6 @@
     }
   }
 
-  @media (max-width: 720px) {
-    .planea-viaje__wrap { align-items: center; text-align: center; }
-  }
-
   @media (max-width: 640px) {
     .imperdibles__item { width: min(72vw, 260px); }
 
@@ -772,9 +769,9 @@
     .eventos__arrow { display: none; }
     .imperdibles__head { flex-direction: column; align-items: flex-start; gap: 12px; }
 
-    .planea-viaje__actions { flex-wrap: wrap; gap: 14px; }
-    .planea-viaje__badge { flex-basis: 70px; max-width: 70px; margin-inline: 0; }
-    .planea-viaje__wrap { align-items: stretch; text-align: left; }
+    .planea-viaje__actions { bottom: -14px; gap: 10px; }
+    .planea-viaje__badge { width: 56px; }
+    .planea-viaje__badge:nth-child(2) { width: 64px; }
 
     .blog-home__mosaic {
       display: flex;
