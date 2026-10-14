@@ -1562,8 +1562,8 @@ body.nav-open {
   margin-bottom: clamp(16px, 3vw, 32px);
 }
 .vn-home .planea-viaje__intro {
-  max-width: 500px;
-  flex: 1 1 360px;
+  max-width: none;
+  flex: 1 1 auto;
 }
 .vn-home .planea-viaje__info {
   flex: 0 0 auto;
@@ -1615,18 +1615,15 @@ body.nav-open {
   letter-spacing: -0.01em;
   color: var(--vn-gris-oscuro);
 }
-.vn-home .planea-viaje__subtitle {
-  margin: 18px 0 6px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--vn-gris-oscuro);
-}
 .vn-home .planea-viaje__desc {
   margin: 0;
-  max-width: 56ch;
   font-size: 18px;
   line-height: 1.6;
   color: var(--vn-gris-60);
+}
+.vn-home .planea-viaje__desc strong {
+  font-weight: 700;
+  color: var(--vn-gris-oscuro);
 }
 .vn-home .planea-viaje__row {
   position: relative;
