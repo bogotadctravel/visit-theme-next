@@ -29,10 +29,13 @@
     color: var(--vn-gris-oscuro);
   }
 
-  // Grid tipo tablero (alturas variadas por tarjeta, efecto mosaico) con
-  // grid-auto-flow: dense — a diferencia del column-count anterior, el grid
-  // rellena los huecos que deja una tarjeta alta en vez de empujarla entera a
-  // la siguiente columna (así se veían los huecos en blanco).
+  // Grid tipo tablero (alturas variadas por tarjeta, efecto mosaico).
+  // Cada tarjeta recibe una columna FIJA según su posición (ver
+  // .blog-grid__item más abajo): así cada columna se comporta como una
+  // pila independiente (masonry real) y nunca quedan celdas vacías entre
+  // columnas, sin importar la altura aleatoria de cada tarjeta ni cuántos
+  // ítems queden en la última página. "dense" solo compacta huecos
+  // verticales dentro de esa misma columna.
   .blog-grid {
     max-width: var(--vn-max);
     margin: 0 auto;
@@ -45,14 +48,19 @@
     gap: 14px;
   }
   // Alto de cada tarjeta en "filas" de 10px — aproxima las proporciones del
-  // mosaico original (3/4, 1/1, 4/5, 16/9, 9/16); no necesita ser exacto por
-  // columna/breakpoint porque "dense" reacomoda el flujo igual.
+  // mosaico original (3/4, 1/1, 4/5, 16/9, 9/16).
   .blog-grid__item {
     &--a { grid-row-end: span 13; } // 3/4
     &--b { grid-row-end: span 10; } // 1/1
     &--c { grid-row-end: span 13; } // 4/5
     &--d { grid-row-end: span 6; }  // 16/9
     &--e { grid-row-end: span 18; } // 9/16
+
+    // Columna fija por posición (round-robin, 4 columnas en desktop).
+    &:nth-child(4n + 1) { grid-column: 1; }
+    &:nth-child(4n + 2) { grid-column: 2; }
+    &:nth-child(4n + 3) { grid-column: 3; }
+    &:nth-child(4n + 4) { grid-column: 4; }
   }
 
   .blog-card {
@@ -94,13 +102,25 @@
 
   @media (max-width: 960px) {
     .blog-grid { grid-template-columns: repeat(3, 1fr); }
+    .blog-grid__item {
+      &:nth-child(3n + 1) { grid-column: 1; }
+      &:nth-child(3n + 2) { grid-column: 2; }
+      &:nth-child(3n + 3) { grid-column: 3; }
+    }
   }
   @media (max-width: 640px) {
     .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .blog-card__caption { padding: 11px 13px; font-size: 12px; }
+    .blog-grid__item {
+      &:nth-child(2n + 1) { grid-column: 1; }
+      &:nth-child(2n + 2) { grid-column: 2; }
+    }
   }
   @media (max-width: 420px) {
     .blog-grid { grid-template-columns: 1fr; }
+    .blog-grid__item {
+      &:nth-child(n) { grid-column: 1; }
+    }
   }
 }
 
