@@ -1,0 +1,53 @@
+{#
+  Nodo 3003 — "Diseña tu viaje". Misma cabecera que los listados .vn-archive
+  (Experiencias/Ofertas, node--835): hero alto con logo + breadcrumb, franja
+  con el título e introducción (field_introduccion o body).
+  Debajo, la sección .vn-planner es el punto de montaje del planificador
+  (proyecto B:\repos\disena-tu-viaje: filtros + mapa ArcGIS + "Mi viaje").
+#}
+{% set hero_bg = node.field_mainimg.entity
+    ? file_url(node.field_mainimg.entity.uri.value)
+    : (node.field_cover.entity ? file_url(node.field_cover.entity.uri.value) : '') %}
+
+<div class="vn-archive vn-disena">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall" aria-label="{{ node.getTitle() }}">
+    {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li aria-current="page">{{ node.getTitle() }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner" style="background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), rgba(66, 57, 38, 0.5);">
+      <h1 class="cat-hero__title">{{ node.getTitle() }}</h1>
+    </div>
+  </section>
+
+  {# ================= INTRO ================= #}
+  {% if node.field_introduccion.0.value or node.body.0.value %}
+  <section class="cat-intro">
+    <div class="cat-intro__wrap">
+      <div class="cat-intro__body">
+        {% if node.field_introduccion.0.value %}
+        <p>{{ node.field_introduccion.0.value }}</p>
+        {% endif %}
+        {% if node.body.0.value %}
+        {{ node.body.0.value|raw }}
+        {% endif %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+
+  {# ================= PLANIFICADOR ================= #}
+  {# Aquí se monta el proyecto "Diseña tu viaje" (pendiente de integrar). #}
+  <section class="vn-planner" id="disena-tu-viaje" aria-label="{{ 'Diseña tu viaje'|t }}">
+    <div class="vn-planner__wrap"></div>
+  </section>
+
+</div>
