@@ -1,22 +1,16 @@
 {#
   Listado de blog (nodo 650) — cuadrícula tipo Pinterest del prototipo v3
   (visitbogota3-theme/blog.html). Datos: visit_theme_preprocess_node() para el
-  nodo 650 expone `article` (getNodesTeaser('article', 12, FALSE, 2)) paginado y
+  nodo 650 expone `article` (getNodesTeaser('article', 12, FALSE, 2), ya
+  procesado por visit_theme_blog_grid_layout() en visit_theme.theme) paginado y
   `pager_article`. Estilos en css/overrides.css (scss/_blog.scss).
+  Cada item trae `grid_size` (a/b/c/d/e, alto de la tarjeta) y `grid_col_4`,
+  `grid_col_3`, `grid_col_2` (columna 1-indexada ya calculada por
+  bin-packing — la columna con menos altura acumulada hasta ese punto —
+  para los breakpoints de 4, 3 y 2 columnas, así ninguna columna queda
+  mucho más corta que las demás y no se ven huecos al final del grid).
 #}
 {% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
-{# Proporciones por bloques de 4 (una por columna del grid desktop). Cada
-   bloque siempre lleva el mismo conjunto de alturas — una vertical (a/c:
-   span 13), un cuadrado (b: span 10), una baja (d: span 6) y una alta
-   (e: span 18), ver _blog.scss — así la sumatoria de alto del bloque es
-   siempre la misma (47) y las columnas empatan abajo cada 4 tarjetas,
-   pero el ORDEN dentro del bloque se baraja en cada carga: desordenado
-   a la vista, parejo abajo. #}
-{% set ratios = [] %}
-{% for i in 0..((article|length / 4)|round(0, 'ceil')) - 1 %}
-  {% set portrait = (['a', 'c']|shuffle)[0] %}
-  {% set ratios = ratios|merge([portrait, 'b', 'd', 'e']|shuffle) %}
-{% endfor %}
 
 <div class="vn-cat vn-blog">
 
@@ -50,7 +44,7 @@
     {% if article is not empty %}
     <ul class="blog-grid">
       {% for item in article %}
-      <li class="blog-grid__item blog-grid__item--{{ ratios[loop.index0 % ratios|length] }}">
+      <li class="blog-grid__item blog-grid__item--{{ item.grid_size }}" style="--col-4: {{ item.grid_col_4 }}; --col-3: {{ item.grid_col_3 }}; --col-2: {{ item.grid_col_2 }};">
         <a class="blog-card" href="{{ item.url }}">
           <img class="blog-card__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="" loading="lazy" decoding="async">
           <span class="blog-card__caption">{{ item.title }}</span>

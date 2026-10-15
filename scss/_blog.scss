@@ -30,12 +30,12 @@
   }
 
   // Grid tipo tablero (alturas variadas por tarjeta, efecto mosaico).
-  // Cada tarjeta recibe una columna FIJA según su posición (ver
-  // .blog-grid__item más abajo): así cada columna se comporta como una
-  // pila independiente (masonry real) y nunca quedan celdas vacías entre
-  // columnas, sin importar la altura aleatoria de cada tarjeta ni cuántos
-  // ítems queden en la última página. "dense" solo compacta huecos
-  // verticales dentro de esa misma columna.
+  // Cada tarjeta trae su columna ya calculada por bin-packing en PHP
+  // (visit_theme_blog_grid_layout(), ver node--650--full.html.twig) vía las
+  // variables --col-4/--col-3/--col-2: siempre va a la columna con menos
+  // altura acumulada hasta ese punto, así ninguna columna queda mucho más
+  // corta que las demás y no se ven huecos en blanco al final del grid.
+  // "dense" solo compacta huecos verticales dentro de esa misma columna.
   .blog-grid {
     max-width: var(--vn-max);
     margin: 0 auto;
@@ -56,11 +56,7 @@
     &--d { grid-row-end: span 6; }  // 16/9
     &--e { grid-row-end: span 18; } // 9/16
 
-    // Columna fija por posición (round-robin, 4 columnas en desktop).
-    &:nth-child(4n + 1) { grid-column: 1; }
-    &:nth-child(4n + 2) { grid-column: 2; }
-    &:nth-child(4n + 3) { grid-column: 3; }
-    &:nth-child(4n + 4) { grid-column: 4; }
+    grid-column: var(--col-4);
   }
 
   .blog-card {
@@ -102,25 +98,16 @@
 
   @media (max-width: 960px) {
     .blog-grid { grid-template-columns: repeat(3, 1fr); }
-    .blog-grid__item {
-      &:nth-child(3n + 1) { grid-column: 1; }
-      &:nth-child(3n + 2) { grid-column: 2; }
-      &:nth-child(3n + 3) { grid-column: 3; }
-    }
+    .blog-grid__item { grid-column: var(--col-3); }
   }
   @media (max-width: 640px) {
     .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .blog-card__caption { padding: 11px 13px; font-size: 12px; }
-    .blog-grid__item {
-      &:nth-child(2n + 1) { grid-column: 1; }
-      &:nth-child(2n + 2) { grid-column: 2; }
-    }
+    .blog-grid__item { grid-column: var(--col-2); }
   }
   @media (max-width: 420px) {
     .blog-grid { grid-template-columns: 1fr; }
-    .blog-grid__item {
-      &:nth-child(n) { grid-column: 1; }
-    }
+    .blog-grid__item { grid-column: 1; }
   }
 }
 
