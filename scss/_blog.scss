@@ -47,16 +47,11 @@
     grid-auto-flow: dense;
     gap: 14px;
   }
-  // Alto de cada tarjeta en "filas" de 10px — aproxima las proporciones del
-  // mosaico original (3/4, 1/1, 4/5, 16/9, 9/16).
+  // Columna y alto (en "filas" de 10px) vienen por tarjeta desde PHP; los
+  // altos ya están estirados para que todas las columnas sumen lo mismo.
   .blog-grid__item {
-    &--a { grid-row-end: span 13; } // 3/4
-    &--b { grid-row-end: span 10; } // 1/1
-    &--c { grid-row-end: span 13; } // 4/5
-    &--d { grid-row-end: span 6; }  // 16/9
-    &--e { grid-row-end: span 18; } // 9/16
-
     grid-column: var(--col-4);
+    grid-row-end: span var(--span-4);
   }
 
   .blog-card {
@@ -98,16 +93,16 @@
 
   @media (max-width: 960px) {
     .blog-grid { grid-template-columns: repeat(3, 1fr); }
-    .blog-grid__item { grid-column: var(--col-3); }
+    .blog-grid__item { grid-column: var(--col-3); grid-row-end: span var(--span-3); }
   }
   @media (max-width: 640px) {
     .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .blog-card__caption { padding: 11px 13px; font-size: 12px; }
-    .blog-grid__item { grid-column: var(--col-2); }
+    .blog-grid__item { grid-column: var(--col-2); grid-row-end: span var(--span-2); }
   }
   @media (max-width: 420px) {
     .blog-grid { grid-template-columns: 1fr; }
-    .blog-grid__item { grid-column: 1; }
+    .blog-grid__item { grid-column: 1; grid-row-end: span var(--span-1); }
   }
 }
 

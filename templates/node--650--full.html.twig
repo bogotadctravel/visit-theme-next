@@ -44,7 +44,7 @@
     {% if article is not empty %}
     <ul class="blog-grid">
       {% for item in article %}
-      <li class="blog-grid__item blog-grid__item--{{ item.grid_size }}" style="--col-4: {{ item.grid_col_4 }}; --col-3: {{ item.grid_col_3 }}; --col-2: {{ item.grid_col_2 }};">
+      <li class="blog-grid__item blog-grid__item--{{ item.grid_size }}" style="--col-4: {{ item.grid_col_4 }}; --col-3: {{ item.grid_col_3 }}; --col-2: {{ item.grid_col_2 }}; --span-4: {{ item.grid_span_4 }}; --span-3: {{ item.grid_span_3 }}; --span-2: {{ item.grid_span_2 }}; --span-1: {{ item.grid_span_1 }};">
         <a class="blog-card" href="{{ item.url }}">
           <img class="blog-card__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="" loading="lazy" decoding="async">
           <span class="blog-card__caption">{{ item.title }}</span>
