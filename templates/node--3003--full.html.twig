@@ -2,9 +2,13 @@
   Nodo 3003 — "Diseña tu viaje". Misma cabecera que los listados .vn-archive
   (Experiencias/Ofertas, node--835): hero alto con logo + breadcrumb, franja
   con el título e introducción (field_introduccion o body).
-  Debajo, la sección .vn-planner es el punto de montaje del planificador
-  (proyecto B:\repos\disena-tu-viaje: filtros + mapa ArcGIS + "Mi viaje").
+  Debajo, .vn-planner: el planificador portado del repo disena-tu-viaje
+  (filtros por categoría + mapa ArcGIS + "Mi viaje" + compartir con QR).
+  Lógica en js/disena-tu-viaje/ (librería visit_theme_next/disena-tu-viaje),
+  estilos en scss/_disena.scss bajo .vn-planner. Los ids los usa app.js; las
+  clases con prefijo dtv- se renombraron porque chocaban con el tema base.
 #}
+{{ attach_library('visit_theme_next/disena-tu-viaje') }}
 {% set hero_bg = node.field_mainimg.entity
     ? file_url(node.field_mainimg.entity.uri.value)
     : (node.field_cover.entity ? file_url(node.field_cover.entity.uri.value) : '') %}
@@ -45,9 +49,97 @@
   {% endif %}
 
   {# ================= PLANIFICADOR ================= #}
-  {# Aquí se monta el proyecto "Diseña tu viaje" (pendiente de integrar). #}
   <section class="vn-planner" id="disena-tu-viaje" aria-label="{{ 'Diseña tu viaje'|t }}">
-    <div class="vn-planner__wrap"></div>
+    <div class="vn-planner__wrap" id="dtvPlanner">
+
+      {# Barra de filtros #}
+      <div class="dtv-filters" aria-label="Filtros">
+        <div class="filters-main" id="filtersMain" role="group" aria-label="Categorías"></div>
+        <div class="filters-sub" id="filtersSub" hidden></div>
+        <div class="api-debug" id="apiDebug" hidden></div>
+      </div>
+
+      <div class="planner-grid">
+        {# Sidebar izquierdo: resultados #}
+        <aside class="panel panel-results" aria-label="Lugares en el mapa">
+          <div class="panel-head">
+            <h2 id="resultsTitle">Imperdibles</h2>
+            <span class="panel-count" id="resultsCount">10</span>
+          </div>
+          <ul class="results-list" id="resultsList"></ul>
+        </aside>
+
+        {# Mapa #}
+        <div class="map-wrap" role="region" aria-label="Mapa de Bogotá">
+          <div id="map" class="dtv-map"></div>
+          <div class="map-loading" id="mapLoading">Cargando mapa…</div>
+
+          {# Card flotante #}
+          <article class="float-card" id="floatCard" hidden>
+            <button type="button" class="float-close" id="floatClose" aria-label="Cerrar">&times;</button>
+            <div class="float-img"><img id="floatImg" alt=""></div>
+            <div class="float-body">
+              <span class="dtv-tag" id="floatTag"></span>
+              <h3 id="floatTitle"></h3>
+              <p id="floatZone" class="muted"></p>
+              <div class="float-actions">
+                <a id="floatMore" class="btn btn-ghost" target="_blank" rel="noopener">Ver más</a>
+                <button type="button" id="floatAdd" class="btn btn-primary">Agregar a mi viaje</button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        {# Sidebar derecho: Mi viaje #}
+        <aside class="panel panel-trip" aria-label="Mi viaje">
+          <div class="panel-head">
+            <h2>Mi viaje</h2>
+            <span class="panel-count" id="tripCount">0</span>
+          </div>
+          <ul class="trip-list" id="tripList"></ul>
+          <div class="trip-empty" id="tripLoading" hidden>
+            <span class="spinner spinner-dark" aria-hidden="true"></span>
+            <p>Cargando itinerario compartido…</p>
+          </div>
+          <div class="trip-empty" id="tripEmpty">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 12 2.5a7 7 0 0 1 7 7C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <p>Aún no tienes lugares.<br>Usa <strong>Agregar a mi viaje</strong> en el mapa para armar tu itinerario.</p>
+          </div>
+          <div class="trip-foot">
+            <p class="trip-hint" id="tripHint">Agrega al menos 2 lugares para compartir tu itinerario.</p>
+            <button type="button" class="btn btn-primary btn-block" id="saveTrip" disabled>Compartir itinerario</button>
+          </div>
+        </aside>
+      </div>
+
+      {# Modal compartir itinerario #}
+      <div class="dtv-modal-backdrop" id="modal" hidden>
+        <div class="dtv-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+          <button type="button" class="dtv-modal-close" id="modalClose" aria-label="Cerrar">&times;</button>
+
+          <h2 id="modalTitle">Comparte tu itinerario</h2>
+          <p class="muted">Quien abra el enlace verá estos <strong id="modalCount">0</strong> lugares tal como están ahora.</p>
+          <ul class="modal-summary" id="modalSummary"></ul>
+
+          <div class="share-qr" id="shareQr" hidden>
+            <div class="qr-box" id="qrBox" aria-label="Código QR del itinerario" role="img"></div>
+            <p>Escanéalo con la cámara de tu celular para llevar el itinerario contigo.</p>
+          </div>
+
+          <label class="share-label" for="shareUrl">Enlace del itinerario</label>
+          <div class="share-row">
+            <input type="text" id="shareUrl" readonly>
+            <button type="button" class="btn btn-primary" id="shareCopy">Copiar</button>
+          </div>
+          <button type="button" class="btn btn-ghost btn-block" id="shareNative" hidden>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>
+            Compartir con mis apps
+          </button>
+        </div>
+      </div>
+
+      <div class="dtv-toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
   </section>
 
 </div>

@@ -389,15 +389,3 @@
     .archive__grid { grid-template-columns: 1fr; }
   }
 }
-
-// Nodo 3003 "Diseña tu viaje": contenedor donde se monta el planificador
-// (B:\repos\disena-tu-viaje), mismo ancho que .archive__wrap.
-.vn-disena .vn-planner {
-  padding: clamp(24px, 4vw, 40px) 0 clamp(56px, 8vw, 96px);
-  background: var(--vn-blanco);
-}
-.vn-disena .vn-planner__wrap {
-  max-width: var(--vn-max);
-  margin: 0 auto;
-  padding-inline: var(--vn-pad);
-}

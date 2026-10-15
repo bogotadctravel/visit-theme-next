@@ -7,3 +7,19 @@ overrides:
     js/overrides.js: {}
   dependencies:
     - visit_theme/global-styling
+
+# "Diseña tu viaje" (nodo 3003) — planificador con mapa ArcGIS. El JS de ArcGIS
+# NO va aquí: lo inyecta js/disena-tu-viaje/app.js al final (ver loadArcgis).
+# qrcode-generator es UMD: debe ejecutarse antes de que exista el `define` de ArcGIS.
+disena-tu-viaje:
+  version: 1.0
+  css:
+    theme:
+      https://js.arcgis.com/4.30/esri/themes/light/main.css: { type: external, minified: true }
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js: { type: external, minified: true }
+    js/disena-tu-viaje/config.js: {}
+    js/disena-tu-viaje/data.js: {}
+    js/disena-tu-viaje/app.js: {}
+  dependencies:
+    - visit_theme_next/overrides

@@ -4812,17 +4812,6 @@ body.nav-open {
   }
 }
 
-.vn-disena .vn-planner {
-  padding: clamp(24px, 4vw, 40px) 0 clamp(56px, 8vw, 96px);
-  background: var(--vn-blanco);
-}
-
-.vn-disena .vn-planner__wrap {
-  max-width: var(--vn-max);
-  margin: 0 auto;
-  padding-inline: var(--vn-pad);
-}
-
 .vn-blog .blog-grid-section {
   padding: clamp(40px, 6vw, 64px) 0 clamp(56px, 8vw, 96px);
   background: var(--vn-blanco);
@@ -5291,6 +5280,1140 @@ body.nav-open {
 }
 .info-modal__body strong {
   color: var(--vn-gris-oscuro);
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+.vn-disena .vn-planner {
+  --navy: #0B1F3A;
+  --red: #FF3108;
+  --yellow: #FFC72C;
+  --ink: #1B2430;
+  --muted: #667085;
+  --line: #E4E7EC;
+  --bg: #F4F5F7;
+  --card: #FFFFFF;
+  --radius: 14px;
+  --shadow: 0 6px 24px rgba(11, 31, 58, .12);
+  --shadow-lg: 0 18px 48px rgba(11, 31, 58, .24);
+  --font-head: 'Lato', system-ui, sans-serif;
+  --font-body: 'Lato', system-ui, sans-serif;
+  --gutter: 24px;
+  --planner-h: max(600px, calc(100vh - 150px));
+  padding: clamp(8px, 2vw, 16px) 0 clamp(56px, 8vw, 96px);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: normal;
+  -webkit-font-smoothing: antialiased;
+}
+.vn-disena .vn-planner .vn-planner__wrap {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+.vn-disena .vn-planner * {
+  box-sizing: border-box;
+}
+.vn-disena .vn-planner h1, .vn-disena .vn-planner h2, .vn-disena .vn-planner h3 {
+  font-family: var(--font-head);
+  margin: 0;
+}
+.vn-disena .vn-planner img {
+  display: block;
+  max-width: 100%;
+}
+.vn-disena .vn-planner button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.vn-disena .vn-planner [hidden] {
+  display: none !important;
+}
+.vn-disena .vn-planner .muted {
+  color: var(--muted);
+  margin: 0;
+  font-size: 13px;
+}
+.vn-disena .vn-planner .dtv-filters {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 20; /* los desplegables quedan sobre el mapa */
+}
+.vn-disena .vn-planner .filters-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.vn-disena .vn-planner .filters-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  animation: dtv-slideDown 0.2s ease;
+}
+@keyframes dtv-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.vn-disena .vn-planner .chip {
+  --c: var(--navy);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 7px 14px 7px 8px;
+  font: 600 14px var(--font-head);
+  color: var(--ink);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.vn-disena .vn-planner .chip:hover {
+  border-color: var(--c);
+}
+.vn-disena .vn-planner .chip:focus-visible, .vn-disena .vn-planner .dtv-result-card:focus-visible, .vn-disena .vn-planner .btn:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 2px;
+}
+.vn-disena .vn-planner .chip .ico {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vn-disena .vn-planner .chip-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--c);
+  color: #fff;
+}
+.vn-disena .vn-planner .chip-n {
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--bg);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+.vn-disena .vn-planner .chip.is-active {
+  background: var(--c);
+  border-color: var(--c);
+  color: #fff;
+}
+.vn-disena .vn-planner .chip.is-active .chip-dot {
+  background: rgba(255, 255, 255, 0.22);
+}
+.vn-disena .vn-planner .chip.is-active .chip-n {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+.vn-disena .vn-planner .chip-imperdible {
+  --c: var(--red);
+  padding-left: 12px;
+}
+.vn-disena .vn-planner .chip-imperdible .ico {
+  fill: currentColor;
+  stroke: none;
+  width: 17px;
+  height: 17px;
+  color: var(--yellow);
+}
+.vn-disena .vn-planner .chip-imperdible:not(.is-active) .ico {
+  color: var(--red);
+}
+.vn-disena .vn-planner .sub-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.vn-disena .vn-planner .sub-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 4px;
+  font: 700 12px var(--font-head);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--c);
+}
+.vn-disena .vn-planner .sub-label .ico {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vn-disena .vn-planner .chip-sm {
+  padding: 5px 12px;
+  font-size: 13px;
+  border-width: 1.5px;
+}
+.vn-disena .vn-planner .chip-sm.is-active {
+  background: var(--c);
+}
+.vn-disena .vn-planner {
+  /* Desplegables de filtros (opciones reales de la API) */
+}
+.vn-disena .vn-planner .dd {
+  position: relative;
+}
+.vn-disena .vn-planner .dd-btn {
+  gap: 6px;
+  padding-right: 8px;
+}
+.vn-disena .vn-planner .dd-btn.is-active {
+  color: #fff;
+  border-color: var(--c);
+}
+.vn-disena .vn-planner .dd-caret {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.15s;
+}
+.vn-disena .vn-planner .dd.is-open .dd-caret {
+  transform: rotate(180deg);
+}
+.vn-disena .vn-planner .dd.is-open .dd-btn:not(.is-active) {
+  border-color: var(--c);
+}
+.vn-disena .vn-planner .dd-n {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.28);
+  font-size: 11px;
+  font-weight: 700;
+}
+.vn-disena .vn-planner .dd-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  width: 290px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--line);
+  padding: 8px;
+  animation: dtv-slideDown 0.15s ease;
+}
+.vn-disena .vn-planner .dd-search {
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  font: 13px var(--font-body);
+  color: var(--ink);
+}
+.vn-disena .vn-planner .dd-search:focus {
+  outline: none;
+  border-color: var(--c);
+}
+.vn-disena .vn-planner .dd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.vn-disena .vn-planner .dd-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.vn-disena .vn-planner .dd-opt:hover {
+  background: var(--bg);
+}
+.vn-disena .vn-planner .dd-opt input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--c);
+  flex-shrink: 0;
+}
+.vn-disena .vn-planner .dd-opt span {
+  flex: 1;
+  line-height: 1.3;
+}
+.vn-disena .vn-planner .dd-opt small {
+  color: var(--muted);
+  font-size: 11.5px;
+}
+.vn-disena .vn-planner .dd-empty {
+  padding: 12px 8px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+.vn-disena .vn-planner .dd-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.vn-disena .vn-planner .dd-foot .link-btn {
+  margin-left: 0;
+}
+.vn-disena .vn-planner .btn-sm {
+  padding: 7px 14px;
+  font-size: 12px;
+}
+.vn-disena .vn-planner .sub-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.vn-disena .vn-planner .sub-status.is-error {
+  color: var(--red);
+}
+.vn-disena .vn-planner .spinner.spinner-dark {
+  border-color: var(--line);
+  border-top-color: var(--muted);
+}
+.vn-disena .vn-planner {
+  /* Panel de depuración (?debug=1) */
+}
+.vn-disena .vn-planner .api-debug {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #0B1F3A;
+  color: #cfe0ff;
+  font-size: 12px;
+  display: grid;
+  gap: 4px;
+}
+.vn-disena .vn-planner .api-debug strong {
+  color: #fff;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.vn-disena .vn-planner .api-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+.vn-disena .vn-planner .api-line code {
+  font: 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+  word-break: break-all;
+}
+.vn-disena .vn-planner .api-line span {
+  color: var(--yellow);
+}
+.vn-disena .vn-planner .link-btn {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  padding: 4px;
+  font: 600 13px var(--font-head);
+  color: var(--muted);
+  text-decoration: underline;
+}
+.vn-disena .vn-planner .link-btn:hover {
+  color: var(--ink);
+}
+.vn-disena .vn-planner .planner-grid {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr) 300px;
+  gap: 16px;
+  height: var(--planner-h);
+}
+.vn-disena .vn-planner {
+  /* ---------- Panels ---------- */
+}
+.vn-disena .vn-planner .panel {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.vn-disena .vn-planner .panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.vn-disena .vn-planner .panel-head h2 {
+  font-size: 17px;
+  font-weight: 800;
+}
+.vn-disena .vn-planner .panel-count {
+  min-width: 26px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--navy);
+  color: #fff;
+  font: 700 13px var(--font-head);
+}
+.vn-disena .vn-planner .results-list, .vn-disena .vn-planner .trip-list {
+  list-style: none;
+  margin: 0;
+  padding: 10px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+.vn-disena .vn-planner .results-list li + li {
+  margin-top: 8px;
+}
+.vn-disena .vn-planner .dtv-result-card {
+  --c: var(--navy);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.vn-disena .vn-planner .dtv-result-card:hover {
+  background: var(--bg);
+}
+.vn-disena .vn-planner .dtv-result-card.is-selected {
+  border-color: var(--c);
+  background: #fff;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 14%, transparent);
+}
+.vn-disena .vn-planner .dtv-result-card.is-selected::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 14px;
+  bottom: 14px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--c);
+}
+.vn-disena .vn-planner .result-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--line);
+}
+.vn-disena .vn-planner .result-body {
+  min-width: 0;
+  flex: 1;
+}
+.vn-disena .vn-planner .result-body h3 {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 3px 0 2px;
+}
+.vn-disena .vn-planner .result-body .muted {
+  font-size: 12px;
+}
+.vn-disena .vn-planner .dtv-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 700 10.5px var(--font-head);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c, var(--navy));
+}
+.vn-disena .vn-planner .dtv-tag .ico {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vn-disena .vn-planner .dtv-tag-imperdible {
+  color: var(--red);
+}
+.vn-disena .vn-planner .add-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.vn-disena .vn-planner .add-mini svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vn-disena .vn-planner .add-mini:hover {
+  border-color: var(--red);
+}
+.vn-disena .vn-planner .add-mini.is-added {
+  background: var(--red);
+  border-color: var(--red);
+}
+.vn-disena .vn-planner .add-mini.is-added svg {
+  stroke: #fff;
+}
+.vn-disena .vn-planner .results-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+.vn-disena .vn-planner .results-empty .spinner {
+  display: inline-block;
+  vertical-align: -2px;
+  margin-right: 8px;
+}
+.vn-disena .vn-planner .results-empty .link-btn {
+  margin: 8px 0 0;
+}
+.vn-disena .vn-planner .no-geo {
+  color: var(--muted);
+  font-style: italic;
+}
+.vn-disena .vn-planner .panel-results.is-updating .results-list {
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.vn-disena .vn-planner .panel-results.is-updating .panel-head {
+  background: linear-gradient(90deg, transparent, rgba(255, 49, 8, 0.08), transparent) 0 0/200% 100%;
+  animation: dtv-shimmer 1s linear infinite;
+}
+@keyframes dtv-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+.vn-disena .vn-planner {
+  /* ---------- Map ---------- */
+}
+.vn-disena .vn-planner .map-wrap {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: #dfe6ee;
+  min-height: 0;
+}
+.vn-disena .vn-planner .dtv-map {
+  position: absolute;
+  inset: 0;
+}
+.vn-disena .vn-planner .map-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: 600 14px var(--font-head);
+  color: var(--muted);
+  background: #eef1f5;
+}
+.vn-disena .vn-planner {
+  /* Card flotante */
+}
+.vn-disena .vn-planner .float-card {
+  --c: var(--navy);
+  --arrow-x: 50%;
+  position: absolute;
+  z-index: 5;
+  width: 280px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: var(--shadow-lg);
+  animation: dtv-pop 0.18s ease;
+}
+@keyframes dtv-pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+}
+.vn-disena .vn-planner .float-card::after {
+  content: "";
+  position: absolute;
+  left: var(--arrow-x);
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  transform: translateX(-50%) rotate(45deg);
+  box-shadow: 3px 3px 6px rgba(11, 31, 58, 0.08);
+}
+.vn-disena .vn-planner .float-card.is-below::after {
+  bottom: auto;
+  top: -7px;
+  box-shadow: -3px -3px 6px rgba(11, 31, 58, 0.06);
+}
+.vn-disena .vn-planner .float-card.is-offmap {
+  opacity: 0;
+  pointer-events: none;
+}
+.vn-disena .vn-planner .float-img {
+  height: 140px;
+  overflow: hidden;
+  border-radius: 14px 14px 0 0;
+  background: var(--line);
+}
+.vn-disena .vn-planner .float-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.vn-disena .vn-planner .float-body {
+  padding: 12px 16px 16px;
+  border-top: 4px solid var(--c);
+}
+.vn-disena .vn-planner .float-body h3 {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 4px 0 2px;
+}
+.vn-disena .vn-planner .float-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.vn-disena .vn-planner .float-actions .btn {
+  flex: 1;
+}
+.vn-disena .vn-planner .float-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(11, 31, 58, 0.6);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+}
+.vn-disena .vn-planner .float-close:hover {
+  background: var(--navy);
+}
+.vn-disena .vn-planner .float-card.is-docked {
+  left: 12px !important;
+  right: 12px;
+  bottom: 12px;
+  top: auto !important;
+  width: auto;
+}
+.vn-disena .vn-planner .float-card.is-docked::after {
+  display: none;
+}
+.vn-disena .vn-planner .float-card.is-docked .float-img {
+  height: 110px;
+}
+.vn-disena .vn-planner {
+  /* ---------- Buttons ---------- */
+}
+.vn-disena .vn-planner .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 1.5px solid transparent;
+  font: 700 13px var(--font-head);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.vn-disena .vn-planner .btn-primary {
+  background: var(--red);
+  color: #fff;
+}
+.vn-disena .vn-planner .btn-primary:hover:not(:disabled) {
+  background: #D92600;
+}
+.vn-disena .vn-planner .btn-primary.is-added {
+  background: #fff;
+  color: var(--red);
+  border-color: var(--red);
+}
+.vn-disena .vn-planner .btn-ghost {
+  background: #fff;
+  color: var(--navy);
+  border-color: var(--navy);
+}
+.vn-disena .vn-planner .btn-ghost:hover {
+  background: var(--navy);
+  color: #fff;
+}
+.vn-disena .vn-planner .btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vn-disena .vn-planner .btn-block {
+  width: 100%;
+}
+.vn-disena .vn-planner {
+  /* ---------- Trip ---------- */
+}
+.vn-disena .vn-planner .trip-list {
+  padding: 10px 12px;
+}
+.vn-disena .vn-planner .trip-item {
+  --c: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px;
+  border-bottom: 1px solid var(--line);
+  animation: dtv-pop 0.2s ease;
+}
+.vn-disena .vn-planner .trip-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--c);
+  color: #fff;
+  font: 700 11px var(--font-head);
+}
+.vn-disena .vn-planner .trip-item img {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--line);
+}
+.vn-disena .vn-planner .trip-body {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vn-disena .vn-planner .trip-body strong {
+  font: 700 13px/1.25 var(--font-head);
+}
+.vn-disena .vn-planner .trip-body:hover strong {
+  text-decoration: underline;
+}
+.vn-disena .vn-planner .trip-remove {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 0;
+  flex-shrink: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+}
+.vn-disena .vn-planner .trip-remove:hover {
+  background: var(--bg);
+  color: var(--red);
+}
+.vn-disena .vn-planner .trip-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.vn-disena .vn-planner .trip-empty svg {
+  width: 44px;
+  height: 44px;
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.6;
+  margin-bottom: 8px;
+}
+.vn-disena .vn-planner .trip-empty p {
+  margin: 0;
+  line-height: 1.5;
+}
+.vn-disena .vn-planner #tripLoading .spinner {
+  width: 22px;
+  height: 22px;
+  margin-bottom: 10px;
+}
+.vn-disena .vn-planner .trip-list:not(:empty) + .trip-empty {
+  display: none;
+}
+.vn-disena .vn-planner .trip-list:empty {
+  display: none;
+}
+.vn-disena .vn-planner .trip-foot {
+  padding: 14px 16px 16px;
+  border-top: 1px solid var(--line);
+  background: #FAFBFC;
+}
+.vn-disena .vn-planner .trip-hint {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+.vn-disena .vn-planner {
+  /* ---------- Modal ---------- */
+}
+.vn-disena .vn-planner .dtv-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000; /* sobre el header fijo */
+  background: rgba(11, 31, 58, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  animation: dtv-fade 0.15s ease;
+}
+@keyframes dtv-fade {
+  from {
+    opacity: 0;
+  }
+}
+.vn-disena .vn-planner .dtv-modal {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: var(--shadow-lg);
+  animation: dtv-pop 0.2s ease;
+}
+.vn-disena .vn-planner .dtv-modal h2 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.vn-disena .vn-planner .dtv-modal .muted {
+  font-size: 14px;
+}
+.vn-disena .vn-planner .dtv-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--bg);
+  font-size: 22px;
+  line-height: 1;
+}
+.vn-disena .vn-planner .modal-summary {
+  list-style: none;
+  margin: 16px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg);
+  max-height: 150px;
+  overflow-y: auto;
+  font-size: 13px;
+}
+.vn-disena .vn-planner .modal-summary li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+}
+.vn-disena .vn-planner .modal-summary span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--c);
+  color: #fff;
+  font: 700 10px var(--font-head);
+}
+.vn-disena .vn-planner .spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  animation: dtv-spin 0.7s linear infinite;
+}
+@keyframes dtv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.vn-disena .vn-planner {
+  /* Compartir itinerario */
+}
+.vn-disena .vn-planner .share-label {
+  display: block;
+  font: 700 13px var(--font-head);
+  margin-bottom: 6px;
+}
+.vn-disena .vn-planner .share-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.vn-disena .vn-planner .share-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--line);
+  font: 13px var(--font-body);
+  color: var(--ink);
+  background: var(--bg);
+}
+.vn-disena .vn-planner .share-row input:focus {
+  outline: none;
+  border-color: var(--navy);
+}
+.vn-disena .vn-planner .share-row .btn {
+  flex-shrink: 0;
+  min-width: 104px;
+}
+.vn-disena .vn-planner .dtv-modal .btn .ico {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.vn-disena .vn-planner .share-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.vn-disena .vn-planner .share-qr p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 260px;
+}
+.vn-disena .vn-planner .qr-box {
+  width: 200px;
+  height: 200px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1.5px solid var(--line);
+}
+.vn-disena .vn-planner .qr-box svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.vn-disena .vn-planner {
+  /* Resalte al cargar un itinerario compartido */
+}
+.vn-disena .vn-planner .panel-trip.is-flash {
+  animation: dtv-flash 2.4s ease;
+}
+@keyframes dtv-flash {
+  0%, 60% {
+    box-shadow: 0 0 0 3px var(--red), var(--shadow);
+  }
+  100% {
+    box-shadow: var(--shadow);
+  }
+}
+.vn-disena .vn-planner {
+  /* ---------- Toast ---------- */
+}
+.vn-disena .vn-planner .dtv-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 1010;
+  transform: translate(-50%, 20px);
+  opacity: 0;
+  pointer-events: none;
+  background: var(--navy);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font: 600 13px var(--font-head);
+  box-shadow: var(--shadow-lg);
+  transition: opacity 0.2s, transform 0.2s;
+  max-width: calc(100vw - 32px);
+}
+.vn-disena .vn-planner .dtv-toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.vn-disena .vn-planner {
+  /* ---------- Responsive ---------- */
+}
+@media (max-width: 1180px) {
+  .vn-disena .vn-planner .planner-grid {
+    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-areas: "results map" "trip trip";
+    grid-template-rows: var(--planner-h) auto;
+    height: auto;
+  }
+  .vn-disena .vn-planner .panel-results {
+    grid-area: results;
+  }
+  .vn-disena .vn-planner .map-wrap {
+    grid-area: map;
+  }
+  .vn-disena .vn-planner .panel-trip {
+    grid-area: trip;
+    max-height: 420px;
+  }
+}
+@media (max-width: 820px) {
+  .vn-disena .vn-planner {
+    --gutter: 16px;
+  }
+  .vn-disena .vn-planner .planner-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "map" "results" "trip";
+    grid-template-rows: 460px auto auto;
+  }
+  .vn-disena .vn-planner .panel-results {
+    max-height: 420px;
+  }
+  .vn-disena .vn-planner .filters-main {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin: 0 -16px;
+    padding: 0 16px 4px;
+    scrollbar-width: none;
+  }
+  .vn-disena .vn-planner .filters-main .chip {
+    flex-shrink: 0;
+  }
+  .vn-disena .vn-planner .dd {
+    position: static;
+  }
+  .vn-disena .vn-planner .sub-group {
+    position: relative;
+  }
+  .vn-disena .vn-planner .dd-pop {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+}
+.vn-disena .vn-planner *:focus {
+  border: 0 !important;
+}
+.vn-disena .vn-planner .chip:focus,
+.vn-disena .vn-planner .dtv-result-card:focus {
+  border: 1.5px solid var(--c) !important;
+}
+.vn-disena .vn-planner .add-mini:focus {
+  border: 1.5px solid var(--line) !important;
+}
+.vn-disena .vn-planner .add-mini.is-added:focus {
+  border-color: var(--red) !important;
+}
+.vn-disena .vn-planner .btn:focus {
+  border: 1.5px solid transparent !important;
+}
+.vn-disena .vn-planner .btn-ghost:focus {
+  border-color: var(--navy) !important;
+}
+.vn-disena .vn-planner .btn-primary.is-added:focus {
+  border-color: var(--red) !important;
+}
+.vn-disena .vn-planner .dd-search:focus {
+  border: 1.5px solid var(--c) !important;
+}
+.vn-disena .vn-planner .share-row input:focus {
+  border: 1.5px solid var(--navy) !important;
+}
+.vn-disena .vn-planner .dd-opt input:focus {
+  border: 2px solid var(--c) !important;
+}
+.vn-disena .vn-planner .dd-opt input[type=checkbox] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border-radius: 4px;
+}
+.vn-disena .vn-planner .dd-opt input[type=checkbox]:checked {
+  background-color: var(--c);
+  border-color: var(--c);
+}
+.vn-disena .vn-planner .dd-opt input[type=checkbox]:checked::after {
+  left: 5px;
+  top: 1px;
+}
+.vn-disena .vn-planner .esri-widget, .vn-disena .vn-planner .esri-widget * {
+  font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .cat-hero::before,
