@@ -1,6 +1,6 @@
 {#
-  Información al viajero (nodo 1234) — hero + intro (justificada, alineada a
-  la izquierda) + tarjetas de info_util filtrables por categoría
+  Información al viajero (nodo 1234) — hero + intro (ancho del contenedor,
+  justificada, alineada a la izquierda) + tarjetas de info_util filtrables por categoría
   (field_categoria_viajero), estructura ".vn-archive" (hero/filtros/grilla)
   igual a Hoteles/Dónde comer. El filtrado por checkbox lo hace el behavior
   "idt-gastro-filter" del tema base (necesita .filters, #cardsList,
@@ -78,7 +78,7 @@
           {% set modal_id = 'info-util-' ~ categoria.tid ~ '-' ~ loop.index %}
           <li class="card" data-categoria="{{ categoria.tid }}">
             <button type="button" class="vn-info-card" data-fancybox data-src="#{{ modal_id }}" aria-haspopup="dialog">
-              <img class="vn-info-card__img" src="{{ item.image_url ?: 'https://placehold.co/800x500' }}" alt="" loading="lazy" decoding="async">
+              <span class="vn-info-card__media"><img class="vn-info-card__img" src="{{ item.image_url ?: 'https://placehold.co/800x500' }}" alt="" loading="lazy" decoding="async"></span>
               <span class="vn-info-card__title">{{ item.title }}</span>
             </button>
 

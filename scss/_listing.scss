@@ -77,6 +77,11 @@
     line-height: 1.05;
     color: var(--vn-blanco);
   }
+  // Variante clara (agenda de eventos): franja blanca translúcida y título
+  // oscuro, igual que .vn-cat .cat-hero--light (subcategoría).
+  .cat-hero--light .cat-hero__banner { background: rgba(255, 255, 255, 0.65); text-align: left; }
+  .cat-hero--light .cat-hero__title { color: var(--vn-gris-oscuro); }
+
   .hero-logo-mark {
     position: absolute;
     z-index: 2;

@@ -15,10 +15,11 @@
 <div class="vn-listing vn-listing--events">
 
   {# ================= HERO ================= #}
-  <section class="cat-hero" aria-label="{{ node.label }}">
+  {# Hero con franja clara detrás del título (mismo patrón que subcategoría). #}
+  <section class="cat-hero cat-hero--tall cat-hero--light" aria-label="{{ node.label }}">
     {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
-    <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
-    <div class="cat-hero__content">
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
           <li><a href="/">{{ 'Inicio'|t }}</a></li>
@@ -26,6 +27,8 @@
           <li aria-current="page">{{ agenda_title ?: node.label }}</li>
         </ol>
       </nav>
+    </div>
+    <div class="cat-hero__banner">
       <h1 class="cat-hero__title">{{ agenda_title ?: node.label }}</h1>
     </div>
   </section>

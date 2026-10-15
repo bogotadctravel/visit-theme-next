@@ -326,9 +326,23 @@
   }
   // Tarjeta directa del markup base (node 561/562): <li class="card"><a><span class="image"><img>
   .archive__grid > li.card {
+    // El tema base (stylesvisit.css) pinta `.card{border:1px solid #efe2e2;
+    // background:#fff; border-radius:12px; overflow:hidden}` y
+    // `.card .image{height:192px}` → marco externo visible y foto achatada.
+    // Se anulan para que la tarjeta sea igual a la de Atractivos (.card-imperdible).
+    border: 0;
+    background: none;
+    border-radius: 0;
+    overflow: visible;
+    min-width: 0;
+
     a { display: flex; flex-direction: column; gap: 12px; text-decoration: none; }
+    a { transition: transform var(--vn-transicion); }
+    a:hover { transform: translateY(-6px); }
     .image {
+      display: block;
       width: 100%;
+      height: auto;
       aspect-ratio: 3/4;
       border-radius: 16px;
       overflow: hidden;
@@ -337,6 +351,7 @@
       transition: border-color var(--vn-transicion);
     }
     .image img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 420ms cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .image img:hover { transform: none; } // anula el scale(1.1) del base; el zoom lo da a:hover
     .title {
       display: block;
       text-align: center;

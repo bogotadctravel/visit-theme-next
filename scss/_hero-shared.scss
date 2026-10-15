@@ -1,0 +1,30 @@
+// =========================================================
+//  Reglas comunes a TODOS los hero del subtema (home, categoría,
+//  subcategoría, fichas, listados, archivos). Se carga al final de
+//  overrides.scss: con la misma especificidad que las reglas acotadas
+//  (.vn-cat .cat-hero__banner, etc.) gana por orden de cascada.
+// =========================================================
+
+// Degradé negro → transparente en la parte superior, sutil, para que
+// resalten el logo de Bogotá y el breadcrumb (arriba-derecha) sobre fotos
+// claras. Queda sobre la foto y bajo el logo/breadcrumb/banner (z-index 2).
+.cat-hero::before,
+.vn-home .hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  height: clamp(140px, 45%, 240px);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0));
+  pointer-events: none;
+}
+// Home: la diapositiva activa lleva z-index 1 y va después en el DOM, así
+// que el degradé necesita 2 (el logo, también 2, sigue encima por orden).
+.vn-home .hero::before { z-index: 2; }
+
+// Título dentro del contenedor seguro: el cajón del título ocupa todo el
+// ancho, pero el texto se alinea con el mismo borde que el logo/breadcrumb
+// (--vn-max + --vn-pad) en vez de irse contra el borde en pantallas anchas.
+.cat-hero .cat-hero__banner {
+  padding-inline: calc(max(0px, (100% - var(--vn-max, 1280px)) / 2) + var(--vn-pad, 16px));
+}

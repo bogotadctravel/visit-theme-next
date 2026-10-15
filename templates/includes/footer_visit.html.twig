@@ -46,6 +46,21 @@
         {% endif %}
       </ul>
 
+      {# App móvil oficial "Visit Bogotá" (IDT) #}
+      <div class="site-footer__app">
+        <p class="site-footer__app-title">{{ 'Descarga la app móvil de Bogotá'|t }}</p>
+        <ul class="site-footer__stores">
+          <li><a class="site-footer__store" href="https://play.google.com/store/apps/details?id=com.servinf.test.bogotadctravel" target="_blank" rel="noopener noreferrer" aria-label="{{ 'Descargar en Google Play'|t }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3 13.4 12l-9.8 9.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1Z" fill="#00d7fe"/><path d="m16.8 8.6-3.4 3.4-9.8-9.7c.3-.2.8-.2 1.2 0l12 6.3Z" fill="#00f076"/><path d="m16.8 15.4-12 6.3c-.4.2-.9.2-1.2 0l9.8-9.7 3.4 3.4Z" fill="#ff3a44"/><path d="M20.3 13.3 16.8 15.4 13.4 12l3.4-3.4 3.5 2.1c1 .6 1 2 0 2.6Z" fill="#ffd500"/></svg>
+            <span class="site-footer__store-text">{{ 'Disponible en'|t }}<strong>Google Play</strong></span>
+          </a></li>
+          <li><a class="site-footer__store" href="https://apps.apple.com/co/app/id1478036261" target="_blank" rel="noopener noreferrer" aria-label="{{ 'Descargar en App Store'|t }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.2-.9-1.7 0-3.2 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.7ZM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z" fill="currentColor"/></svg>
+            <span class="site-footer__store-text">{{ 'Descárgala en'|t }}<strong>App Store</strong></span>
+          </a></li>
+        </ul>
+      </div>
+
       {% include "@visit_theme_next/includes/_disclaimer_establecimientos.html.twig" %}
     </div>
 
