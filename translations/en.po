@@ -1,0 +1,500 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Visit Bogotá — visit_theme_next\n"
+"POT-Creation-Date: 2026-10-14 00:00-0500\n"
+"PO-Revision-Date: 2026-10-14 00:00-0500\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+# ──────────────────────────────────────────────────────────────────
+# Textos de interfaz del subtema visit_theme_next (listados vía |t en
+# templates/js/scss). Dos familias de msgid convive en el código:
+#   1) Texto literal en español (el msgid ES el texto fuente, ya que el
+#      idioma por defecto del sitio es "es" — Drupal usa el string tal
+#      cual como clave de traducción).
+#   2) Claves "ui.xxx" (msgid = la clave, no texto visible) — se usan
+#      cuando se quiso desacoplar la clave del texto en español; ESA
+#      traducción al español ya está cargada en Drupal (locale UI), acá
+#      solo se agrega el inglés.
+# Importar con: drush locale:import --langcode=en --type=customized
+#   translations/en.po
+# (o Admin → Regional and language → Translate interface → Import).
+# Generado a partir de un grep de todos los `'...'|t` en templates/ del
+# subtema — no incluye el tema base visit_theme (son miles de strings de
+# Drupal core/contrib, fuera de alcance de este archivo).
+# ──────────────────────────────────────────────────────────────────
+
+msgid "Atractivos"
+msgstr "Attractions"
+
+msgid "Atractivos en este itinerario"
+msgstr "Attractions on this itinerary"
+
+msgid "Bogotá en 24 horas"
+msgstr "Bogotá in 24 hours"
+
+msgid "Bogotá en 48 horas"
+msgstr "Bogotá in 48 hours"
+
+msgid "Bogotá en 72 horas"
+msgstr "Bogotá in 72 hours"
+
+msgid "Bogotá tiene un plan para cada momento y para cada forma de viajar."
+msgstr "Bogotá has a plan for every moment and every way of traveling."
+
+msgid "Bogotá, tu casa."
+msgstr "Bogotá, your home."
+
+msgid "Capacidad"
+msgstr "Capacity"
+
+msgid "Categorías"
+msgstr "Categories"
+
+msgid "Conciertos, ferias y planes que se viven en Bogotá durante los próximos días."
+msgstr "Concerts, fairs, and things to do in Bogotá over the next few days."
+
+msgid "Conoce el ambiente en 360°"
+msgstr "Explore the atmosphere in 360°"
+
+msgid "Crónicas"
+msgstr "Stories"
+
+msgid "Cómo llegar en transporte público"
+msgstr "How to get there by public transport"
+
+msgid "Descubre Bogotá"
+msgstr "Discover Bogotá"
+
+msgid "Dónde comer"
+msgstr "Where to eat"
+
+msgid "El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los establecimientos incluidos en visitbogota.co, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas."
+msgstr "The IDT assumes no responsibility for the agreements, services, disputes, or claims that may arise between users and the establishments listed on visitbogota.co; such relationships are the sole responsibility of the parties involved."
+
+msgid "El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los guías incluidos en este directorio, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas."
+msgstr "The IDT assumes no responsibility for the agreements, services, disputes, or claims that may arise between users and the guides listed in this directory; such relationships are the sole responsibility of the parties involved."
+
+msgid "Entradas"
+msgstr "Tickets"
+
+msgid "Escuchar detalles"
+msgstr "Listen to details"
+
+msgid "Escuchar reseña gastronómica"
+msgstr "Listen to the restaurant review"
+
+msgid "Eventos"
+msgstr "Events"
+
+msgid "Eventos en Bogotá"
+msgstr "Events in Bogotá"
+
+msgid "Eventos relacionados"
+msgstr "Related events"
+
+msgid "Explora"
+msgstr "Explore"
+
+msgid "Explora la ciudad por categorías, desde gastronomía y cultura hasta bienestar y negocios."
+msgstr "Explore the city by category, from food and culture to wellness and business."
+
+msgid "Explorar todo"
+msgstr "Explore all"
+
+msgid "Explorar todos los atractivos"
+msgstr "Explore all attractions"
+
+msgid "Fecha"
+msgstr "Date"
+
+msgid "Filtros"
+msgstr "Filters"
+
+msgid "Foto de la galería"
+msgstr "Gallery photo"
+
+msgid "Galería"
+msgstr "Gallery"
+
+msgid "Hasta"
+msgstr "To"
+
+msgid "Historias de ciudad"
+msgstr "City stories"
+
+msgid "Historias de ciudad relacionadas"
+msgstr "Related city stories"
+
+msgid "Horarios"
+msgstr "Hours"
+
+msgid "Idioma"
+msgstr "Language"
+
+msgid "Idiomas"
+msgstr "Languages"
+
+msgid "Idiomas de atención"
+msgstr "Service languages"
+
+msgid "Imperdibles de Bogotá"
+msgstr "Must-sees in Bogotá"
+
+msgid "Información del viajero"
+msgstr "Traveler information"
+
+msgid "Inicio"
+msgstr "Home"
+
+msgid "Inicio del evento"
+msgstr "Event start"
+
+msgid "Leer más"
+msgstr "Read more"
+
+msgid "Los sitios más icónicos de la ciudad, los que no te puedes perder en tu visita."
+msgstr "The city's most iconic spots — the ones you can't miss on your visit."
+
+msgid "Lugares relacionados"
+msgstr "Related places"
+
+msgid "Mapa"
+msgstr "Map"
+
+msgid "Máx."
+msgstr "Max."
+
+msgid "Mín."
+msgstr "Min."
+
+msgid "Navegación principal"
+msgstr "Main navigation"
+
+msgid "No hay una sola Bogotá: está la que quieres conocer, la que quieres sentir y la que quieres recordar. Elige lo que te mueve y descubre tu próximo plan."
+msgstr "There isn't just one Bogotá: there's the one you want to get to know, the one you want to feel, and the one you want to remember. Choose what moves you and discover your next plan."
+
+msgid "No se encontraron eventos con estos filtros."
+msgstr "No events found with these filters."
+
+msgid "Ofrecido por"
+msgstr "Offered by"
+
+msgid "Otros conciertos y planes que también pueden interesarte."
+msgstr "Other concerts and plans you might also like."
+
+msgid "Planea tu viaje"
+msgstr "Plan your trip"
+
+msgid "Publicación de Instagram"
+msgstr "Instagram post"
+
+msgid "Punto de encuentro"
+msgstr "Meeting point"
+
+msgid "Registrarse como Guía Turístico"
+msgstr "Register as a Tour Guide"
+
+msgid "Regístralo en este enlace"
+msgstr "Register it at this link"
+
+msgid "Reservar experiencia"
+msgstr "Book experience"
+
+msgid "Reservar mesa"
+msgstr "Book a table"
+
+msgid "Restaurante galardonado"
+msgstr "Award-winning restaurant"
+
+msgid "Restaurante vegetariano"
+msgstr "Vegetarian restaurant"
+
+msgid "Revisa nuestro aviso legal"
+msgstr "Check our legal notice"
+
+msgid "Ruta de navegación"
+msgstr "Breadcrumb"
+
+msgid "Rutas relacionadas"
+msgstr "Related routes"
+
+msgid "Sector turístico"
+msgstr "Tourism sector"
+
+msgid "Seleccionar idioma. Idioma actual:"
+msgstr "Select language. Current language:"
+
+msgid "Seleccionar slide"
+msgstr "Select slide"
+
+msgid "Sigue explorando Bogotá"
+msgstr "Keep exploring Bogotá"
+
+msgid "Síguenos"
+msgstr "Follow us"
+
+msgid "También te puede interesar"
+msgstr "You might also like"
+
+msgid "Todo lo que necesitas para disfrutar Bogotá a tu manera."
+msgstr "Everything you need to enjoy Bogotá your way."
+
+msgid "Todos los idiomas"
+msgstr "All languages"
+
+msgid "Todos los sectores"
+msgstr "All sectors"
+
+msgid "Términos y condiciones"
+msgstr "Terms and conditions"
+
+msgid "Ver anteriores"
+msgstr "View previous"
+
+msgid "Ver evento"
+msgstr "View event"
+
+msgid "Ver foto"
+msgstr "View photo"
+
+msgid "Ver la agenda completa"
+msgstr "View the full agenda"
+
+msgid "Ver menú digital"
+msgstr "View digital menu"
+
+msgid "Ver operador"
+msgstr "View operator"
+
+msgid "Ver publicación de Instagram"
+msgstr "View Instagram post"
+
+msgid "Ver siguientes"
+msgstr "View next"
+
+msgid "Ver toda la categoría"
+msgstr "View entire category"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "de"
+msgstr "of"
+
+msgid "de descuento"
+msgstr "off"
+
+msgid "experiencias"
+msgstr "experiences"
+
+msgid "guías encontrados"
+msgstr "guides found"
+
+msgid "lugares"
+msgstr "places"
+
+msgid "min de lectura"
+msgstr "min read"
+
+msgid "por subcategoría"
+msgstr "by subcategory"
+
+msgid "resultados"
+msgstr "results"
+
+msgid "rutas"
+msgstr "routes"
+
+msgid "¿Cuánto tiempo tienes? ¿Qué quieres conocer? ¿Viajas solo, en pareja, con amigos o en familia?"
+msgstr "How much time do you have? What do you want to see? Are you traveling solo, as a couple, with friends, or with family?"
+
+msgid "¿No ves tu establecimiento aquí?"
+msgstr "Don't see your establishment here?"
+
+msgid "¿Para quién?"
+msgstr "Who is it for?"
+
+msgid "¿Qué Bogotá quieres vivir?"
+msgstr "Which Bogotá do you want to experience?"
+
+# ── Claves "ui.xxx" (msgid = clave, no texto visible) ──
+msgid "ui.accommodation_type"
+msgstr "Accommodation type"
+
+msgid "ui.admission_fee"
+msgstr "Admission fee"
+
+msgid "ui.all_categories"
+msgstr "All categories"
+
+msgid "ui.all_filter"
+msgstr "All"
+
+msgid "ui.all_months"
+msgstr "All months"
+
+msgid "ui.all_rights_reserved"
+msgstr "All rights reserved"
+
+msgid "ui.available_rooms_label"
+msgstr "Available rooms"
+
+msgid "ui.book_tour"
+msgstr "Book tour"
+
+msgid "ui.category"
+msgstr "Category"
+
+msgid "ui.certified_experiences"
+msgstr "Certified experiences"
+
+msgid "ui.check_availability"
+msgstr "Check availability"
+
+msgid "ui.city_brand"
+msgstr "City brand"
+
+msgid "ui.close"
+msgstr "Close"
+
+msgid "ui.cost"
+msgstr "Cost"
+
+msgid "ui.direct_contact"
+msgstr "Direct contact"
+
+msgid "ui.event_type"
+msgstr "Event type"
+
+msgid "ui.experiencias_certificada_title"
+msgstr "Certified experiences"
+
+msgid "ui.explore_360"
+msgstr "Explore in 360°"
+
+msgid "ui.from_date"
+msgstr "From date"
+
+msgid "ui.gastro_categories"
+msgstr "Food categories"
+
+msgid "ui.home"
+msgstr "Home"
+
+msgid "ui.hotel_services"
+msgstr "Hotel services"
+
+msgid "ui.how_to_get_there"
+msgstr "How to get there"
+
+msgid "ui.imperdible_badge"
+msgstr "Must-see"
+
+msgid "ui.listen_audio_guide"
+msgstr "Listen to audio guide"
+
+msgid "ui.location_aria"
+msgstr "Location"
+
+msgid "ui.month"
+msgstr "Month"
+
+msgid "ui.more_information"
+msgstr "More information"
+
+msgid "ui.more_options"
+msgstr "More options"
+
+msgid "ui.official_website"
+msgstr "Official website"
+
+msgid "ui.open_map"
+msgstr "Open map"
+
+msgid "ui.open_menu"
+msgstr "Open menu"
+
+msgid "ui.opening_hours"
+msgstr "Opening hours"
+
+msgid "ui.places_nearby"
+msgstr "Nearby places"
+
+msgid "ui.price_range"
+msgstr "Price range"
+
+msgid "ui.privacy_policy"
+msgstr "Privacy policy"
+
+msgid "ui.related_content"
+msgstr "Related content"
+
+msgid "ui.resolution_239"
+msgstr "Resolution 239"
+
+msgid "ui.route_discover"
+msgstr "Discover the route"
+
+msgid "ui.route_map"
+msgstr "Route map"
+
+msgid "ui.route_map_alt"
+msgstr "Route map"
+
+msgid "ui.search"
+msgstr "Search"
+
+msgid "ui.search_placeholder"
+msgstr "Search…"
+
+msgid "ui.skip_to_content"
+msgstr "Skip to content"
+
+msgid "ui.starting_point"
+msgstr "Starting point"
+
+msgid "ui.subcategories"
+msgstr "Subcategories"
+
+msgid "ui.suggested_duration"
+msgstr "Suggested duration"
+
+msgid "ui.to_date"
+msgstr "To date"
+
+msgid "ui.tourist_experiences_heading"
+msgstr "Tourist experiences"
+
+msgid "ui.tourist_routes"
+msgstr "Tourist routes"
+
+msgid "ui.tourist_support"
+msgstr "Traveler support"
+
+msgid "ui.visit_website"
+msgstr "Visit website"
+
+msgid "ui.want_to_go"
+msgstr "I want to go"
+
+msgid "ui.what_this_place_offers"
+msgstr "What this place offers"
+
+msgid "ui.what_to_do"
+msgstr "What to do"
+
+msgid "ui.where_to_eat"
+msgstr "Where to eat"
+
+msgid "ui.where_to_sleep"
+msgstr "Where to stay"
+
+msgid "ui.where_will_you_be"
+msgstr "Where will you be"
+
+msgid "ui.zones"
+msgstr "Zones"

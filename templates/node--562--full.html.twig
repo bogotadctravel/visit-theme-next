@@ -53,6 +53,10 @@
           {% for cat in taxonomy('zonas_gastronomicas') %}
           <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
           {% endfor %}
+          <h3>{{ 'ui.subcategories'|t }}</h3>
+          {% for cat in taxonomy('subcategorias_2026') %}
+          <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
+          {% endfor %}
         </div>
       </aside>
 
@@ -63,7 +67,8 @@
           {% set categorias = (item.categoria_gastronomica|default([]))|map(t => t.tid)|join(',') %}
           {% set zonas = (item.zonagast|default([]))|map(t => t.tid)|join(',') %}
           {% set precios = (item.field_rango_de_precios|default([]))|map(t => t.tid)|join(',') %}
-          <li class="card" data-categoria="{{ categorias }}" data-zona="{{ zonas }}" data-precios="{{ precios }}">
+          {% set subcategorias = (item.field_tursubcat|default([]))|map(t => t.tid)|join(',') %}
+          <li class="card" data-categoria="{{ categorias }}" data-zona="{{ zonas }}" data-precios="{{ precios }}" data-subcategoria="{{ subcategorias }}">
             <a href="{{ item.url }}">
               <span class="image"><img src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="{{ item.title }}" loading="lazy" decoding="async"></span>
               <span class="title">{{ item.title }}</span>

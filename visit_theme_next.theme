@@ -434,10 +434,22 @@ function visit_theme_next_preprocess_node(array &$variables) {
       $variables['atractivos'] = $content_loader->getImperdibles(8);
     }
 
-    // Rutas relacionadas + botón "Explorar todos" (por categoría del itinerario).
-    $variables['rutas'] = $tid
-      ? $content_loader->getNodesTeaserByCategory('rutas', $tid, 3)
-      : $content_loader->getNodesTeaser('rutas', 3);
+    // Rutas relacionadas: la fuente es lo que el editor puso en el campo
+    // "Contenido relacionado" (field_contenidos_relacionados) del itinerario.
+    // Respaldo: por categoría, o las rutas más recientes (igual que antes).
+    if ($node->hasField('field_contenidos_relacionados') && !$node->get('field_contenidos_relacionados')->isEmpty()) {
+      $variables['rutas'] = $content_loader->getTeasersFromEntities(
+        $node->get('field_contenidos_relacionados')->referencedEntities()
+      );
+    }
+    elseif ($tid) {
+      $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 3);
+    }
+    else {
+      $variables['rutas'] = $content_loader->getNodesTeaser('rutas', 3);
+    }
+    // Botón "Explorar todos" sigue dependiendo de la categoría, no del campo
+    // de relacionados (ese botón lleva a /atractivos/<tid>, no a "rutas").
     if ($tid) {
       $variables['itinerary_cat_tid'] = $tid;
     }

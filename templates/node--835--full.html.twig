@@ -67,6 +67,13 @@
           {% for cat in taxonomy('recomendaciones') %}
           <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
           {% endfor %}
+          <h3>{{ 'ui.zones'|t }}</h3>
+          {# field_turzone ya viene genérico en buildTeaserOutput (lo usa 826/rutas
+             con el mismo vocabulario); si en este bundle el campo estuviera vacío
+             el checkbox simplemente no filtraría nada (sin romper nada). #}
+          {% for cat in taxonomy('zonas_de_la_ciudad') %}
+          <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
+          {% endfor %}
         </div>
       </aside>
 
@@ -76,7 +83,8 @@
           {% for item in experiencias|shuffle %}
           {% set para = (item.field_turpara|default([]))|map(t => t.tid)|join(',') %}
           {% set categorias = (item.field_turcat|default([]))|map(t => t.tid)|join(',') %}
-          <li class="card" data-categoria="{{ categorias }}" data-para="{{ para }}">
+          {% set zonas = (item.field_turzone|default([]))|map(t => t.tid)|join(',') %}
+          <li class="card" data-categoria="{{ categorias }}" data-para="{{ para }}" data-zona="{{ zonas }}">
             <a href="{{ item.url }}">
               <span class="image"><img src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="{{ item.title }}" loading="lazy" decoding="async"></span>
               <span class="title">{{ item.title }}</span>

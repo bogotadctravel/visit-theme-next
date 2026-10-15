@@ -5,11 +5,18 @@
   `pager_article`. Estilos en css/overrides.css (scss/_blog.scss).
 #}
 {% set hero_bg = node.field_mainimg.entity ? file_url(node.field_mainimg.entity.uri.value) : '' %}
-{# Proporciones rotativas (efecto tablero). El tamaño real de cada tarjeta lo
-   da el grid-row-end: span de .blog-grid__item--a..e (_blog.scss), no un
-   aspect-ratio en la propia tarjeta — así el grid con grid-auto-flow: dense
-   puede reordenar y rellenar huecos en vez de dejarlos en blanco. #}
-{% set ratios = ['a', 'b', 'c', 'd', 'b', 'a', 'e', 'c', 'd', 'a', 'b', 'c', 'e', 'a', 'd', 'b'] %}
+{# Proporciones por bloques de 4 (una por columna del grid desktop). Cada
+   bloque siempre lleva el mismo conjunto de alturas — una vertical (a/c:
+   span 13), un cuadrado (b: span 10), una baja (d: span 6) y una alta
+   (e: span 18), ver _blog.scss — así la sumatoria de alto del bloque es
+   siempre la misma (47) y las columnas empatan abajo cada 4 tarjetas,
+   pero el ORDEN dentro del bloque se baraja en cada carga: desordenado
+   a la vista, parejo abajo. #}
+{% set ratios = [] %}
+{% for i in 0..((article|length / 4)|round(0, 'ceil')) - 1 %}
+  {% set portrait = (['a', 'c']|shuffle)[0] %}
+  {% set ratios = ratios|merge([portrait, 'b', 'd', 'e']|shuffle) %}
+{% endfor %}
 
 <div class="vn-cat vn-blog">
 
