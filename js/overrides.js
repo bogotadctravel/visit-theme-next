@@ -230,7 +230,25 @@
           var firstLink = results.querySelector('li a[href]');
           if (firstLink) { e.preventDefault(); window.location.href = firstLink.getAttribute('href'); }
         }
+        if (e.key === 'ArrowDown' && results) {
+          var first = results.querySelector('li a[href]');
+          if (first) { e.preventDefault(); first.focus(); }
+        }
       });
+      // Flechas arriba/abajo recorren los resultados; arriba desde el primero
+      // devuelve el foco al campo.
+      if (results) {
+        results.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+          var links = [].slice.call(results.querySelectorAll('li a[href]'));
+          var at = links.indexOf(document.activeElement);
+          if (at === -1) return;
+          e.preventDefault();
+          if (e.key === 'ArrowDown') { if (links[at + 1]) links[at + 1].focus(); }
+          else if (at === 0) searchInput.focus();
+          else links[at - 1].focus();
+        });
+      }
       document.addEventListener('click', function (e) {
         if (!searchComp.contains(e.target)) closeResults();
       });
