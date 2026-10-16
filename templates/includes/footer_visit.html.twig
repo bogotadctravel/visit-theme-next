@@ -49,7 +49,10 @@
       {# App móvil oficial "Visit Bogotá" (IDT) #}
       <div class="site-footer__app">
         <p class="site-footer__app-title">{{ 'Descarga la app móvil de Bogotá'|t }}</p>
-        <ul class="site-footer__stores">
+        {# TEMPORAL: comparación de estilos de botones de tiendas. Dejar solo la opción elegida. #}
+        {% for variante, etiqueta in {'outline': 'Opción A · Outline blanco', 'solid': 'Opción B · Fondo blanco'} %}
+        <p class="site-footer__store-label">{{ etiqueta }}</p>
+        <ul class="site-footer__stores site-footer__stores--{{ variante }}">
           <li><a class="site-footer__store" href="https://play.google.com/store/apps/details?id=com.servinf.test.bogotadctravel" target="_blank" rel="noopener noreferrer" aria-label="{{ 'Descargar en Google Play'|t }}">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3 13.4 12l-9.8 9.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1Z" fill="#00d7fe"/><path d="m16.8 8.6-3.4 3.4-9.8-9.7c.3-.2.8-.2 1.2 0l12 6.3Z" fill="#00f076"/><path d="m16.8 15.4-12 6.3c-.4.2-.9.2-1.2 0l9.8-9.7 3.4 3.4Z" fill="#ff3a44"/><path d="M20.3 13.3 16.8 15.4 13.4 12l3.4-3.4 3.5 2.1c1 .6 1 2 0 2.6Z" fill="#ffd500"/></svg>
             <span class="site-footer__store-text">{{ 'Disponible en'|t }}<strong>Google Play</strong></span>
@@ -59,6 +62,7 @@
             <span class="site-footer__store-text">{{ 'Descárgala en'|t }}<strong>App Store</strong></span>
           </a></li>
         </ul>
+        {% endfor %}
       </div>
 
       {% include "@visit_theme_next/includes/_disclaimer_establecimientos.html.twig" %}

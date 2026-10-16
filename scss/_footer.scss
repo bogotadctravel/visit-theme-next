@@ -122,6 +122,30 @@
     &:hover { transform: translateY(-2px); border-color: var(--vn-blanco); }
     &:focus-visible { outline: 2px solid var(--vn-blanco); outline-offset: 2px; }
   }
+  // Opción A: outline blanco, fondo transparente, logos monocromos.
+  .site-footer__stores--outline .site-footer__store {
+    background: transparent;
+    border-color: var(--vn-blanco);
+    transition: transform var(--vn-transicion), background var(--vn-transicion);
+
+    svg path { fill: currentColor; }
+    &:hover { background: rgba(255, 255, 255, 0.12); }
+  }
+  // Opción B: fondo blanco sólido, texto oscuro, logo de Play a color.
+  .site-footer__stores--solid .site-footer__store {
+    background: var(--vn-blanco);
+    border-color: var(--vn-blanco);
+    color: #000;
+    transition: transform var(--vn-transicion), box-shadow var(--vn-transicion);
+
+    &:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); }
+    &:focus-visible { outline-color: var(--vn-blanco); }
+  }
+  .site-footer__store-label {
+    margin: 4px 0 0;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+  }
   .site-footer__store-text {
     display: flex;
     flex-direction: column;
