@@ -1,0 +1,500 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Visit Bogotá — visit_theme_next\n"
+"POT-Creation-Date: 2026-10-14 00:00-0500\n"
+"PO-Revision-Date: 2026-10-14 00:00-0500\n"
+"Language-Team: Spanish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# ──────────────────────────────────────────────────────────────────
+# Textos de interfaz del subtema visit_theme_next (listados vía |t en
+# templates/js/scss). Dos familias de msgid convive en el código:
+#   1) Texto literal en español (el msgid ES el texto fuente, ya que el
+#      idioma por defecto del sitio es "es" — Drupal usa el string tal
+#      cual como clave de traducción).
+#   2) Claves "ui.xxx" (msgid = la clave, no texto visible) — se usan
+#      cuando se quiso desacoplar la clave del texto en español; ESA
+#      traducción al español ya está cargada en Drupal (locale UI), acá
+#      se incluye igual para fijarla desde el repo.
+# Importar con: drush locale:import --langcode=es --type=customized
+#   translations/es.po
+# (o Admin → Regional and language → Translate interface → Import).
+# Generado a partir de un grep de todos los `'...'|t` en templates/ del
+# subtema — no incluye el tema base visit_theme (son miles de strings de
+# Drupal core/contrib, fuera de alcance de este archivo).
+# ──────────────────────────────────────────────────────────────────
+
+msgid "Atractivos"
+msgstr "Atractivos"
+
+msgid "Atractivos en este itinerario"
+msgstr "Atractivos en este itinerario"
+
+msgid "Bogotá en 24 horas"
+msgstr "Bogotá en 24 horas"
+
+msgid "Bogotá en 48 horas"
+msgstr "Bogotá en 48 horas"
+
+msgid "Bogotá en 72 horas"
+msgstr "Bogotá en 72 horas"
+
+msgid "Bogotá tiene un plan para cada momento y para cada forma de viajar."
+msgstr "Bogotá tiene un plan para cada momento y para cada forma de viajar."
+
+msgid "Bogotá, tu casa."
+msgstr "Bogotá, tu casa."
+
+msgid "Capacidad"
+msgstr "Capacidad"
+
+msgid "Categorías"
+msgstr "Categorías"
+
+msgid "Conciertos, ferias y planes que se viven en Bogotá durante los próximos días."
+msgstr "Conciertos, ferias y planes que se viven en Bogotá durante los próximos días."
+
+msgid "Conoce el ambiente en 360°"
+msgstr "Conoce el ambiente en 360°"
+
+msgid "Crónicas"
+msgstr "Crónicas"
+
+msgid "Cómo llegar en transporte público"
+msgstr "Cómo llegar en transporte público"
+
+msgid "Descubre Bogotá"
+msgstr "Descubre Bogotá"
+
+msgid "Dónde comer"
+msgstr "Dónde comer"
+
+msgid "El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los establecimientos incluidos en visitbogota.co, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas."
+msgstr "El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los establecimientos incluidos en visitbogota.co, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas."
+
+msgid "El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los guías incluidos en este directorio, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas."
+msgstr "El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los guías incluidos en este directorio, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas."
+
+msgid "Entradas"
+msgstr "Entradas"
+
+msgid "Escuchar detalles"
+msgstr "Escuchar detalles"
+
+msgid "Escuchar reseña gastronómica"
+msgstr "Escuchar reseña gastronómica"
+
+msgid "Eventos"
+msgstr "Eventos"
+
+msgid "Eventos en Bogotá"
+msgstr "Eventos en Bogotá"
+
+msgid "Eventos relacionados"
+msgstr "Eventos relacionados"
+
+msgid "Explora"
+msgstr "Explora"
+
+msgid "Explora la ciudad por categorías, desde gastronomía y cultura hasta bienestar y negocios."
+msgstr "Explora la ciudad por categorías, desde gastronomía y cultura hasta bienestar y negocios."
+
+msgid "Explorar todo"
+msgstr "Explorar todo"
+
+msgid "Explorar todos los atractivos"
+msgstr "Explorar todos los atractivos"
+
+msgid "Fecha"
+msgstr "Fecha"
+
+msgid "Filtros"
+msgstr "Filtros"
+
+msgid "Foto de la galería"
+msgstr "Foto de la galería"
+
+msgid "Galería"
+msgstr "Galería"
+
+msgid "Hasta"
+msgstr "Hasta"
+
+msgid "Historias de ciudad"
+msgstr "Historias de ciudad"
+
+msgid "Historias de ciudad relacionadas"
+msgstr "Historias de ciudad relacionadas"
+
+msgid "Horarios"
+msgstr "Horarios"
+
+msgid "Idioma"
+msgstr "Idioma"
+
+msgid "Idiomas"
+msgstr "Idiomas"
+
+msgid "Idiomas de atención"
+msgstr "Idiomas de atención"
+
+msgid "Imperdibles de Bogotá"
+msgstr "Imperdibles de Bogotá"
+
+msgid "Información del viajero"
+msgstr "Información del viajero"
+
+msgid "Inicio"
+msgstr "Inicio"
+
+msgid "Inicio del evento"
+msgstr "Inicio del evento"
+
+msgid "Leer más"
+msgstr "Leer más"
+
+msgid "Los sitios más icónicos de la ciudad, los que no te puedes perder en tu visita."
+msgstr "Los sitios más icónicos de la ciudad, los que no te puedes perder en tu visita."
+
+msgid "Lugares relacionados"
+msgstr "Lugares relacionados"
+
+msgid "Mapa"
+msgstr "Mapa"
+
+msgid "Máx."
+msgstr "Máx."
+
+msgid "Mín."
+msgstr "Mín."
+
+msgid "Navegación principal"
+msgstr "Navegación principal"
+
+msgid "No hay una sola Bogotá: está la que quieres conocer, la que quieres sentir y la que quieres recordar. Elige lo que te mueve y descubre tu próximo plan."
+msgstr "No hay una sola Bogotá: está la que quieres conocer, la que quieres sentir y la que quieres recordar. Elige lo que te mueve y descubre tu próximo plan."
+
+msgid "No se encontraron eventos con estos filtros."
+msgstr "No se encontraron eventos con estos filtros."
+
+msgid "Ofrecido por"
+msgstr "Ofrecido por"
+
+msgid "Otros conciertos y planes que también pueden interesarte."
+msgstr "Otros conciertos y planes que también pueden interesarte."
+
+msgid "Planea tu viaje"
+msgstr "Planea tu viaje"
+
+msgid "Publicación de Instagram"
+msgstr "Publicación de Instagram"
+
+msgid "Punto de encuentro"
+msgstr "Punto de encuentro"
+
+msgid "Registrarse como Guía Turístico"
+msgstr "Registrarse como Guía Turístico"
+
+msgid "Regístralo en este enlace"
+msgstr "Regístralo en este enlace"
+
+msgid "Reservar experiencia"
+msgstr "Reservar experiencia"
+
+msgid "Reservar mesa"
+msgstr "Reservar mesa"
+
+msgid "Restaurante galardonado"
+msgstr "Restaurante galardonado"
+
+msgid "Restaurante vegetariano"
+msgstr "Restaurante vegetariano"
+
+msgid "Revisa nuestro aviso legal"
+msgstr "Revisa nuestro aviso legal"
+
+msgid "Ruta de navegación"
+msgstr "Ruta de navegación"
+
+msgid "Rutas relacionadas"
+msgstr "Rutas relacionadas"
+
+msgid "Sector turístico"
+msgstr "Sector turístico"
+
+msgid "Seleccionar idioma. Idioma actual:"
+msgstr "Seleccionar idioma. Idioma actual:"
+
+msgid "Seleccionar slide"
+msgstr "Seleccionar slide"
+
+msgid "Sigue explorando Bogotá"
+msgstr "Sigue explorando Bogotá"
+
+msgid "Síguenos"
+msgstr "Síguenos"
+
+msgid "También te puede interesar"
+msgstr "También te puede interesar"
+
+msgid "Todo lo que necesitas para disfrutar Bogotá a tu manera."
+msgstr "Todo lo que necesitas para disfrutar Bogotá a tu manera."
+
+msgid "Todos los idiomas"
+msgstr "Todos los idiomas"
+
+msgid "Todos los sectores"
+msgstr "Todos los sectores"
+
+msgid "Términos y condiciones"
+msgstr "Términos y condiciones"
+
+msgid "Ver anteriores"
+msgstr "Ver anteriores"
+
+msgid "Ver evento"
+msgstr "Ver evento"
+
+msgid "Ver foto"
+msgstr "Ver foto"
+
+msgid "Ver la agenda completa"
+msgstr "Ver la agenda completa"
+
+msgid "Ver menú digital"
+msgstr "Ver menú digital"
+
+msgid "Ver operador"
+msgstr "Ver operador"
+
+msgid "Ver publicación de Instagram"
+msgstr "Ver publicación de Instagram"
+
+msgid "Ver siguientes"
+msgstr "Ver siguientes"
+
+msgid "Ver toda la categoría"
+msgstr "Ver toda la categoría"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "de"
+msgstr "de"
+
+msgid "de descuento"
+msgstr "de descuento"
+
+msgid "experiencias"
+msgstr "experiencias"
+
+msgid "guías encontrados"
+msgstr "guías encontrados"
+
+msgid "lugares"
+msgstr "lugares"
+
+msgid "min de lectura"
+msgstr "min de lectura"
+
+msgid "por subcategoría"
+msgstr "por subcategoría"
+
+msgid "resultados"
+msgstr "resultados"
+
+msgid "rutas"
+msgstr "rutas"
+
+msgid "¿Cuánto tiempo tienes? ¿Qué quieres conocer? ¿Viajas solo, en pareja, con amigos o en familia?"
+msgstr "¿Cuánto tiempo tienes? ¿Qué quieres conocer? ¿Viajas solo, en pareja, con amigos o en familia?"
+
+msgid "¿No ves tu establecimiento aquí?"
+msgstr "¿No ves tu establecimiento aquí?"
+
+msgid "¿Para quién?"
+msgstr "¿Para quién?"
+
+msgid "¿Qué Bogotá quieres vivir?"
+msgstr "¿Qué Bogotá quieres vivir?"
+
+# ── Claves "ui.xxx" (msgid = clave, no texto visible) ──
+msgid "ui.accommodation_type"
+msgstr "Tipo de alojamiento"
+
+msgid "ui.admission_fee"
+msgstr "Valor de entrada"
+
+msgid "ui.all_categories"
+msgstr "Todas las categorías"
+
+msgid "ui.all_filter"
+msgstr "Todos"
+
+msgid "ui.all_months"
+msgstr "Todos los meses"
+
+msgid "ui.all_rights_reserved"
+msgstr "Todos los derechos reservados"
+
+msgid "ui.available_rooms_label"
+msgstr "Habitaciones disponibles"
+
+msgid "ui.book_tour"
+msgstr "Reservar recorrido"
+
+msgid "ui.category"
+msgstr "Categoría"
+
+msgid "ui.certified_experiences"
+msgstr "Experiencias certificadas"
+
+msgid "ui.check_availability"
+msgstr "Consultar disponibilidad"
+
+msgid "ui.city_brand"
+msgstr "Marca ciudad"
+
+msgid "ui.close"
+msgstr "Cerrar"
+
+msgid "ui.cost"
+msgstr "Costo"
+
+msgid "ui.direct_contact"
+msgstr "Contacto directo"
+
+msgid "ui.event_type"
+msgstr "Tipo de evento"
+
+msgid "ui.experiencias_certificada_title"
+msgstr "Experiencias certificadas"
+
+msgid "ui.explore_360"
+msgstr "Explora en 360°"
+
+msgid "ui.from_date"
+msgstr "Desde"
+
+msgid "ui.gastro_categories"
+msgstr "Categorías gastronómicas"
+
+msgid "ui.home"
+msgstr "Inicio"
+
+msgid "ui.hotel_services"
+msgstr "Servicios del hotel"
+
+msgid "ui.how_to_get_there"
+msgstr "Cómo llegar"
+
+msgid "ui.imperdible_badge"
+msgstr "Imperdible"
+
+msgid "ui.listen_audio_guide"
+msgstr "Escuchar audioguía"
+
+msgid "ui.location_aria"
+msgstr "Ubicación"
+
+msgid "ui.month"
+msgstr "Mes"
+
+msgid "ui.more_information"
+msgstr "Más información"
+
+msgid "ui.more_options"
+msgstr "Más opciones"
+
+msgid "ui.official_website"
+msgstr "Sitio web oficial"
+
+msgid "ui.open_map"
+msgstr "Abrir mapa"
+
+msgid "ui.open_menu"
+msgstr "Abrir menú"
+
+msgid "ui.opening_hours"
+msgstr "Horarios"
+
+msgid "ui.places_nearby"
+msgstr "Lugares que puedes visitar cerca a @place"
+
+msgid "ui.price_range"
+msgstr "Rango de precios"
+
+msgid "ui.privacy_policy"
+msgstr "Políticas de privacidad"
+
+msgid "ui.related_content"
+msgstr "Contenidos relacionados"
+
+msgid "ui.resolution_239"
+msgstr "Resolución 239 del 5 noviembre del 2021"
+
+msgid "ui.route_discover"
+msgstr "¿Qué vas a conocer en esta ruta?"
+
+msgid "ui.route_map"
+msgstr "Mapa de la ruta"
+
+msgid "ui.route_map_alt"
+msgstr "Mapa del recorrido"
+
+msgid "ui.search"
+msgstr "Buscar"
+
+msgid "ui.search_placeholder"
+msgstr "Buscar en Visit Bogotá…"
+
+msgid "ui.skip_to_content"
+msgstr "Saltar al contenido principal"
+
+msgid "ui.starting_point"
+msgstr "Punto de partida"
+
+msgid "ui.subcategories"
+msgstr "Subcategorías"
+
+msgid "ui.suggested_duration"
+msgstr "Duración sugerida"
+
+msgid "ui.to_date"
+msgstr "Hasta"
+
+msgid "ui.tourist_experiences_heading"
+msgstr "Experiencias turísticas"
+
+msgid "ui.tourist_routes"
+msgstr "Rutas turísticas"
+
+msgid "ui.tourist_support"
+msgstr "Atención al turista"
+
+msgid "ui.visit_website"
+msgstr "Visitar web"
+
+msgid "ui.want_to_go"
+msgstr "¿Quieres ir?"
+
+msgid "ui.what_this_place_offers"
+msgstr "Lo que ofrece este lugar"
+
+msgid "ui.what_to_do"
+msgstr "Qué hacer"
+
+msgid "ui.where_to_eat"
+msgstr "Dónde comer"
+
+msgid "ui.where_to_sleep"
+msgstr "Dónde dormir"
+
+msgid "ui.where_will_you_be"
+msgstr "¿Dónde estarás?"
+
+msgid "ui.zones"
+msgstr "Zonas"
