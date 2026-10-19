@@ -45,10 +45,10 @@
           {% for cat in taxonomy('rangos_de_precios') %}
           <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
           {% endfor %}
-          <h3>{{ 'ui.gastro_categories'|t }}</h3>
+          {# <h3>{{ 'ui.gastro_categories'|t }}</h3>
           {% for cat in taxonomy('categorias_gastronomicas') %}
           <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
-          {% endfor %}
+          {% endfor %} #}
           <h3>{{ 'ui.zones'|t }}</h3>
           {% for cat in taxonomy('zonas_gastronomicas') %}
           <label for="f-{{ cat.tid }}"><input type="checkbox" id="f-{{ cat.tid }}" value="{{ cat.tid }}"> {{ cat.name }}</label>
