@@ -2691,6 +2691,10 @@ body.nav-open {
     grid-template-columns: minmax(0, 70%) 30%;
   }
 }
+.vn-cat .cat-layout .cat-layout__wrap:not(:has(> aside)) {
+  max-width: var(--vn-max);
+  grid-template-columns: minmax(0, 1fr);
+}
 @media (max-width: 900px) {
   .vn-cat .cat-subcats__item {
     width: calc((100% - 14px) / 2);
