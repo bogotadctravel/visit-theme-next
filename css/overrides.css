@@ -2123,6 +2123,7 @@ body.nav-open {
   color: var(--vn-tinta);
   font-size: 16px;
   line-height: 1.75;
+  text-align: justify;
 }
 .vn-cat .cat-intro__body > :first-child {
   margin-top: 0;
@@ -2155,7 +2156,7 @@ body.nav-open {
   margin-bottom: 28px;
   font-size: 19px;
   line-height: 1.6;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--vn-gris-oscuro);
 }
 .vn-cat .cat-intro__body .cat-intro__accent {
@@ -3893,15 +3894,17 @@ body.nav-open {
   text-decoration: underline;
 }
 .vn-listing .cat-intro {
-  padding: clamp(48px, 7vw, 80px) var(--vn-pad) clamp(20px, 3vw, 32px);
+  padding: clamp(48px, 7vw, 80px) 0 clamp(20px, 3vw, 32px);
   background: var(--vn-blanco);
 }
 .vn-listing .cat-intro__wrap {
-  max-width: 760px;
+  max-width: var(--vn-max);
   margin: 0 auto;
+  padding-inline: var(--vn-pad);
 }
 .vn-listing .cat-intro__body {
   color: var(--vn-tinta);
+  text-align: justify;
 }
 .vn-listing .cat-intro__body > :first-child {
   margin-top: 0;
@@ -4182,12 +4185,12 @@ body.nav-open {
   padding-inline: var(--vn-pad);
 }
 .vn-listing .guias__intro {
-  max-width: 820px;
   margin: 0 0 28px;
   font-size: 18px;
   line-height: 1.6;
-  font-weight: 600;
-  color: var(--vn-gris-oscuro);
+  font-weight: 400;
+  color: var(--vn-gris-60);
+  text-align: justify;
 }
 .vn-listing .guias__intro p {
   margin: 0 0 10px;
@@ -4470,15 +4473,19 @@ body.nav-open {
   text-decoration: underline;
 }
 .vn-archive .cat-intro {
-  padding: clamp(48px, 7vw, 80px) var(--vn-pad) clamp(20px, 3vw, 32px);
+  padding: clamp(48px, 7vw, 80px) 0 clamp(20px, 3vw, 32px);
   background: var(--vn-blanco);
 }
 .vn-archive .cat-intro__wrap {
-  max-width: 760px;
+  max-width: var(--vn-max);
   margin: 0 auto;
+  padding-inline: var(--vn-pad);
 }
 .vn-archive .cat-intro__body {
   color: var(--vn-tinta);
+  font-size: 16px;
+  line-height: 1.75;
+  text-align: justify;
 }
 .vn-archive .cat-intro__body > :first-child {
   margin-top: 0;
@@ -4846,12 +4853,12 @@ body.nav-open {
   padding-inline: var(--vn-pad);
 }
 .vn-blog .blog-grid-section__intro {
-  max-width: 640px;
   margin: 0;
   font-size: 18px;
   line-height: 1.6;
-  font-weight: 600;
-  color: var(--vn-gris-oscuro);
+  font-weight: 400;
+  color: var(--vn-gris-60);
+  text-align: justify;
 }
 .vn-blog .blog-grid {
   max-width: var(--vn-max);
@@ -5030,7 +5037,7 @@ body.nav-open {
 .vn-cat.vn-blog-single .cat-intro__lead {
   font-size: 18px;
   line-height: 1.6;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--vn-gris-oscuro);
 }
 .vn-cat.vn-blog-single .single-blog__tags {
@@ -5145,7 +5152,7 @@ body.nav-open {
 
 .info-viajero__lead {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--vn-gris-60);
   margin: 0 0 12px;
   text-align: justify;

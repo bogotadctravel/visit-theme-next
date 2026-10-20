@@ -21,12 +21,12 @@
     padding-inline: var(--vn-pad);
   }
   .blog-grid-section__intro {
-    max-width: 640px;
     margin: 0;
     font-size: 18px;
     line-height: 1.6;
-    font-weight: 600;
-    color: var(--vn-gris-oscuro);
+    font-weight: 400;
+    color: var(--vn-gris-60);
+    text-align: justify;
   }
 
   // Grid tipo tablero (alturas variadas por tarjeta, efecto mosaico).
@@ -157,7 +157,7 @@
   .cat-intro__lead {
     font-size: 18px;
     line-height: 1.6;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--vn-gris-oscuro);
   }
 

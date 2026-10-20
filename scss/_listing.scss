@@ -124,12 +124,13 @@
 
   // ── Intro (texto CMS) ──
   .cat-intro {
-    padding: clamp(48px, 7vw, 80px) var(--vn-pad) clamp(20px, 3vw, 32px);
+    padding: clamp(48px, 7vw, 80px) 0 clamp(20px, 3vw, 32px);
     background: var(--vn-blanco);
   }
-  .cat-intro__wrap { max-width: 760px; margin: 0 auto; }
+  .cat-intro__wrap { max-width: var(--vn-max); margin: 0 auto; padding-inline: var(--vn-pad); }
   .cat-intro__body {
     color: var(--vn-tinta);
+    text-align: justify;
 
     > :first-child { margin-top: 0; }
     > :last-child { margin-bottom: 0; }
@@ -335,12 +336,12 @@
   }
   .guias__wrap { max-width: var(--vn-max); margin: 0 auto; padding-inline: var(--vn-pad); }
   .guias__intro {
-    max-width: 820px;
     margin: 0 0 28px;
     font-size: 18px;
     line-height: 1.6;
-    font-weight: 600;
-    color: var(--vn-gris-oscuro);
+    font-weight: 400;
+    color: var(--vn-gris-60);
+    text-align: justify;
 
     p { margin: 0 0 10px; &:last-child { margin-bottom: 0; } }
   }
