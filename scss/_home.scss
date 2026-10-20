@@ -528,8 +528,8 @@
   //  PLANEA TU VIAJE
   // =======================================================
   .planea-viaje {
-    padding: clamp(48px, 7vw, 80px) var(--vn-pad) 0;
-    background: var(--vn-gris-10);
+    padding: clamp(48px, 7vw, 80px) var(--vn-pad) clamp(56px, 7vw, 88px);
+    background: var(--vn-blanco);
   }
 
   .planea-viaje__wrap {
@@ -537,56 +537,7 @@
     margin: 0 auto;
   }
 
-  // ── Layout general: bloque principal (texto + ilustración + badges) a la izq., mapa+botón a la der. ──
-  .planea-viaje__layout {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 32px;
-  }
-  .planea-viaje__main {
-    flex: 1 1 auto;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(16px, 3vw, 32px);
-  }
-  .planea-viaje__intro { max-width: none; }
-
-  .planea-viaje__info {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 16px;
-    width: 100%;
-    max-width: 260px;
-  }
-  .planea-viaje__info-illustration { display: block; width: 100%; height: auto; }
-  .planea-viaje__info-btn {
-    flex: none;
-    display: block;
-    width: 100%;
-    padding: 18px 20px;
-    border-radius: 14px;
-    background: var(--vn-blanco);
-    border: 2px solid #B2B2B2;
-    color: var(--vn-rojo-principal);
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    text-align: center;
-    text-transform: uppercase;
-    text-decoration: none;
-    line-height: 1.3;
-    transition: background var(--vn-transicion), color var(--vn-transicion), transform var(--vn-transicion);
-
-    &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); transform: translateY(-4px); }
-  }
-
-  @media (max-width: 900px) {
-    .planea-viaje__info { display: none; }
-  }
+  .planea-viaje__intro { margin-bottom: clamp(24px, 4vw, 40px); }
 
   .planea-viaje__title {
     margin: 0 0 8px;
@@ -605,36 +556,82 @@
     strong { font-weight: 700; color: var(--vn-gris-oscuro); }
   }
 
-  // ── Fila inferior: ilustración a todo el ancho con los badges superpuestos ──
-  .planea-viaje__row {
+  // ── Grilla de 4 columnas. Las 3 primeras comparten el panorama (cada una muestra un tercio),
+  //    la 4ª muestra el mapa. Badge / botón quedan montados sobre el borde inferior del panel. ──
+  .planea-viaje__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(8px, 1.2vw, 16px);
+  }
+
+  .planea-viaje__col {
     position: relative;
-  }
-  .planea-viaje__illustration {
     display: block;
-    width: 100%;
-    height: auto;
-  }
-  .planea-viaje__actions {
-    position: absolute;
-    left: clamp(12px, 3vw, 48px);
-    bottom: clamp(-20px, -3vw, -8px);
-    display: flex;
-    align-items: flex-end;
-    gap: clamp(16px, 4vw, 40px);
-  }
-  .planea-viaje__badge {
-    display: block;
-    flex: none;
-    width: clamp(68px, 8vw, 96px);
+    aspect-ratio: 3 / 4;
+    margin-bottom: 36px; // espacio para el badge que sobresale
+    background-color: #EFEFED;
+    background-repeat: no-repeat;
+    text-decoration: none;
     transition: transform var(--vn-transicion);
 
-    img { display: block; width: 100%; height: auto; }
     &:hover { transform: translateY(-6px); }
-    &:nth-child(2) { width: clamp(76px, 9vw, 108px); }
+  }
+
+  .planea-viaje__col--24,
+  .planea-viaje__col--48,
+  .planea-viaje__col--72 {
+    background-image: var(--pv-panorama);
+    background-size: 300% auto;
+    background-position-y: 70%;
+  }
+  .planea-viaje__col--24 { background-position-x: 0; }
+  .planea-viaje__col--48 { background-position-x: 50%; }
+  .planea-viaje__col--72 { background-position-x: 100%; }
+
+  .planea-viaje__col--info {
+    background-image: var(--pv-info);
+    background-size: 92% auto;
+    background-position: center 40%;
+  }
+
+  .planea-viaje__badge {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    display: block;
+    width: clamp(68px, 9vw, 108px);
+    height: auto;
+    transform: translate(-50%, 35%);
+  }
+
+  .planea-viaje__info-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 86%;
+    padding: 16px 12px;
+    border-radius: 14px;
+    background: var(--vn-blanco);
+    border: 2px solid #B2B2B2;
+    color: var(--vn-rojo-principal);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 1.3;
+    transform: translate(-50%, 50%);
+    transition: background var(--vn-transicion), color var(--vn-transicion);
+
+    .planea-viaje__col:hover & { background: var(--vn-rojo-principal); color: var(--vn-blanco); }
   }
 
   @media (max-width: 900px) {
-    .planea-viaje__actions { gap: clamp(12px, 5vw, 24px); }
+    .planea-viaje__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 24px;
+    }
+    .planea-viaje__info-btn { width: 92%; padding: 12px 8px; font-size: 12px; border-radius: 10px; }
   }
 
   // =======================================================
@@ -766,10 +763,6 @@
     .eventos__item { flex: 0 0 100%; }
     .eventos__arrow { display: none; }
     .imperdibles__head { flex-direction: column; align-items: flex-start; gap: 12px; }
-
-    .planea-viaje__actions { bottom: -14px; gap: 10px; }
-    .planea-viaje__badge { width: 56px; }
-    .planea-viaje__badge:nth-child(2) { width: 64px; }
 
     .blog-home__mosaic {
       display: flex;
