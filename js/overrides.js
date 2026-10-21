@@ -608,6 +608,13 @@
     var rows = [].slice.call(cards.querySelectorAll('.guias-row'));
     if (!fLang || !fSector || !rows.length) return;
 
+    // Orden aleatorio en cada visita (Fisher-Yates); en Twig quedaría fijo por la caché de página.
+    for (var i = rows.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = rows[i]; rows[i] = rows[j]; rows[j] = tmp;
+    }
+    rows.forEach(function (row) { cards.appendChild(row); });
+
     var countTpl = count ? count.textContent.replace(/^\d+\s*/, '') : '';
 
     var apply = function () {
