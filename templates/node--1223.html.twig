@@ -191,18 +191,19 @@
         </p>
       </div>
 
-      {# 4 columnas: el panorama se reparte entre las 3 primeras (background al 300%), la 4ª lleva el mapa #}
-      <div class="planea-viaje__grid" style="--pv-panorama: url('/{{ subtheme_path ?: directory }}/images/recursos/recursoBig.png'); --pv-info: url('/{{ subtheme_path ?: directory }}/images/recursos/recurso2Big.png');">
-        <a class="planea-viaje__col planea-viaje__col--24" href="/bogota-en-24-horas" aria-label="{{ 'Bogotá en 24 horas'|t }}">
-          <img class="planea-viaje__badge" src="/{{ subtheme_path ?: directory }}/images/24h@2x-8.png" alt="" loading="lazy">
+      {# 4 columnas pegadas: cada recurso es una franja del mismo panorama (24/48/72 ya traen el badge) #}
+      <div class="planea-viaje__grid">
+        <a class="planea-viaje__col" href="/bogota-en-24-horas" aria-label="{{ 'Bogotá en 24 horas'|t }}">
+          <img class="planea-viaje__img" src="/{{ subtheme_path ?: directory }}/images/recursos/01_24%20horas.jpg" alt="" loading="lazy">
         </a>
-        <a class="planea-viaje__col planea-viaje__col--48" href="/bogota-en-48-horas" aria-label="{{ 'Bogotá en 48 horas'|t }}">
-          <img class="planea-viaje__badge" src="/{{ subtheme_path ?: directory }}/images/48h@2x-8.png" alt="" loading="lazy">
+        <a class="planea-viaje__col" href="/bogota-en-48-horas" aria-label="{{ 'Bogotá en 48 horas'|t }}">
+          <img class="planea-viaje__img" src="/{{ subtheme_path ?: directory }}/images/recursos/02_48%20horas.jpg" alt="" loading="lazy">
         </a>
-        <a class="planea-viaje__col planea-viaje__col--72" href="/bogota-en-72-horas" aria-label="{{ 'Bogotá en 72 horas'|t }}">
-          <img class="planea-viaje__badge" src="/{{ subtheme_path ?: directory }}/images/72h@2x-8.png" alt="" loading="lazy">
+        <a class="planea-viaje__col" href="/bogota-en-72-horas" aria-label="{{ 'Bogotá en 72 horas'|t }}">
+          <img class="planea-viaje__img" src="/{{ subtheme_path ?: directory }}/images/recursos/03_72%20horas.jpg" alt="" loading="lazy">
         </a>
-        <a class="planea-viaje__col planea-viaje__col--info" href="/es/informacion-al-viajero">
+        <a class="planea-viaje__col" href="/es/informacion-al-viajero">
+          <img class="planea-viaje__img" src="/{{ subtheme_path ?: directory }}/images/recursos/04_info_viajero.jpg" alt="" loading="lazy">
           <span class="planea-viaje__info-btn">{{ 'Información del viajero'|t }}</span>
         </a>
       </div>
