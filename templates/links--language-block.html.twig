@@ -6,8 +6,8 @@
 #}
 {% set allowed_langs = ['es', 'en'] %}
 {% set flags = {
-  'es': '<svg viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="4" fill="#FCD116"/><rect y="4" width="12" height="2" fill="#003893"/><rect y="6" width="12" height="2" fill="#CE1126"/></svg>',
-  'en': '<svg viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="8" fill="#012169"/><path d="M0 0l12 8M12 0L0 8" stroke="#fff" stroke-width="1.6"/><path d="M0 0l12 8M12 0L0 8" stroke="#C8102E" stroke-width=".9"/><path d="M6 0v8M0 4h12" stroke="#fff" stroke-width="2.6"/><path d="M6 0v8M0 4h12" stroke="#C8102E" stroke-width="1.5"/></svg>'
+  'es': '<svg viewBox="0 0 12 8" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="4" fill="#FCD116"/><rect y="4" width="12" height="2" fill="#003893"/><rect y="6" width="12" height="2" fill="#CE1126"/></svg>',
+  'en': '<svg viewBox="0 0 12 8" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><rect width="12" height="8" fill="#012169"/><path d="M0 0l12 8M12 0L0 8" stroke="#fff" stroke-width="1.6"/><path d="M0 0l12 8M12 0L0 8" stroke="#C8102E" stroke-width=".9"/><path d="M6 0v8M0 4h12" stroke="#fff" stroke-width="2.6"/><path d="M6 0v8M0 4h12" stroke="#C8102E" stroke-width="1.5"/></svg>'
 } %}
 
 <style>
@@ -48,9 +48,12 @@
   {% set current = (current_langcode in allowed_langs) ? current_langcode : 'es' %}
   <div class="language-dropdown">
 
+    {# Sin aria-hidden en el span de la bandera (va en el <svg>): el widget SANDI
+       (sandi-visit-language.js) reescribe el textContent del primer
+       span[aria-hidden="true"] del toggle y borraba la bandera. #}
     <button type="button" class="language-dropdown__toggle" aria-haspopup="true" aria-expanded="false"
       aria-label="{{ 'Seleccionar idioma. Idioma actual:'|t }} {{ current|upper }}">
-      <span class="language-dropdown__flag" aria-hidden="true">{{ flags[current]|raw }}</span>
+      <span class="language-dropdown__flag">{{ flags[current]|raw }}</span>
       <span aria-hidden="true">{{ current|upper }}</span>
       <span class="language-dropdown__arrow" aria-hidden="true">▼</span>
     </button>
