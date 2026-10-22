@@ -230,7 +230,7 @@
     main.innerHTML =
       `<button class="chip chip-imperdible ${all ? 'is-active' : ''}" data-cat="__all" aria-pressed="${all}">
          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>
-         Imperdibles
+         ${Drupal.t('Imperdibles')}
        </button>` +
       Object.entries(CATS).map(([key, c]) => {
         const on = state.cats.has(key);
@@ -248,19 +248,19 @@
       const c = CATS[key], def = state.defs[key];
       let body;
       if (!def || def.status === 'loading') {
-        body = `<span class="sub-status"><span class="spinner spinner-dark" aria-hidden="true"></span>Cargando filtros…</span>`;
+        body = `<span class="sub-status"><span class="spinner spinner-dark" aria-hidden="true"></span>${Drupal.t('Cargando filtros…')}</span>`;
       } else if (def.status === 'error') {
-        body = `<span class="sub-status is-error">No se pudieron cargar los filtros.</span>
-                <button class="link-btn" data-retry="${key}">Reintentar</button>`;
+        body = `<span class="sub-status is-error">${Drupal.t('No se pudieron cargar los filtros.')}</span>
+                <button class="link-btn" data-retry="${key}">${Drupal.t('Reintentar')}</button>`;
       } else if (!def.groups.length) {
-        body = `<span class="sub-status">Sin filtros disponibles</span>`;
+        body = `<span class="sub-status">${Drupal.t('Sin filtros disponibles')}</span>`;
       } else {
         body = def.groups.map(g => dropdownHtml(key, g)).join('');
       }
       return `<div class="sub-group" style="--c:${c.color}">
                 <span class="sub-label">${icon(key)}${esc(c.label)}</span>${body}
               </div>`;
-    }).join('') + `<button class="link-btn" id="clearFilters">Limpiar filtros</button>`;
+    }).join('') + `<button class="link-btn" id="clearFilters">${Drupal.t('Limpiar filtros')}</button>`;
   }
 
   const caret = '<svg class="dd-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
@@ -278,7 +278,7 @@
         ${ddButtonInner(g.label, sel.size)}
       </button>
       <div class="dd-pop" role="group" aria-label="${esc(g.label)}" ${open ? '' : 'hidden'}>
-        ${g.options.length > 8 ? `<input type="search" class="dd-search" placeholder="Buscar en ${esc(g.label.toLowerCase())}…" aria-label="Buscar">` : ''}
+        ${g.options.length > 8 ? `<input type="search" class="dd-search" placeholder="${Drupal.t('Buscar en @grupo…', { '@grupo': g.label.toLowerCase() })}" aria-label="${Drupal.t('Buscar')}">` : ''}
         <ul class="dd-list">
           ${g.options.map(o => `<li data-title="${esc(normalize(o.title))}">
             <label class="dd-opt">
@@ -288,10 +288,10 @@
             </label>
           </li>`).join('')}
         </ul>
-        <div class="dd-empty" hidden>Sin coincidencias</div>
+        <div class="dd-empty" hidden>${Drupal.t('Sin coincidencias')}</div>
         <div class="dd-foot">
-          <button type="button" class="link-btn" data-dd-clear>Limpiar</button>
-          <button type="button" class="btn btn-primary btn-sm" data-dd-close>Listo</button>
+          <button type="button" class="link-btn" data-dd-clear>${Drupal.t('Limpiar')}</button>
+          <button type="button" class="btn btn-primary btn-sm" data-dd-close>${Drupal.t('Listo')}</button>
         </div>
       </div>
     </div>`;
@@ -412,24 +412,24 @@
   /* ---------- Sidebar izquierdo ---------- */
 
   function tagFor(p) {
-    if (state.cats.size === 0) return `Imperdible ${p.imperdible}`;
-    return p.discount ? `${CATS[p.cat].short} · ${p.discount}% dto.` : CATS[p.cat].short;
+    if (state.cats.size === 0) return Drupal.t('Imperdible !n', { '!n': p.imperdible });
+    return p.discount ? `${CATS[p.cat].short} · ${Drupal.t('!n% dto.', { '!n': p.discount })}` : CATS[p.cat].short;
   }
 
   const spinnerDark = '<span class="spinner spinner-dark" aria-hidden="true"></span>';
 
   function renderResults(list) {
     const status = visibleStatus();
-    $('#resultsTitle').textContent = state.cats.size === 0 ? 'Imperdibles' : 'Resultados';
+    $('#resultsTitle').textContent = state.cats.size === 0 ? Drupal.t('Imperdibles') : Drupal.t('Resultados');
     $('#resultsCount').textContent = status === 'loading' && !list.length ? '…' : list.length;
     $('.panel-results').classList.toggle('is-updating', status === 'loading' && list.length > 0);
     const ul = $('#resultsList');
     if (!list.length) {
       ul.innerHTML = status === 'loading'
-        ? `<li class="results-empty">${spinnerDark}Cargando lugares…</li>`
+        ? `<li class="results-empty">${spinnerDark}${Drupal.t('Cargando lugares…')}</li>`
         : status === 'error'
-          ? `<li class="results-empty">No se pudieron cargar los lugares.<br><button class="link-btn" data-retry-results>Reintentar</button></li>`
-          : `<li class="results-empty">No hay lugares con estos filtros.<br>Prueba quitando alguno.</li>`;
+          ? `<li class="results-empty">${Drupal.t('No se pudieron cargar los lugares.')}<br><button class="link-btn" data-retry-results>${Drupal.t('Reintentar')}</button></li>`
+          : `<li class="results-empty">${Drupal.t('No hay lugares con estos filtros.')}<br>${Drupal.t('Prueba quitando alguno.')}</li>`;
       return;
     }
     ul.innerHTML = list.map(p => {
@@ -440,10 +440,10 @@
           <div class="result-body">
             <span class="dtv-tag ${state.cats.size === 0 ? 'dtv-tag-imperdible' : ''}">${icon(p.cat)}${esc(tagFor(p))}</span>
             <h3>${esc(p.name)}</h3>
-            <p class="muted">${esc(p.zone)}${p.hasGeo ? '' : `${p.zone ? ' · ' : ''}<span class="no-geo">Sin ubicación en el mapa</span>`}</p>
+            <p class="muted">${esc(p.zone)}${p.hasGeo ? '' : `${p.zone ? ' · ' : ''}<span class="no-geo">${Drupal.t('Sin ubicación en el mapa')}</span>`}</p>
           </div>
           <button class="add-mini ${inTrip ? 'is-added' : ''}" data-add="${p.id}"
-                  aria-label="${inTrip ? 'Quitar de' : 'Agregar a'} mi viaje" title="${inTrip ? 'En mi viaje' : 'Agregar a mi viaje'}">
+                  aria-label="${inTrip ? Drupal.t('Quitar de mi viaje') : Drupal.t('Agregar a mi viaje')}" title="${inTrip ? Drupal.t('En mi viaje') : Drupal.t('Agregar a mi viaje')}">
             ${inTrip ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>' : '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>'}
           </button>
         </div>
@@ -545,13 +545,13 @@
     s.src = ARCGIS_JS;
     s.async = true;
     s.onload = done;
-    s.onerror = () => { $('#mapLoading').textContent = 'No se pudo cargar ArcGIS. Revisa tu conexión.'; };
+    s.onerror = () => { $('#mapLoading').textContent = Drupal.t('No se pudo cargar ArcGIS. Revisa tu conexión.'); };
     document.head.appendChild(s);
   }
 
   function initMap() {
     if (typeof window.require !== 'function') {
-      $('#mapLoading').textContent = 'No se pudo cargar ArcGIS. Revisa tu conexión.';
+      $('#mapLoading').textContent = Drupal.t('No se pudo cargar ArcGIS. Revisa tu conexión.');
       return;
     }
     window.require([
@@ -580,7 +580,7 @@
         $('#mapLoading').hidden = true;
         renderMarkers(visiblePlaces(), !sharedTrip);
         if (sharedTrip && !state.tripLoading) fitTo(state.trip.map(byId));
-      }, () => { $('#mapLoading').textContent = 'No se pudo cargar el mapa.'; });
+      }, () => { $('#mapLoading').textContent = Drupal.t('No se pudo cargar el mapa.'); });
 
       map.view.on('click', e => {
         map.view.hitTest(e, { include: [map.layer] }).then(r => {
@@ -635,10 +635,11 @@
     card.style.setProperty('--c', CATS[p.cat].color);
     $('#floatImg').src = p.img;
     $('#floatImg').alt = p.name;
-    const extra = p.imperdible ? ` · Imperdible ${p.imperdible}` : p.discount ? ` · ${p.discount}% dto.` : '';
+    const extra = p.imperdible ? ' · ' + Drupal.t('Imperdible !n', { '!n': p.imperdible })
+      : p.discount ? ' · ' + Drupal.t('!n% dto.', { '!n': p.discount }) : '';
     $('#floatTag').innerHTML = icon(p.cat) + esc(CATS[p.cat].short + extra);
     $('#floatTitle').textContent = p.name;
-    $('#floatZone').textContent = p.hasGeo ? p.zone : [p.zone, 'Sin ubicación en el mapa'].filter(Boolean).join(' · ');
+    $('#floatZone').textContent = p.hasGeo ? p.zone : [p.zone, Drupal.t('Sin ubicación en el mapa')].filter(Boolean).join(' · ');
     $('#floatMore').href = p.url;
     updateCardAddBtn();
     card.hidden = false;
@@ -649,9 +650,9 @@
     if (!state.selected) return;
     const inTrip = state.trip.includes(state.selected);
     const btn = $('#floatAdd');
-    btn.textContent = inTrip ? '✓ En mi viaje' : 'Agregar a mi viaje';
+    btn.textContent = inTrip ? '✓ ' + Drupal.t('En mi viaje') : Drupal.t('Agregar a mi viaje');
     btn.classList.toggle('is-added', inTrip);
-    btn.title = inTrip ? 'Clic para quitar de mi viaje' : '';
+    btn.title = inTrip ? Drupal.t('Clic para quitar de mi viaje') : '';
   }
 
   function positionCard() {
@@ -707,10 +708,10 @@
     if (i === -1) {
       state.trip.push(id);
       if (state.selected === id) closeCard();
-      toast(`«${byId(id).name}» agregado a tu viaje`);
+      toast(Drupal.t('«!nombre» agregado a tu viaje', { '!nombre': byId(id).name }));
     } else {
       state.trip.splice(i, 1);
-      toast(`«${byId(id).name}» quitado de tu viaje`);
+      toast(Drupal.t('«!nombre» quitado de tu viaje', { '!nombre': byId(id).name }));
     }
     renderTrip();
     renderResults(visiblePlaces());
@@ -727,18 +728,18 @@
       return `<li class="trip-item" style="--c:${CATS[p.cat].color}">
         <span class="trip-num">${i + 1}</span>
         <img src="${esc(p.thumb)}" alt="" loading="lazy">
-        <button class="trip-body" data-go="${p.id}" title="Ver en el mapa">
+        <button class="trip-body" data-go="${p.id}" title="${Drupal.t('Ver en el mapa')}">
           <strong>${esc(p.name)}</strong>
           <span class="dtv-tag">${icon(p.cat)}${esc(CATS[p.cat].short)}</span>
         </button>
-        <button class="trip-remove" data-remove="${p.id}" aria-label="Quitar ${esc(p.name)}">&times;</button>
+        <button class="trip-remove" data-remove="${p.id}" aria-label="${Drupal.t('Quitar @nombre', { '@nombre': p.name })}">&times;</button>
       </li>`;
     }).join('');
     if (!state.tripLoading) syncUrl();
     $('#saveTrip').disabled = n < 2 || state.tripLoading;
     $('#tripHint').textContent = n < 2
-      ? `Agrega ${n === 0 ? 'al menos 2 lugares' : '1 lugar más'} para guardar tu itinerario.`
-      : `Tu itinerario tiene ${n} lugares.`;
+      ? (n === 0 ? Drupal.t('Agrega al menos 2 lugares para guardar tu itinerario.') : Drupal.t('Agrega 1 lugar más para guardar tu itinerario.'))
+      : Drupal.t('Tu itinerario tiene !n lugares.', { '!n': n });
   }
 
   $('#tripList').addEventListener('click', e => {
@@ -747,7 +748,7 @@
     const go = e.target.closest('[data-go]');
     if (go) {
       const p = byId(go.dataset.go);
-      if (!p.hasGeo) toast('Este lugar no tiene ubicación en el mapa');
+      if (!p.hasGeo) toast(Drupal.t('Este lugar no tiene ubicación en el mapa'));
       // si el lugar no está visible con los filtros actuales, activamos su categoría
       if (!visiblePlaces().some(v => v.id === p.id)) {
         state.cats.add(p.cat);
@@ -790,7 +791,7 @@
     $('#modalSummary').innerHTML = state.trip.map((id, i) =>
       `<li><span style="--c:${CATS[byId(id).cat].color}">${i + 1}</span>${esc(byId(id).name)}</li>`).join('');
     $('#shareUrl').value = url;
-    $('#shareCopy').textContent = 'Copiar';
+    $('#shareCopy').textContent = Drupal.t('Copiar');
     $('#shareQr').hidden = !(isDesktop() && window.qrcode && renderQr(url));
     $('#shareNative').hidden = !navigator.share;
     modal.hidden = false;
@@ -814,9 +815,9 @@
     const input = $('#shareUrl');
     const done = ok => {
       const btn = $('#shareCopy');
-      btn.textContent = ok ? '¡Copiado!' : 'Copia manual';
-      toast(ok ? 'Enlace del itinerario copiado' : 'No se pudo copiar: selecciona el enlace y cópialo');
-      setTimeout(() => { btn.textContent = 'Copiar'; }, 2000);
+      btn.textContent = ok ? Drupal.t('¡Copiado!') : Drupal.t('Copia manual');
+      toast(ok ? Drupal.t('Enlace del itinerario copiado') : Drupal.t('No se pudo copiar: selecciona el enlace y cópialo'));
+      setTimeout(() => { btn.textContent = Drupal.t('Copiar'); }, 2000);
     };
     const fallback = () => {
       input.focus();
@@ -833,7 +834,11 @@
   });
 
   $('#shareNative').addEventListener('click', () => {
-    navigator.share({ title: 'Mi itinerario por Bogotá', text: `Mi itinerario por Bogotá (${state.trip.length} lugares)`, url: $('#shareUrl').value })
+    navigator.share({
+      title: Drupal.t('Mi itinerario por Bogotá'),
+      text: Drupal.t('Mi itinerario por Bogotá (!n lugares)', { '!n': state.trip.length }),
+      url: $('#shareUrl').value
+    })
       .catch(() => {}); // el usuario canceló
   });
 
@@ -903,8 +908,9 @@
         fitTo(state.trip.map(byId));
         const n = state.trip.length;
         toast(n
-          ? `Itinerario compartido cargado · ${n} ${n === 1 ? 'lugar' : 'lugares'}${missing ? ` (${missing} ya no disponible${missing > 1 ? 's' : ''})` : ''}`
-          : 'No se pudo cargar el itinerario compartido');
+          ? Drupal.formatPlural(n, 'Itinerario compartido cargado · 1 lugar', 'Itinerario compartido cargado · @count lugares')
+            + (missing ? ' ' + Drupal.formatPlural(missing, '(1 ya no disponible)', '(@count ya no disponibles)') : '')
+          : Drupal.t('No se pudo cargar el itinerario compartido'));
         const panel = $('.panel-trip');
         panel.classList.add('is-flash');
         setTimeout(() => panel.classList.remove('is-flash'), 2400);

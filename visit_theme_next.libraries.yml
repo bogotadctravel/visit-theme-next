@@ -22,4 +22,6 @@ disena-tu-viaje:
     js/disena-tu-viaje/data.js: {}
     js/disena-tu-viaje/app.js: {}
   dependencies:
+    # Drupal.t: textos del planificador (traducciones en translations/en.po)
+    - core/drupal
     - visit_theme_next/overrides

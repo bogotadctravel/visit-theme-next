@@ -76,7 +76,7 @@ msgid "El IDT no asume responsabilidad por los acuerdos, servicios, controversia
 msgstr "The IDT assumes no responsibility for the agreements, services, disputes, or claims that may arise between users and the establishments listed on visitbogota.co; such relationships are the sole responsibility of the parties involved."
 
 msgid "El IDT no asume responsabilidad por los acuerdos, servicios, controversias o reclamaciones que puedan surgir entre los usuarios y los guías incluidos en este directorio, siendo dichas relaciones de exclusiva responsabilidad de las partes involucradas."
-msgstr "The IDT assumes no responsibility for the agreements, services, disputes, or claims that may arise between users and the guides listed in this directory; such relationships are the sole responsibility of the parties involved."
+msgstr "The IDT assumes no responsibility for agreements, services, disputes, or claims that may arise between users and the guides listed in this directory. These relationships are the sole responsibility of the parties involved."
 
 msgid "Entradas"
 msgstr "Tickets"
@@ -277,7 +277,7 @@ msgid "Ver siguientes"
 msgstr "View next"
 
 msgid "Ver toda la categoría"
-msgstr "View entire category"
+msgstr "View the full category"
 
 msgid "Video"
 msgstr "Video"
@@ -488,13 +488,242 @@ msgid "ui.what_to_do"
 msgstr "What to do"
 
 msgid "ui.where_to_eat"
-msgstr "Where to eat"
+msgstr "Where to Eat"
 
 msgid "ui.where_to_sleep"
-msgstr "Where to stay"
+msgstr "Where to Sleep"
 
 msgid "ui.where_will_you_be"
 msgstr "Where will you be"
 
 msgid "ui.zones"
 msgstr "Zones"
+
+# ── Agenda (títulos por ?rango=) y Diseña tu viaje (plantilla 3003 + JS) ──
+# Los del JS van con Drupal.t(): locale los registra al cargar el archivo.
+
+msgid "Eventos hoy"
+msgstr "Today's events"
+
+msgid "Eventos esta semana"
+msgstr "This week's events"
+
+msgid "Eventos este fin de semana"
+msgstr "This weekend's events"
+
+msgid "Eventos este mes"
+msgstr "This month's events"
+
+msgid "Diseña tu viaje"
+msgstr "Design your trip"
+
+msgid "Imperdibles"
+msgstr "Must-Sees"
+
+msgid "Imperdible !n"
+msgstr "Must-See !n"
+
+msgid "Atractivos turísticos"
+msgstr "Tourist Attractions"
+
+msgid "Atractivo"
+msgstr "Attraction"
+
+msgid "Hoteles"
+msgstr "Hotels"
+
+msgid "Hotel"
+msgstr "Hotel"
+
+msgid "Ofertas"
+msgstr "Deals"
+
+msgid "Oferta"
+msgstr "Deal"
+
+msgid "Restaurantes"
+msgstr "Restaurants"
+
+msgid "Restaurante"
+msgstr "Restaurant"
+
+msgid "!n% dto."
+msgstr "!n% off"
+
+msgid "Resultados"
+msgstr "Results"
+
+msgid "Lugares en el mapa"
+msgstr "Places on the map"
+
+msgid "Mapa de Bogotá"
+msgstr "Map of Bogotá"
+
+msgid "Cargando mapa…"
+msgstr "Loading map…"
+
+msgid "No se pudo cargar el mapa."
+msgstr "The map could not be loaded."
+
+msgid "No se pudo cargar ArcGIS. Revisa tu conexión."
+msgstr "ArcGIS could not be loaded. Check your connection."
+
+msgid "Cargando filtros…"
+msgstr "Loading filters…"
+
+msgid "No se pudieron cargar los filtros."
+msgstr "The filters could not be loaded."
+
+msgid "Sin filtros disponibles"
+msgstr "No filters available"
+
+msgid "Limpiar filtros"
+msgstr "Clear filters"
+
+msgid "Buscar"
+msgstr "Search"
+
+msgid "Buscar en @grupo…"
+msgstr "Search in @grupo…"
+
+msgid "Sin coincidencias"
+msgstr "No matches"
+
+msgid "Limpiar"
+msgstr "Clear"
+
+msgid "Listo"
+msgstr "Done"
+
+msgid "Reintentar"
+msgstr "Retry"
+
+msgid "Cargando lugares…"
+msgstr "Loading places…"
+
+msgid "No se pudieron cargar los lugares."
+msgstr "The places could not be loaded."
+
+msgid "No hay lugares con estos filtros."
+msgstr "No places match these filters."
+
+msgid "Prueba quitando alguno."
+msgstr "Try removing some."
+
+msgid "Sin ubicación en el mapa"
+msgstr "No location on the map"
+
+msgid "Este lugar no tiene ubicación en el mapa"
+msgstr "This place has no location on the map"
+
+msgid "Cerrar"
+msgstr "Close"
+
+msgid "Ver más"
+msgstr "See more"
+
+msgid "Ver en el mapa"
+msgstr "View on the map"
+
+msgid "Mi viaje"
+msgstr "My Trip"
+
+msgid "En mi viaje"
+msgstr "In my trip"
+
+msgid "Agregar a mi viaje"
+msgstr "Add to my trip"
+
+msgid "Quitar de mi viaje"
+msgstr "Remove from my trip"
+
+msgid "Clic para quitar de mi viaje"
+msgstr "Click to remove from my trip"
+
+msgid "Quitar @nombre"
+msgstr "Remove @nombre"
+
+msgid "«!nombre» agregado a tu viaje"
+msgstr "“!nombre” added to your trip"
+
+msgid "«!nombre» quitado de tu viaje"
+msgstr "“!nombre” removed from your trip"
+
+msgid "Aún no tienes lugares."
+msgstr "You don't have any places yet."
+
+msgid "Usa <strong>Agregar a mi viaje</strong> en el mapa para armar tu itinerario."
+msgstr "Use <strong>Add to my trip</strong> on the map to build your itinerary."
+
+msgid "Agrega al menos 2 lugares para compartir tu itinerario."
+msgstr "Add at least 2 places to share your itinerary."
+
+msgid "Agrega al menos 2 lugares para guardar tu itinerario."
+msgstr "Add at least 2 places to save your itinerary."
+
+msgid "Agrega 1 lugar más para guardar tu itinerario."
+msgstr "Add 1 more place to save your itinerary."
+
+msgid "Tu itinerario tiene !n lugares."
+msgstr "Your itinerary has !n places."
+
+msgid "Compartir itinerario"
+msgstr "Share itinerary"
+
+msgid "Comparte tu itinerario"
+msgstr "Share your itinerary"
+
+msgid "Quien abra el enlace verá estos"
+msgstr "Anyone who opens the link will see these"
+
+msgid "lugares tal como están ahora."
+msgstr "places exactly as they are now."
+
+msgid "Código QR del itinerario"
+msgstr "Itinerary QR code"
+
+msgid "Escanéalo con la cámara de tu celular para llevar el itinerario contigo."
+msgstr "Scan it with your phone's camera to take the itinerary with you."
+
+msgid "Enlace del itinerario"
+msgstr "Itinerary link"
+
+msgid "Copiar"
+msgstr "Copy"
+
+msgid "¡Copiado!"
+msgstr "Copied!"
+
+msgid "Copia manual"
+msgstr "Copy manually"
+
+msgid "Enlace del itinerario copiado"
+msgstr "Itinerary link copied"
+
+msgid "No se pudo copiar: selecciona el enlace y cópialo"
+msgstr "Could not copy: select the link and copy it"
+
+msgid "Compartir con mis apps"
+msgstr "Share with my apps"
+
+msgid "Mi itinerario por Bogotá"
+msgstr "My Bogotá itinerary"
+
+msgid "Mi itinerario por Bogotá (!n lugares)"
+msgstr "My Bogotá itinerary (!n places)"
+
+msgid "Cargando itinerario compartido…"
+msgstr "Loading shared itinerary…"
+
+msgid "No se pudo cargar el itinerario compartido"
+msgstr "The shared itinerary could not be loaded"
+
+msgid "Itinerario compartido cargado · 1 lugar"
+msgid_plural "Itinerario compartido cargado · @count lugares"
+msgstr[0] "Shared itinerary loaded · 1 place"
+msgstr[1] "Shared itinerary loaded · @count places"
+
+msgid "(1 ya no disponible)"
+msgid_plural "(@count ya no disponibles)"
+msgstr[0] "(1 no longer available)"
+msgstr[1] "(@count no longer available)"
