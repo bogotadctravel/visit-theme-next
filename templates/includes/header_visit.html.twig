@@ -161,26 +161,6 @@
           </li>
           {% endfor %}
 
-          {# ── Enlaces externos del topbar: solo visibles dentro del panel móvil ── #}
-          {% if menu_topbar_visit['#items'] is not empty %}
-          <li class="mainnav__item mainnav__topbar-mobile">
-            <ul class="mainnav__topbar-list">
-              {% for item in menu_topbar_visit['#items'] %}
-              <li>
-                <a href="{{ item.url }}" {{ h.ext_attrs(item.url) }}>{{ item.title }}</a>
-                {% if item.below %}
-                <ul>
-                  {% for subitem in item.below %}
-                  <li><a href="{{ subitem.url }}" {{ h.ext_attrs(subitem.url) }}>{{ subitem.title }}</a></li>
-                  {% endfor %}
-                </ul>
-                {% endif %}
-              </li>
-              {% endfor %}
-            </ul>
-          </li>
-          {% endif %}
-
         </ul>
       </nav>
 
