@@ -197,3 +197,26 @@
     <img class="vn-modal__image" id="galleryModalImg" src="" alt="">
   </div>
 </div>
+
+{# Datos estructurados (schema.org) — portado de visit_theme. #}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristAttraction",
+  "name": {{ node.getTitle()|json_encode|raw }},
+  "description": {{ node.body.0.value|default('')|striptags|trim|json_encode|raw }}{% if hero_bg %},
+  "image": [{{ hero_bg|json_encode|raw }}]{% endif %}{% if node.field_direccion.0.value is not empty %},
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": {{ node.field_direccion.0.value|default('')|json_encode|raw }},
+    "addressLocality": "Bogotá",
+    "addressRegion": "Cundinamarca",
+    "addressCountry": "CO"
+  }{% endif %}{% if lat is not empty and lng is not empty %},
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": {{ lat|json_encode|raw }},
+    "longitude": {{ lng|json_encode|raw }}
+  }{% endif %}
+}
+</script>

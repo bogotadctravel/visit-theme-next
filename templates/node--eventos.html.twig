@@ -199,3 +199,43 @@
     <img class="vn-modal__image" id="galleryModalImg" src="" alt="">
   </div>
 </div>
+
+{# Datos estructurados (schema.org) — portado de visit_theme. #}
+{% set ld_offers_url = node.field_link_a_boleteria.0.url ?: (node.field_weblink.0.url ?: '') %}
+{% if raw_inicio %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": {{ node.getTitle()|json_encode|raw }},
+  "startDate": {{ raw_inicio|date('Y-m-d')|json_encode|raw }},
+  "description": {{ node.body.0.value|default('')|striptags|trim|json_encode|raw }}{% if hero_bg %},
+  "image": [{{ hero_bg|json_encode|raw }}]{% endif %},
+  "location": {
+    "@type": "Place",
+    "name": {{ node.field_lugar_del_evento.0.value|default('Bogotá')|json_encode|raw }},
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Bogotá",
+      "addressRegion": "Cundinamarca",
+      "addressCountry": "CO"
+    }
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "Visit Bogotá",
+    "url": "https://visitbogota.co"
+  },
+  "eventStatus": "https://schema.org/EventScheduled",
+  "offers": {
+    "@type": "Offer",
+    "url": {{ ld_offers_url|json_encode|raw }},
+    "price": "0",
+    "priceCurrency": "COP",
+    "availability": "https://schema.org/InStock",
+    "validFrom": {{ raw_inicio|date('Y-m-d')|json_encode|raw }}
+  }{% if raw_fin is not empty %},
+  "endDate": {{ raw_fin|date('Y-m-d')|json_encode|raw }}{% endif %}
+}
+</script>
+{% endif %}

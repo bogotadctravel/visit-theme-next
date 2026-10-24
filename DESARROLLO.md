@@ -71,6 +71,22 @@ previa y reversión automática si algo falla), hace `git pull` del subtema,
 reaplica `config/deploy/` y reactiva `visit_theme_next`. Úsalo cuando el equipo
 de contenido haya cargado material nuevo que quieras ver en el theme.
 
+### Publicar en producción
+
+Cuando lo que está en staging ya está revisado:
+
+```bash
+sudo /data/backups/bin/deploy-theme-prod.sh --check   # muestra commits, archivos y config que salen
+sudo /data/backups/bin/deploy-theme-prod.sh           # publica (pide escribir PUBLICAR)
+sudo /data/backups/bin/deploy-theme-prod.sh --rollback  # deshace el último despliegue
+```
+
+Publica en prod **exactamente el commit que tiene staging** (no hace `git pull`
+propio), importa solo los `config/deploy/*.yml` que cambiaron, reimporta
+`translations/en.po` si cambió, hace `drush cr` y valida `/es` y `/en`. Si la
+validación falla, vuelve solo al commit anterior. Sin modo mantenimiento.
+El script vive versionado en [docs/server/deploy-theme-prod.sh](docs/server/deploy-theme-prod.sh).
+
 ### Acceso a staging
 
 - **Aviso del navegador (Traefik):** usuario `adminvisit` · contraseña `Visit2025`

@@ -89,3 +89,30 @@
   </section>
 
 </div>
+
+{# Datos estructurados (schema.org) — portado de visit_theme. #}
+{% set ld_description = node.field_introduccion.0.value|default(node.body.0.value|default(''))|striptags|trim %}
+{% set ld_image = cover ? cover.uri.value|image_style('ancho') : '' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ node.getTitle()|json_encode|raw }},
+  "description": {{ ld_description|json_encode|raw }},
+  "datePublished": {{ node.getCreatedTime()|date('c')|json_encode|raw }},
+  "dateModified": {{ node.getChangedTime()|date('c')|json_encode|raw }}{% if ld_image %},
+  "image": [{{ ld_image|json_encode|raw }}]{% endif %},
+  "author": {
+    "@type": "Organization",
+    "name": "Visit Bogotá"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Visit Bogotá",
+    "logo": {
+      "@type": "ImageObject",
+      "url": {{ ("https://visitbogota.co/" ~ directory ~ "/android-chrome-512x512.png")|json_encode|raw }}
+    }
+  }
+}
+</script>

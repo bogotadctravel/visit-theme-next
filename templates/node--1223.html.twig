@@ -233,3 +233,28 @@
   {% endif %}
 
 </div>
+
+{# Datos estructurados (schema.org) — portado de visit_theme. touristType usa
+   las categorías 2026 ya cargadas arriba en "Descubre Bogotá". #}
+{% set ld_attractions = [] %}
+{% for item in (experiencias|default(imperdibles|default([])))|slice(0, 10) %}
+  {% set ld_attractions = ld_attractions|merge([{
+    '@type': 'TouristAttraction',
+    'name': item.title,
+    'url': item.url,
+  }]) %}
+{% endfor %}
+{% set ld_tourist_types = [] %}
+{% for cat in (categorias|default([]))|slice(0, 8) %}
+  {% set ld_tourist_types = ld_tourist_types|merge([cat.name]) %}
+{% endfor %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristDestination",
+  "name": "Bogotá",
+  "description": "Descubre qué hacer en Bogotá: atractivos, experiencias, rutas turísticas y eventos en la capital de Colombia.",
+  "touristType": {{ ld_tourist_types|json_encode|raw }},
+  "includesAttraction": {{ ld_attractions|json_encode|raw }}
+}
+</script>
