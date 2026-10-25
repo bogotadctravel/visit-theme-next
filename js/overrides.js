@@ -392,6 +392,15 @@
     if (heroTrack && heroDots) {
       var slides = [].slice.call(heroTrack.querySelectorAll('.hero__slide'));
       if (slides.length > 1) {
+        var current = 0;
+        var goTo = function (i) {
+          current = (i + slides.length) % slides.length;
+          slides.forEach(function (s, j) { s.classList.toggle('is-active', current === j); });
+          [].slice.call(heroDots.children).forEach(function (d, j) {
+            d.classList.toggle('is-active', current === j);
+            d.setAttribute('aria-selected', current === j ? 'true' : 'false');
+          });
+        };
         slides.forEach(function (_, i) {
           var dot = document.createElement('button');
           dot.type = 'button';
@@ -399,15 +408,24 @@
           dot.setAttribute('role', 'tab');
           dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
           dot.setAttribute('aria-label', 'Ir al slide ' + (i + 1));
-          dot.addEventListener('click', function () {
-            slides.forEach(function (s, j) { s.classList.toggle('is-active', i === j); });
-            [].slice.call(heroDots.children).forEach(function (d, j) {
-              d.classList.toggle('is-active', i === j);
-              d.setAttribute('aria-selected', i === j ? 'true' : 'false');
-            });
-          });
+          dot.addEventListener('click', function () { goTo(i); });
           heroDots.appendChild(dot);
         });
+
+        // Swipe horizontal con el dedo (las diapositivas están apiladas, no
+        // hay scroll nativo que aprovechar).
+        var touchX = null, touchY = 0;
+        heroTrack.addEventListener('touchstart', function (e) {
+          touchX = e.touches[0].clientX;
+          touchY = e.touches[0].clientY;
+        }, { passive: true });
+        heroTrack.addEventListener('touchend', function (e) {
+          if (touchX === null) return;
+          var dx = e.changedTouches[0].clientX - touchX;
+          var dy = e.changedTouches[0].clientY - touchY;
+          touchX = null;
+          if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) goTo(current + (dx < 0 ? 1 : -1));
+        }, { passive: true });
       }
     }
 
@@ -635,12 +653,60 @@
     fSector.addEventListener('change', apply);
   }
 
+  // =========================================================
+  //  AGENDA — filtros plegables en móvil (el CSS los oculta sin .is-open)
+  // =========================================================
+  function initEventsFilters() {
+    var toggle = document.querySelector('.events-filters__toggle');
+    if (!toggle || toggle.dataset.vnInit) return;
+    toggle.dataset.vnInit = '1';
+
+    var wrap = toggle.closest('.events-filters-wrap');
+    toggle.addEventListener('click', function () {
+      var open = wrap.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  }
+
+  // =========================================================
+  //  MIGA DE PAN → schema.org BreadcrumbList (JSON-LD)
+  //  Las migas están escritas a mano en cada plantilla; se arma el JSON-LD
+  //  desde el DOM en un solo sitio. Google procesa el JSON-LD inyectado por JS.
+  // =========================================================
+  function initBreadcrumbSchema() {
+    var list = document.querySelector('nav.breadcrumb ol');
+    if (!list || document.getElementById('vn-breadcrumb-ld')) return;
+
+    var items = [].slice.call(list.querySelectorAll(':scope > li')).map(function (li, i, all) {
+      var link = li.querySelector('a[href]');
+      var name = (li.textContent || '').trim();
+      if (!name) return null;
+      var url = link ? link.href : (i === all.length - 1 ? window.location.href.split('#')[0] : null);
+      var entry = { '@type': 'ListItem', position: i + 1, name: name };
+      if (url) entry.item = url;
+      return entry;
+    }).filter(Boolean);
+    if (items.length < 2) return;
+
+    var script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'vn-breadcrumb-ld';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items,
+    });
+    document.head.appendChild(script);
+  }
+
   function init() {
     initHeader();
     initHome();
     initCat();
     initPlace();
     initGuias();
+    initEventsFilters();
+    initBreadcrumbSchema();
   }
 
   if (document.readyState === 'loading') {

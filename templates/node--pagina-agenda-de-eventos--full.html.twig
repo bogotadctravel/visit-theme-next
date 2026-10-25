@@ -43,8 +43,17 @@
   {% endif %}
 
   {# ================= FILTROS ================= #}
-  <section class="events-filters-wrap">
-    <form class="events-filters" method="GET" action="">
+  {# En móvil el formulario arranca plegado (salvo que ya haya filtros
+     aplicados); el botón lo despliega — ver initEventsFilters() en overrides.js. #}
+  {% set filtros_activos = (current_filtro_mes and current_filtro_mes != 'all')
+      or (current_categoria and current_categoria != 'all')
+      or (current_tipo and current_tipo != 'all') %}
+  <section class="events-filters-wrap{% if filtros_activos %} is-open{% endif %}">
+    <button class="events-filters__toggle" type="button" aria-expanded="{{ filtros_activos ? 'true' : 'false' }}" aria-controls="events-filters-form">
+      <span>{{ 'Filtros'|t }}</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <form class="events-filters" id="events-filters-form" method="GET" action="">
       <div class="events-filters__row">
 
         <div class="events-filters__field">
@@ -111,6 +120,7 @@
               </span>
               <span class="card-evento__info">
                 <span class="card-evento__info-date">
+                  <svg class="card-evento__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                   {% if fecha_ini < hoy %}
                   <span class="card-evento__info-month">{{ 'Hasta'|t }} {{ item.field_fecha_de_finalizacion|date('d') }} {{ meses[item.field_fecha_de_finalizacion|date('M')] ?? item.field_fecha_de_finalizacion|date('M') }}</span>
                   {% else %}
@@ -118,7 +128,12 @@
                   <span class="card-evento__info-month">{{ meses[mes_ini] ?? mes_ini }}</span>
                   {% endif %}
                 </span>
-                <span class="card-evento__info-venue">{{ item['field_lugar_del_evento'] }}</span>
+                {% if item['field_lugar_del_evento'] %}
+                <span class="card-evento__info-venue">
+                  <svg class="card-evento__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                  {{ item['field_lugar_del_evento'] }}
+                </span>
+                {% endif %}
               </span>
             </span>
           </span>

@@ -231,7 +231,6 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     cursor: grab;
-    touch-action: pan-y;
     user-select: none;
 
     &::-webkit-scrollbar { display: none; }
@@ -403,7 +402,6 @@
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     cursor: grab;
-    touch-action: pan-y;
     user-select: none;
 
     &::-webkit-scrollbar { display: none; }
@@ -608,6 +606,45 @@
     .planea-viaje__info-btn { width: 92%; padding: 12px 8px; font-size: 12px; border-radius: 10px; }
   }
 
+  // ── Móvil: solo los badges 24/48/72 en una fila + botón de información ──
+  .planea-viaje__mobile { display: none; }
+
+  @media (max-width: 640px) {
+    .planea-viaje__grid { display: none; }
+    .planea-viaje__mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .planea-viaje__badges {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .planea-viaje__badge {
+      display: block;
+      transition: transform var(--vn-transicion);
+
+      img { display: block; width: 100%; height: auto; }
+      &:active { transform: scale(0.96); }
+    }
+    .planea-viaje__mobile-info {
+      display: block;
+      padding: 14px 12px;
+      border-radius: 10px;
+      border: 2px solid #B2B2B2;
+      color: var(--vn-rojo-principal);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+  }
+
   // =======================================================
   //  BLOG
   // =======================================================
@@ -734,7 +771,9 @@
       > li { flex: 0 0 72%; min-width: 0; scroll-snap-align: start; }
     }
 
-    .eventos__item { flex: 0 0 100%; }
+    // Asoma un poco el siguiente evento y solo se muestran 6 (menos bullets).
+    .eventos__item { flex: 0 0 86%; }
+    .eventos__item:nth-child(n + 7) { display: none; }
     .eventos__arrow { display: none; }
     .imperdibles__head { flex-direction: column; align-items: flex-start; gap: 12px; }
 
@@ -753,8 +792,9 @@
       margin-inline: var(--vn-pad);
 
       &::-webkit-scrollbar { display: none; }
+      // 86% para que asome la siguiente historia (indica que hay más).
       > li {
-        flex: 0 0 100%;
+        flex: 0 0 86%;
         min-width: 0;
         scroll-snap-align: start;
         grid-column: auto !important;

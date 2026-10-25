@@ -7,6 +7,18 @@
 {% set hero_bg = node.field_mainimg.entity
     ? file_url(node.field_mainimg.entity.uri.value)
     : (node.field_cover.entity ? file_url(node.field_cover.entity.uri.value) : '') %}
+{# Sin imagen en el nodo el hero quedaba negro: se usa la de la categoría
+   Gastronomía y, si no la hay, la del primer establecimiento. #}
+{% if not hero_bg %}
+  {% for cat in taxonomy('categorias_2026') %}
+    {% if not hero_bg and 'gastronom' in cat.name|lower %}
+      {% set hero_bg = cat.image_full ?: cat.image %}
+    {% endif %}
+  {% endfor %}
+  {% if not hero_bg and establecimientos is not empty %}
+    {% set hero_bg = establecimientos|first.image_full ?: establecimientos|first.image %}
+  {% endif %}
+{% endif %}
 
 <div class="vn-archive">
 

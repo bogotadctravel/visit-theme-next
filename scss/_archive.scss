@@ -388,7 +388,53 @@
   @media (max-width: 760px) {
     .archive__grid { grid-template-columns: repeat(2, 1fr); }
   }
-  @media (max-width: 480px) {
-    .archive__grid { grid-template-columns: 1fr; }
+
+  // Móvil: se mantienen 2 columnas con tarjetas más bajas (Dónde dormir,
+  // Dónde comer, Rutas, Información al viajero, vistas por categoría).
+  @media (max-width: 640px) {
+    .archive__grid { gap: 20px 12px; }
+    .archive__grid > li.card {
+      a { gap: 8px; }
+      a:hover { transform: none; }
+      .image { aspect-ratio: 4/3; border-radius: 12px; box-shadow: 0 6px 14px rgba(16, 27, 48, 0.1); }
+      .title { font-size: 14px; line-height: 1.25; }
+    }
+    .card-imperdible {
+      gap: 8px;
+
+      &__media { aspect-ratio: 4/3; border-radius: 12px; }
+      &__title,
+      & > .title { font-size: 14px; line-height: 1.25; }
+    }
+  }
+
+  // ── Variante lista (Experiencias certificadas / ofertas) ──
+  //    En móvil, igual que la agenda: foto pequeña a la izquierda y el
+  //    título al lado, una tarjeta por fila.
+  &.vn-archive--list {
+    @media (max-width: 640px) {
+      .archive__grid { grid-template-columns: 1fr; gap: 12px; }
+      .archive__grid > li.card {
+        a {
+          flex-direction: row;
+          align-items: center;
+          gap: 14px;
+          padding: 10px;
+          border: 1px solid var(--vn-gris-30);
+          border-radius: 10px;
+          background: var(--vn-blanco);
+        }
+        a:hover { border-color: var(--vn-rojo-principal); }
+        .image {
+          flex: none;
+          width: 88px;
+          aspect-ratio: 1;
+          border-radius: 8px;
+          border: 0;
+          box-shadow: none;
+        }
+        .title { text-align: left; font-size: 15px; font-weight: 700; }
+      }
+    }
   }
 }

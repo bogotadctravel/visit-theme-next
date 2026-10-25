@@ -241,9 +241,11 @@ function visit_theme_next_preprocess_taxonomy_term(array &$variables) {
   $content_loader = \Drupal::service('idt_theme_support.content_loader');
   $tid = (int) $term->id();
 
-  $variables['atractivos']      = $content_loader->getNodesTeaserByCategory('atractivos', $tid, 12);
-  $variables['establecimientos'] = $content_loader->getNodesTeaserByCategory('establecimientos', $tid, 12);
-  $variables['article']         = $content_loader->getNodesTeaserByCategory('article', $tid, 8);
+  // Versión liviana de getNodesTeaserByCategory(): la página solo pinta
+  // título, URL e imagen de cada tarjeta (ver _visit_theme_next_category_teasers).
+  $variables['atractivos']      = _visit_theme_next_category_teasers('atractivos', $tid, 12);
+  $variables['establecimientos'] = _visit_theme_next_category_teasers('establecimientos', $tid, 12);
+  $variables['article']         = _visit_theme_next_category_teasers('article', $tid, 8);
   if ($term->bundle() === 'categorias_2026') {
     // "Rutas relacionadas" (sidebar de la categoría): orden personalizado si el
     // editor curó rutas en field_rutas_destacadas (referencia a nodos `rutas`,
@@ -271,6 +273,58 @@ function visit_theme_next_preprocess_taxonomy_term(array &$variables) {
   $variables['#cache']['tags'][] = 'node_list:article';
   $variables['#cache']['tags'][] = 'node_list:rutas';
   $variables['#cache']['tags'][] = 'taxonomy_term_list:subcategorias_2026';
+}
+
+/**
+ * Tarjetas (título, URL, imagen) de los nodos de un tipo asociados a una
+ * categoría o subcategoría — misma consulta que
+ * ContentLoader::getNodesTeaserByCategory(), pero sin su buildTeaserOutput():
+ * ese arma ~40 claves por nodo (body con los filtros de texto aplicados,
+ * 13 campos de taxonomía, galerías, 5 derivados de imagen…) y era lo que
+ * llevaba la página de categoría a 4–8 s de render en el servidor.
+ *
+ * Devuelve las claves que usan las plantillas de término: title, url,
+ * image ('grande') e image_full ('ancho').
+ */
+function _visit_theme_next_category_teasers(string $type, int $tid, int $limit): array {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', $type)
+    ->condition('status', 1)
+    ->condition('langcode', $langcode)
+    ->range(0, $limit)
+    ->accessCheck(TRUE);
+  $query->condition($query->orConditionGroup()
+    ->condition('field_turcat.target_id', $tid)
+    ->condition('field_tursubcat.target_id', $tid));
+  $nids = $query->execute();
+  if (!$nids) {
+    return [];
+  }
+
+  /** @var \Drupal\idt_theme_support\Service\ContentLoader $content_loader */
+  $content_loader = \Drupal::service('idt_theme_support.content_loader');
+  $teasers = [];
+  foreach (\Drupal\node\Entity\Node::loadMultiple($nids) as $node) {
+    if ($node->hasTranslation($langcode)) {
+      $node = $node->getTranslation($langcode);
+    }
+    $file = NULL;
+    foreach (['field_mainimg', 'field_image'] as $field_name) {
+      if (!$file && $node->hasField($field_name) && !$node->get($field_name)->isEmpty()) {
+        $file = $node->get($field_name)->entity;
+      }
+    }
+    $teasers[] = [
+      'id' => $node->id(),
+      'title' => $node->label(),
+      'url' => $node->toUrl()->toString(),
+      'image' => $content_loader->getStyledUrl($file, 'grande'),
+      'image_full' => $content_loader->getStyledUrl($file, 'ancho'),
+    ];
+  }
+  return $teasers;
 }
 
 /**

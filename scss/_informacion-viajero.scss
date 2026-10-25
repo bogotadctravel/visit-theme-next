@@ -46,6 +46,7 @@
 .vn-info-card {
   display: flex;
   flex-direction: column;
+  align-items: stretch; // el tema base da flex-start a los <button> y descentraba títulos cortos
   gap: 12px;
   width: 100%;
   padding: 0;
@@ -99,6 +100,13 @@
   font-weight: 600;
   line-height: 1.24;
   transition: color var(--vn-transicion);
+}
+
+// Móvil: 2 columnas (ver _archive.scss) con tarjetas más bajas.
+@media (max-width: 640px) {
+  .vn-info-card { gap: 8px; }
+  .vn-info-card__media { aspect-ratio: 4 / 3; border-radius: 12px; }
+  .vn-info-card__title { font-size: 14px; line-height: 1.25; }
 }
 
 // Modal (contenido inline de Fancybox). Fancybox mueve el div al lightbox y le

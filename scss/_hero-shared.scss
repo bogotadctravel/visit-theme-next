@@ -28,3 +28,20 @@
 .cat-hero .cat-hero__banner {
   padding-inline: calc(max(0px, (100% - var(--vn-max, 1280px)) / 2) + var(--vn-pad, 16px));
 }
+
+// Miga de pan: en móvil no se muestra, pero se conserva en el DOM y en el
+// árbol de accesibilidad (oculta solo visualmente, no con display:none) para
+// lectores de pantalla y SEO. El BreadcrumbList (JSON-LD) lo arma overrides.js.
+@media (max-width: 640px) {
+  nav.breadcrumb {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+}

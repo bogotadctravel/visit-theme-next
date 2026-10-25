@@ -4,6 +4,28 @@
 //  Acotado bajo .vn-cat.
 // =========================================================
 
+// Fila horizontal con swipe nativo y snap (móvil). $item = ancho de cada <li>.
+@mixin swipe-row($item) {
+  display: flex;
+  flex-direction: row;
+  grid-template-columns: none;
+  gap: 14px;
+  padding-block: 6px 18px; // deja ver la sombra y el hover de la tarjeta
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+  > li {
+    flex: 0 0 $item;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+}
+
 .vn-cat {
   --vn-max: 1280px;
   --vn-pad: clamp(16px, 4vw, 40px);
@@ -272,7 +294,6 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     cursor: grab;
-    touch-action: pan-y;
     user-select: none;
 
     &::-webkit-scrollbar { display: none; }
@@ -591,28 +612,18 @@
     .cat-subcats__arrow { display: none; }
 
     // "Rutas relacionadas" como carrusel con swipe en móvil
-    // (prototipo v3, commit d377a61).
+    // (prototipo v3, commit d377a61). Sin el padding lateral del sidebar de
+    // escritorio: el panel ocupa el ancho del contenedor.
+    .rutas-sidebar { padding: 0 0 8px; }
     .rutas-sidebar__grid {
-      flex-direction: row;
-      gap: 14px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      overscroll-behavior-x: contain;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-
-      &::-webkit-scrollbar { display: none; }
-      > li {
-        flex: 0 0 78%;
-        min-width: 0;
-        scroll-snap-align: start;
-      }
+      @include swipe-row(78%);
     }
-  }
-  @media (max-width: 560px) {
-    .cat-blog__grid,
+
+    // Blog, Atractivos, Dónde comer y "Sigue explorando" pasan de grilla a
+    // carrusel con swipe; la tarjeta mide menos del ancho para que asome la
+    // siguiente y se entienda que se puede deslizar.
+    .cat-blog__grid { @include swipe-row(82%); }
     .cat-attractions__grid,
-    .cat-explore__grid { grid-template-columns: 1fr; }
+    .cat-explore__grid { @include swipe-row(min(64vw, 240px)); }
   }
 }

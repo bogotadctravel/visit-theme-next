@@ -207,6 +207,20 @@
           <span class="planea-viaje__info-btn">{{ 'Información del viajero'|t }}</span>
         </a>
       </div>
+
+      {# Móvil: las ilustraciones no caben; solo los 3 cuadritos en una fila. #}
+      <div class="planea-viaje__mobile">
+        <ul class="planea-viaje__badges">
+          {% for h, label in {'24': 'Bogotá en 24 horas'|t, '48': 'Bogotá en 48 horas'|t, '72': 'Bogotá en 72 horas'|t} %}
+          <li>
+            <a class="planea-viaje__badge" href="/bogota-en-{{ h }}-horas">
+              <img src="/{{ subtheme_path ?: directory }}/images/{{ h }}h@2x-8.png" alt="{{ label }}" loading="lazy" decoding="async">
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        <a class="planea-viaje__mobile-info" href="/es/informacion-al-viajero">{{ 'Información del viajero'|t }}</a>
+      </div>
     </div>
   </section>
 
