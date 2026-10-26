@@ -1,0 +1,39 @@
+{#
+  Qué hacer en Bogotá (nodo 639) — reemplaza la cuadrícula del tema base
+  (categorias_turisticas) por la franja "Descubre Bogotá" del home
+  (node--1223.html.twig), con las categorías 2026.
+  Va dentro de .vn-home para heredar los estilos de scss/_home.scss y el
+  .reveal de initHome() en js/overrides.js. Aquí el título es el h1 de la página.
+#}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
+
+<div class="vn-home">
+
+  {# ================= DESCUBRE BOGOTÁ ================= #}
+  {% set categorias = taxonomy('categorias_2026') %}
+  {% if categorias is not empty %}
+  <section class="que-hacer reveal" aria-labelledby="vn-quehacer-title">
+    <div class="que-hacer__head">
+      <h1 class="que-hacer__title" id="vn-quehacer-title">{{ 'Descubre Bogotá'|t }}</h1>
+      <p class="que-hacer__desc">{{ 'Explora la ciudad por categorías, desde gastronomía y cultura hasta bienestar y negocios.'|t }}</p>
+    </div>
+    <ul class="que-hacer__grid">
+      {% for cat in categorias %}
+      <li>
+        <a class="card-categoria" href="{{ conecta.cat_href(cat.name, cat.url) }}">
+          <span class="card-categoria__media">
+            <img class="card-categoria__img" src="{{ cat.image_full ?: cat.image }}" alt="" loading="lazy" decoding="async">
+          </span>
+          <span class="card-categoria__title">{{ cat.name }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+</div>
+
+<div class="planifica-container" data-aos="fade-right">
+  {% include "@visit_theme/includes/planifica.html.twig" %}
+</div>
