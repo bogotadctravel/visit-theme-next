@@ -727,3 +727,6 @@ msgid "(1 ya no disponible)"
 msgid_plural "(@count ya no disponibles)"
 msgstr[0] "(1 no longer available)"
 msgstr[1] "(@count no longer available)"
+
+msgid "Este contenido fue traducido con inteligencia artificial y está en revisión, por lo que puede contener errores."
+msgstr "This content was translated using artificial intelligence and is under review, so it may contain errors."

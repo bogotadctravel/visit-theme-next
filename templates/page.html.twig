@@ -47,6 +47,13 @@
   {{ page.content }}
 </main>
 
+{# --- AVISO DE TRADUCCIÓN CON IA (field_traduccion_sin_revisar, ver preprocess_page) --- #}
+{% if traduccion_sin_revisar %}
+  <aside class="ia-notice" role="note">
+    <p class="ia-notice__text">{{ 'Este contenido fue traducido con inteligencia artificial y está en revisión, por lo que puede contener errores.'|t }}</p>
+  </aside>
+{% endif %}
+
 {# --- RENDER DEL FOOTER --- #}
 {% if use_conecta %}
   {% include "@visit_theme/includes/footer_conecta.html.twig" %}

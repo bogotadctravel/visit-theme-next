@@ -181,6 +181,20 @@ function visit_theme_next_preprocess_page(array &$variables) {
   // plantilla cae en su imagen principal (`subcat.image`) como hasta ahora.
   $variables['subcat_menu_images'] = _visit_theme_next_subcat_menu_images();
   $variables['#cache']['tags'][] = 'taxonomy_term_list:subcategorias_2026';
+
+  // Aviso "traducido con IA" antes del footer: solo si la traducción que se
+  // está viendo tiene marcado field_traduccion_sin_revisar (módulo
+  // idt_theme_support, update 10004). Los tags del nodo hacen que el aviso
+  // desaparezca en cuanto un revisor quita el check.
+  $variables['traduccion_sin_revisar'] = FALSE;
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof \Drupal\node\NodeInterface && $node->hasField('field_traduccion_sin_revisar')) {
+    $lang = \Drupal::languageManager()->getCurrentLanguage(\Drupal\Core\Language\LanguageInterface::TYPE_CONTENT)->getId();
+    $translation = $node->hasTranslation($lang) ? $node->getTranslation($lang) : $node;
+    $variables['traduccion_sin_revisar'] = (bool) $translation->get('field_traduccion_sin_revisar')->value;
+    $variables['#cache']['tags'] = array_merge($variables['#cache']['tags'], $node->getCacheTags());
+    $variables['#cache']['contexts'][] = 'languages:language_content';
+  }
 }
 
 /**
