@@ -270,3 +270,234 @@
     a:hover { color: var(--cx-rojo); }
   }
 }
+
+// ════════════════════════════════════════════════════════════════════════
+// Barrido de azules del tema base (css/styles.css de @visit_theme) en las
+// páginas Conecta: listados de venues/proveedores, fichas, filtros, galería,
+// "Acerca de", noticias, etc. Se mapea por función, no por color exacto:
+//   azul de acento (botones, iconos, tabs, chips) → rojo Visit
+//   lavanda/azul claro de superficie              → gris claro Visit
+//   azul marino de texto                          → tinta Visit
+//   azul marino de fondo                          → gris oscuro Visit
+// Si aparece otro azul, buscar su selector en styles.css y sumarlo al grupo.
+// ════════════════════════════════════════════════════════════════════════
+.vn-conecta {
+  // ── Texto azul marino → tinta ──
+  section h1,
+  section h2,
+  .why-bogota__header h2,
+  .places__header h1,
+  .place-card__title,
+  .about__header h1,
+  .about-slide__content h3,
+  .highlight-slide__copy h3,
+  .highlight-slide__label,
+  .result-card__title,
+  .venues--media .venue-card__name,
+  .success-card__body p,
+  .footer__links a,
+  .top-nav__mobile-icon,
+  .allies-nav,
+  .ally-card,
+  .ally-card__logo,
+  .pill__icon svg,
+  .media-card--audio,
+  .media-card--audio p,
+  .event-card,
+  .event-card__content,
+  .places-input input,
+  .places-input select,
+  .places-checkbox__label {
+    color: var(--cx-tinta);
+  }
+  .site-footer { color: var(--cx-tinta); }
+  .news-card h2,
+  .detail-rooms__header h2 { color: var(--cx-tinta); }
+
+  // ── Texto / iconos de acento azul → rojo ──
+  .link,
+  .about-slide__link,
+  .highlight-slide__copy a,
+  .data-tab--active,
+  .data-tab:hover,
+  .venues--media .venue-card__tag,
+  .footer__policies a,
+  .places__search-label,
+  .places__search-field--range .places__search-label,
+  .places__search-field:not(.places__search-field--range) .places__search-label,
+  .places-input__icon,
+  .places-input--select .places-input__icon,
+  .about-slide__eyebrow,
+  .highlight-slide__eyebrow {
+    color: var(--cx-rojo);
+  }
+  .places-input input::placeholder { color: var(--cx-muted); }
+
+  // ── Fondos de acento azul → rojo (botones, burbujas, puntos) ──
+  .button,
+  .brand__logo,
+  .news-card__cta:hover,
+  .places-range__bubble,
+  .places-range__bubble::after,
+  .places__search-submit,
+  .detail__cta,
+  .room-card__cta,
+  .media-audio__play,
+  .event-card__tag,
+  .about-slider__arrow:hover,
+  .about-slider__indicators button[aria-current='true'],
+  .highlight-slider__arrow:hover,
+  .data-tab--active .data-tab__dot,
+  .data-tab:hover .data-tab__dot,
+  .data-tab--active::after,
+  .home .btn-primary-cta {
+    background: var(--cx-rojo);
+    color: #fff;
+    box-shadow: none;
+  }
+  .button:hover,
+  .places__search-submit:hover,
+  .detail__cta:hover,
+  .room-card__cta:hover { background: var(--cx-rojo-hover); box-shadow: none; }
+  .home .btn-primary-cta:hover { background: var(--cx-rojo-hover); color: #fff; }
+  .data-tab--active,
+  .data-tab:hover { background: transparent; box-shadow: none; }
+
+  // Etiquetas tipo píldora (categoría de noticias/eventos): rojo Visit.
+  .event-card__tag,
+  .news-card__tag { border-radius: 4px; }
+
+  // ── Superficies lavanda / azul claro → gris claro ──
+  .search-card,
+  .places__search-card,
+  .places__search-field:not(.places__search-field--range) .places__search-label,
+  .places-checkboxes.filtros,
+  .detail__info,
+  .about-slide__stat,
+  .data-tabs,
+  .gallery-thumbs__media,
+  .media-card__action:hover,
+  .media-card__map,
+  .rooms-tab.is-active,
+  .success-card,
+  .result-card__media,
+  .venues--media .venue-card__media,
+  .highlight-slide__media,
+  .about-slide__stat-media,
+  .top-nav__mobile-list,
+  .portfolio-card:hover {
+    background: var(--cx-gris-10);
+  }
+  .places__search-card { box-shadow: none; border: 1px solid var(--cx-borde); }
+  .rooms-tab.is-active { color: var(--cx-rojo); box-shadow: none; }
+  .success-card { color: var(--cx-tinta); }
+
+  // Botones de carrusel "pastilla azul claro" → blanco con borde rojo.
+  .success-nav,
+  .venues-nav,
+  .highlight-slider__arrow,
+  .about-slider__arrow,
+  .gallery-viewer__badge {
+    background: #fff;
+    color: var(--cx-rojo);
+    border: 1px solid var(--cx-rojo);
+  }
+  .about-slider__indicators button { background: #FFD0C4; }
+
+  // ── Bordes lavanda → gris neutro ──
+  .gallery-thumbs__item,
+  .media-card__action,
+  .media-dropdown,
+  .rooms-tab,
+  .room-tag,
+  .map-livebox__close,
+  .top-nav__mobile-list,
+  .pill {
+    border-color: var(--cx-borde);
+  }
+  .gallery-thumbs__item.is-active,
+  .gallery-thumbs__item:hover {
+    border-color: var(--cx-rojo);
+    box-shadow: 0 8px 18px rgba(16, 27, 48, 0.12);
+  }
+
+  // ── Chips y campos con borde azul → rojo ──
+  .places-chip {
+    border-color: rgba(255, 49, 8, 0.4);
+    color: var(--cx-rojo);
+
+    &:hover,
+    &:focus-visible { border-color: var(--cx-rojo); }
+    &:focus-visible { outline-color: rgba(255, 49, 8, 0.4); }
+  }
+  .places-input {
+    border-color: var(--cx-tinta);
+    border-width: 1px;
+
+    &:focus-within {
+      border-color: var(--cx-rojo);
+      box-shadow: 0 0 0 3px rgba(255, 49, 8, 0.15);
+    }
+  }
+  .places-input__action {
+    background: var(--cx-gris-10);
+    color: var(--cx-rojo);
+    border-color: var(--cx-borde);
+
+    &:hover,
+    &:focus-visible { background: rgba(255, 49, 8, 0.1); }
+  }
+  .details__recommended .events__filters.details button {
+    color: var(--cx-rojo);
+    border-color: rgba(255, 49, 8, 0.5);
+  }
+
+  // Checkbox / range nativos y personalizados.
+  .places-checkbox input[type='checkbox'],
+  .places-range input[type='range'] { accent-color: var(--cx-rojo); }
+  .places-range input[type='range']::-webkit-slider-thumb { background: var(--cx-rojo); box-shadow: 0 0 0 10px rgba(255, 49, 8, 0.12); }
+  .places-range input[type='range']::-moz-range-thumb { background: var(--cx-rojo); box-shadow: 0 0 0 10px rgba(255, 49, 8, 0.12); }
+  .places-range input[type='range']::-webkit-slider-runnable-track { background-color: var(--cx-borde); border-color: var(--cx-borde); }
+  .places-range input[type='range']::-moz-range-track { background-color: var(--cx-borde); border-color: var(--cx-borde); }
+  .check-box { border-color: var(--cx-rojo); }
+  .check-input:checked + .check-box { background-color: var(--cx-rojo); border-color: var(--cx-rojo); }
+
+  // ── Fondos azul marino → gris oscuro ──
+  .top-nav__toggle,
+  .top-nav__toggle:hover,
+  .gallery-viewer__control,
+  .event-card[data-event='monolith'] .event-card__media { background: rgba(29, 29, 29, 0.85); }
+  .gallery-viewer__control:hover { background: var(--cx-rojo); }
+  .hero::before { background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.25)); }
+  .events__body { background-color: var(--cx-gris-10); }
+  .success-card:hover { background: #fff; box-shadow: var(--cx-sombra); }
+
+  // Sombras teñidas de azul → neutras.
+  .place-card,
+  .result-card,
+  .gallery-viewer,
+  .splideDetailGallery,
+  .venues--media .venue-card:hover,
+  .place-card:hover,
+  .result-card:hover { box-shadow: var(--cx-sombra); }
+  .place-card { border-color: var(--cx-borde); }
+}
+
+// Etiquetas azules de stylesvisit.css (listado de noticias /conecta/noticias,
+// carruseles de blog/eventos) → píldora roja Visit.
+.vn-conecta {
+  .blog .grid-blogs a .tag,
+  .splideBlogs a .tag,
+  .eventos ul a .tag,
+  .bi-card__tag {
+    background-color: var(--cx-rojo);
+    color: #fff;
+    border-radius: 4px;
+  }
+  .tag-item:hover { background-color: var(--cx-rojo); border-color: var(--cx-rojo); }
+  .article.blog-post .blog-header .blog-categories .cat-badge {
+    background-color: rgba(255, 49, 8, 0.1);
+    color: var(--cx-rojo);
+  }
+  .filters-form .tags li input:focus + label { outline-color: var(--cx-rojo); }
+}
