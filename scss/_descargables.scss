@@ -1,0 +1,150 @@
+// Franja "Descargables" (templates/includes/_descargables.html.twig).
+// Independiente de .vn-cat para poder usarla también en Información al viajero
+// (.vn-info-viajero) e itinerarios. Portadas verticales tipo libro (3:4), sin
+// recorte: el estilo de imagen vn_cover solo escala.
+@use "category" as cat;
+
+.vn-downloads {
+  --vn-max: 1280px;
+  --vn-pad: clamp(16px, 4vw, 40px);
+
+  padding: clamp(40px, 6vw, 64px) 0 clamp(48px, 7vw, 80px);
+  background: var(--vn-blanco);
+  border-top: 1px solid var(--vn-gris-10);
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  &__wrap { max-width: var(--vn-max); margin: 0 auto; padding-inline: var(--vn-pad); }
+
+  &__head { margin: 0 0 28px; }
+  &__title {
+    margin: 0;
+    font-size: clamp(22px, 2.9vw, 29px);
+    font-weight: 700;
+    line-height: 1.125;
+    letter-spacing: -0.01em;
+    color: var(--vn-gris-oscuro);
+  }
+  &__lead {
+    margin: 8px 0 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--vn-tinta);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 28px 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    > li { min-width: 0; }
+  }
+
+  @media (max-width: 1100px) {
+    &__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (max-width: 900px) {
+    &__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  // Móvil: carrusel con swipe; asoma la siguiente portada para que se entienda
+  // que se puede deslizar (mismo patrón que Blog / Atractivos).
+  @media (max-width: 640px) {
+    &__grid { @include cat.swipe-row(min(42vw, 180px)); }
+  }
+}
+
+.card-download {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+
+  &__cover {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 4;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--vn-gris-10);
+    box-shadow: 0 1px 2px rgba(16, 27, 48, 0.08), 0 8px 20px rgba(16, 27, 48, 0.10);
+    transition: transform var(--vn-transicion), box-shadow var(--vn-transicion);
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    // Lomo del libro: un filete oscuro a la izquierda da lectura de "publicación".
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 6px;
+      background: linear-gradient(to right, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0));
+      pointer-events: none;
+    }
+  }
+
+  &__placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: var(--vn-rojo-principal);
+
+    svg { width: 40%; height: auto; }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--vn-gris-oscuro);
+    transition: color var(--vn-transicion);
+  }
+
+  &__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--vn-rojo-principal);
+
+    svg { flex: none; width: 14px; height: 14px; }
+  }
+
+  &:hover &__cover,
+  &:focus-visible &__cover {
+    transform: translateY(-4px);
+    box-shadow: 0 2px 4px rgba(16, 27, 48, 0.08), 0 16px 32px rgba(16, 27, 48, 0.16);
+  }
+  &:hover &__title,
+  &:focus-visible &__title { color: var(--vn-rojo-principal); }
+
+  &:focus-visible {
+    outline: 2px solid var(--vn-rojo-principal);
+    outline-offset: 4px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__cover { transition: none; }
+    &:hover &__cover,
+    &:focus-visible &__cover { transform: none; }
+  }
+}

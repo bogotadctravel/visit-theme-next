@@ -464,6 +464,7 @@ body.nav-open { overflow: hidden; }
     background: none;
     border: 0;
     cursor: pointer;
+    text-decoration: none;
     color: var(--vn-blanco);
     font-size: 19px;
     font-weight: 700;
@@ -471,7 +472,7 @@ body.nav-open { overflow: hidden; }
     transition: color var(--vn-transicion);
 
     &:hover,
-    &[aria-current='true'] { color: var(--vn-rojo-principal); }
+    &[aria-expanded='true'] { color: var(--vn-rojo-principal); }
   }
 
   .megamenu__panels {
@@ -734,8 +735,8 @@ body.nav-open { overflow: hidden; }
       transition: transform var(--vn-transicion);
     }
 
-    &[aria-current='true'] { color: var(--vn-rojo-principal); }
-    &[aria-current='true']::after { transform: rotate(-135deg) translate(-2px, -2px); }
+    &[aria-expanded='true'] { color: var(--vn-rojo-principal); }
+    &[aria-expanded='true']::after { transform: rotate(-135deg) translate(-2px, -2px); }
   }
 
   .masthead .megamenu__panels { display: none; }

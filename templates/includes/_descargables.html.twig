@@ -1,0 +1,57 @@
+{#
+  Franja "Descargables" (guías, libros y cartillas en PDF).
+  Datos: _visit_theme_next_descargables() en visit_theme_next.theme, expuesto
+  como `descargables` en categorías, subcategorías, Información al viajero e
+  itinerarios. Qué descargable sale dónde lo decide el editor en la ficha del
+  descargable (field_turcat / field_tursubcat / field_mostrar_en_pagina).
+  Estilos: scss/_descargables.scss (.vn-downloads, independiente de .vn-cat).
+
+  Uso:
+    {% include '@visit_theme_next/includes/_descargables.html.twig' with { items: descargables } only %}
+#}
+{% if items is not empty %}
+<section class="vn-downloads" aria-labelledby="vnDownloadsTitle">
+  <div class="vn-downloads__wrap">
+    <div class="vn-downloads__head">
+      <h2 class="vn-downloads__title" id="vnDownloadsTitle">{{ 'Descargables'|t }}</h2>
+      <p class="vn-downloads__lead">{{ 'Guías, libros y publicaciones para planear tu visita.'|t }}</p>
+    </div>
+    <ul class="vn-downloads__grid">
+      {% for item in items %}
+      <li>
+        <a class="card-download hasAnalytics" data-event="descargable" href="{{ item.url }}"
+          {% if item.is_file or item.is_link %}target="_blank" rel="noopener"{% endif %}>
+          <span class="card-download__cover">
+            {% if item.image %}
+            <img src="{{ item.image }}" alt="" loading="lazy" decoding="async">
+            {% else %}
+            <span class="card-download__placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 3v5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </span>
+            {% endif %}
+          </span>
+          <span class="card-download__body">
+            <span class="card-download__title">{{ item.title }}</span>
+            <span class="card-download__meta">
+              {% if item.is_link %}
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3h4v4M13 3L7 9M11 9.5V13H3V5h3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {% else %}
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {% endif %}
+              {% if item.is_link %}
+                {{ 'Ver libro digital'|t }}
+              {% elseif item.is_file %}
+                {{ 'Descargar'|t }}{% if item.ext %} {{ item.ext }}{% endif %}{% if item.size %} · {{ item.size }}{% endif %}
+              {% else %}
+                {{ 'Ver más'|t }}
+              {% endif %}
+            </span>
+          </span>
+          {% if item.is_file or item.is_link %}<span class="visually-hidden"> ({{ 'se abre en una pestaña nueva'|t }})</span>{% endif %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}

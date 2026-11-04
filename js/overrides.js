@@ -22,7 +22,7 @@
     function resetMegamenu(menu) {
       var mega = menu.classList && menu.classList.contains('megamenu') ? menu : menu.querySelector('.megamenu');
       if (!mega) return;
-      mega.querySelectorAll('.megamenu__cat').forEach(function (c) { c.removeAttribute('aria-current'); });
+      mega.querySelectorAll('.megamenu__cat').forEach(function (c) { c.setAttribute('aria-expanded', 'false'); });
       mega.querySelectorAll('.megamenu__panel').forEach(function (p) { p.hidden = true; });
     }
 
@@ -105,11 +105,11 @@
       var allPanels = function () { return [].slice.call(mega.querySelectorAll('.megamenu__panel')); };
 
       var showCat = function (slug) {
-        cats.forEach(function (c) { c.setAttribute('aria-current', String(c.dataset.cat === slug)); });
+        cats.forEach(function (c) { c.setAttribute('aria-expanded', String(c.dataset.cat === slug)); });
         allPanels().forEach(function (p) { p.hidden = p.dataset.panel !== slug; });
       };
       var closeCats = function () {
-        cats.forEach(function (c) { c.removeAttribute('aria-current'); });
+        cats.forEach(function (c) { c.setAttribute('aria-expanded', 'false'); });
         allPanels().forEach(function (p) { p.hidden = true; });
       };
 
@@ -119,8 +119,14 @@
           showCat(cat.dataset.cat);
         });
         cat.addEventListener('click', function (e) {
+          // Escritorio con hover: el panel ya está abierto por mouseenter y el
+          // clic sigue el enlace a la página de la categoría.
+          if (window.matchMedia(HOVER_QUERY).matches) return;
+          // Táctil / móvil: el toque despliega o recoge las subcategorías (el
+          // panel incluye "Ver toda la categoría" para entrar a ella).
+          e.preventDefault();
           e.stopPropagation();
-          if (cat.getAttribute('aria-current') === 'true') closeCats();
+          if (cat.getAttribute('aria-expanded') === 'true') closeCats();
           else showCat(cat.dataset.cat);
         });
         cat.addEventListener('focus', function () { showCat(cat.dataset.cat); });

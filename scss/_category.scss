@@ -152,24 +152,48 @@
     &--empty { min-height: 360px; }
   }
 
+  // ── Lead de la categoría (field_intro_cat, richtext → puede traer sus
+  //    propios <p>; por eso el contenedor es <div>, no <p>) ──
+  .cat-layout__main > .cat-intro__lead {
+    margin: 0 0 28px;
+    padding-left: 18px;
+    border-left: 3px solid var(--vn-rojo-principal);
+    font-size: clamp(18px, 1.6vw, 20px);
+    line-height: 1.55;
+    font-weight: 400;
+    color: var(--vn-gris-oscuro);
+
+    p { margin: 0 0 12px; }
+    > :last-child { margin-bottom: 0; }
+  }
+
   // ── Intro (richtext de la descripción del término) ──
+  // Justificado (pedido del cliente) con un ritmo vertical único: párrafos a
+  // 16px, subtítulos con más aire arriba que abajo para que agrupen con su texto.
   .cat-intro__body {
     color: var(--vn-tinta);
     font-size: 16px;
-    line-height: 1.75;
+    line-height: 1.7;
     text-align: justify;
+
+    h2, h3, h4 { text-align: left; }
 
     > :first-child { margin-top: 0; }
     > :last-child { margin-bottom: 0; }
 
-    p { margin: 0 0 18px; }
-    h2, h3 {
-      margin: 36px 0 14px;
-      font-size: 19px;
-      line-height: 1.4;
+    p { margin: 0 0 16px; }
+    h2, h3, h4 {
+      margin: 32px 0 10px;
+      font-size: 20px;
+      line-height: 1.35;
       font-weight: 700;
+      letter-spacing: -0.005em;
       color: var(--vn-gris-oscuro);
+
+      strong, b { font-weight: inherit; }
     }
+    h4 { font-size: 17px; }
+    strong, b { font-weight: 700; color: var(--vn-gris-oscuro); }
     ul, ol { margin: 0 0 18px; padding-left: 20px; }
     li { margin-bottom: 10px; }
     a { color: var(--vn-rojo-principal); text-decoration: underline; }

@@ -275,6 +275,13 @@ function visit_theme_next_preprocess_taxonomy_term(array &$variables) {
       $variables['rutas'] = $content_loader->getNodesTeaserByCategory('rutas', $tid, 6);
     }
   }
+  // Franja "Descargables": categoría → field_turcat, subcategoría → field_tursubcat.
+  $variables['descargables'] = _visit_theme_next_descargables(
+    $term->bundle() === 'categorias_2026' ? 'field_turcat' : 'field_tursubcat',
+    $tid
+  );
+  $variables['#cache']['tags'][] = 'node_list:descargables';
+
   if ($term->bundle() === 'subcategorias_2026') {
     // Franja "También te puede interesar" del prototipo (subcategory.html):
     // reels de Instagram relacionados con esta subcategoría.
@@ -339,6 +346,120 @@ function _visit_theme_next_category_teasers(string $type, int $tid, int $limit):
     ];
   }
   return $teasers;
+}
+
+/**
+ * Franja "Descargables" (guías, libros, cartillas en PDF): nodos del tipo
+ * `descargables` asociados a un término o a una página concreta. Lo decide el
+ * editor desde la ficha del descargable, así que agregar uno nuevo no requiere
+ * código:
+ *   · field_turcat      (categorias_2026)    → sale en esa categoría.
+ *   · field_tursubcat   (subcategorias_2026) → sale en esa subcategoría.
+ *   · field_mostrar_en_pagina (referencia a nodos, opcional) → sale en esa
+ *     página (Información al viajero 1234, itinerarios como "Bogotá por
+ *     primera vez" 2768…). Si el campo aún no existe, se ignora.
+ *
+ * No filtra por idioma: si el descargable no tiene traducción se muestra en el
+ * idioma original (mejor una guía en español que nada). field_archivo es
+ * traducible, así que cada idioma enlaza su propio PDF cuando lo hay.
+ *
+ * @param string $field
+ *   'field_turcat', 'field_tursubcat' o 'field_mostrar_en_pagina'.
+ * @param int $target_id
+ *   tid o nid según el campo.
+ *
+ * @return array
+ *   Lista de ['id', 'title', 'url' (PDF o la ficha), 'is_file', 'ext',
+ *   'size', 'image'].
+ */
+function _visit_theme_next_descargables(string $field, int $target_id, int $limit = 12): array {
+  if (!$target_id) {
+    return [];
+  }
+  $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'descargables');
+  if (!isset($definitions[$field])) {
+    return [];
+  }
+
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'descargables')
+    ->condition('status', 1)
+    ->condition($field . '.target_id', $target_id)
+    ->sort('sticky', 'DESC')
+    ->sort('created', 'DESC')
+    ->range(0, $limit)
+    ->accessCheck(TRUE)
+    ->execute();
+  if (!$nids) {
+    return [];
+  }
+
+  $link_fields = [];
+  foreach ($definitions as $name => $definition) {
+    if ($definition->getType() === 'link' && strpos($name, 'field_') === 0) {
+      $link_fields[] = $name;
+    }
+  }
+
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $url_generator = \Drupal::service('file_url_generator');
+  $items = [];
+  foreach (\Drupal\node\Entity\Node::loadMultiple($nids) as $node) {
+    if ($node->hasTranslation($langcode)) {
+      $node = $node->getTranslation($langcode);
+    }
+
+    $url = '';
+    $ext = '';
+    $size = '';
+    if ($node->hasField('field_archivo') && !$node->get('field_archivo')->isEmpty()) {
+      $file = $node->get('field_archivo')->entity;
+      if ($file) {
+        $url = $url_generator->generateString($file->getFileUri());
+        $ext = strtoupper(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
+        $bytes = (int) $file->getSize();
+        if ($bytes) {
+          $size = $bytes >= 1048576
+            ? number_format($bytes / 1048576, 1, ',', '.') . ' MB'
+            : max(1, (int) round($bytes / 1024)) . ' KB';
+        }
+      }
+    }
+
+    // Libro digital / micrositio (p. ej. librobogotatucasa.visitbogota.co):
+    // el primer campo de tipo "link" con valor del descargable. Tiene
+    // prioridad sobre el PDF. Se busca por tipo y no por nombre de máquina.
+    $link = '';
+    foreach ($link_fields as $link_field) {
+      if ($node->hasField($link_field) && !$node->get($link_field)->isEmpty()) {
+        $link = $node->get($link_field)->first()->getUrl()->toString();
+        break;
+      }
+    }
+
+    $cover = '';
+    foreach (['field_mainimg', 'field_image', 'field_cover'] as $image_field) {
+      if ($node->hasField($image_field) && !$node->get($image_field)->isEmpty()) {
+        $image = $node->get($image_field)->entity;
+        if ($image) {
+          $cover = _visit_theme_next_image_style_url($image->getFileUri(), 'vn_cover');
+          break;
+        }
+      }
+    }
+
+    $items[] = [
+      'id' => $node->id(),
+      'title' => $node->label(),
+      'url' => $link ?: ($url ?: $node->toUrl()->toString()),
+      'is_link' => (bool) $link,
+      'is_file' => !$link && $url,
+      'ext' => $link ? '' : $ext,
+      'size' => $link ? '' : $size,
+      'image' => $cover,
+    ];
+  }
+  return $items;
 }
 
 /**
@@ -466,6 +587,14 @@ function visit_theme_next_preprocess_node(array &$variables) {
     $variables['info_util_categorias'] = _visit_theme_next_get_info_util_por_categoria();
     $variables['#cache']['tags'][] = 'node_list:info_util';
     $variables['#cache']['tags'][] = 'taxonomy_term_list:categoria_viajero';
+  }
+
+  // Descargables asignados a esta página (field_mostrar_en_pagina del
+  // descargable): Información al viajero (1234) e itinerarios (p. ej.
+  // "Bogotá por primera vez", 2768).
+  if ((int) $node->id() === 1234 || $node->bundle() === 'itinerarios') {
+    $variables['descargables'] = _visit_theme_next_descargables('field_mostrar_en_pagina', (int) $node->id());
+    $variables['#cache']['tags'][] = 'node_list:descargables';
   }
 
   // Ficha de evento (single-event.html): "Eventos relacionados". El tema base

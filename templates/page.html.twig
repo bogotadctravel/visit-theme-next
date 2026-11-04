@@ -27,6 +27,7 @@
   'pagina-que-hacer',
   'banco_de_imagenes',
   'itinerarios',
+  'descargables',
 ] %}
 
 {# 4. Decisión FINAL (una sola regla) #}
@@ -36,6 +37,9 @@
     or (node is defined and node.bundle not in visit_types)
   )
 %}
+{# .vn-conecta: wrapper para el maquillaje Visit de Conecta (scss/_conecta.scss). #}
+{% if use_conecta %}<div class="vn-conecta">{% endif %}
+
 {# --- RENDER DEL HEADER --- #}
 {% if use_conecta %}
   {% include "@visit_theme/includes/header_conecta.html.twig" %}
@@ -60,3 +64,5 @@
 {% else %}
   {% include "@visit_theme_next/includes/footer_visit.html.twig" %}
 {% endif %}
+
+{% if use_conecta %}</div>{% endif %}

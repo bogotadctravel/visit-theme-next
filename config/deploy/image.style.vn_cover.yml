@@ -1,0 +1,15 @@
+uuid: 171b027d-013b-4e7f-ba20-958b9be93629
+langcode: en
+status: true
+dependencies: {  }
+name: vn_cover
+label: 'VN — Portada de descargable (480 ancho, sin recorte)'
+effects:
+  76e5bdfc-7979-4b3d-81e9-3cf3b8615cae:
+    uuid: 76e5bdfc-7979-4b3d-81e9-3cf3b8615cae
+    id: image_scale
+    weight: 1
+    data:
+      width: 480
+      height: null
+      upscale: false

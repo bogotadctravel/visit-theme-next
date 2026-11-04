@@ -730,3 +730,18 @@ msgstr[1] "(@count no longer available)"
 
 msgid "Este contenido fue traducido con inteligencia artificial y está en revisión, por lo que puede contener errores."
 msgstr "This content was translated using artificial intelligence and is under review, so it may contain errors."
+
+msgid "Descargables"
+msgstr "Downloads"
+
+msgid "Guías, libros y publicaciones para planear tu visita."
+msgstr "Guides, books and publications to plan your visit."
+
+msgid "Descargar"
+msgstr "Download"
+
+msgid "se abre en una pestaña nueva"
+msgstr "opens in a new tab"
+
+msgid "Ver libro digital"
+msgstr "View digital book"

@@ -86,7 +86,12 @@
                 <ul class="megamenu__cats">
                   {% for cat in categorias %}
                   <li>
-                    <button class="megamenu__cat" type="button" data-cat="cat-{{ cat.tid }}">{{ cat.name }}</button>
+                    {#- Enlace real a la categoría: en escritorio el hover abre el
+                        panel de subcategorías y el clic navega; en móvil (sin
+                        hover) el primer toque despliega el acordeón (ver
+                        initHeader en overrides.js). -#}
+                    <a class="megamenu__cat" href="{{ conecta.cat_href(cat.name, cat.url) }}" data-cat="cat-{{ cat.tid }}" aria-expanded="false"
+                      aria-controls="mega-panel-{{ cat.tid }}">{{ cat.name }}</a>
                   </li>
                   {% endfor %}
                 </ul>
@@ -104,7 +109,7 @@
                   {% endif %}
                   {% endfor %}
 
-                  <div class="megamenu__panel" data-panel="cat-{{ cat.tid }}" hidden>
+                  <div class="megamenu__panel" id="mega-panel-{{ cat.tid }}" data-panel="cat-{{ cat.tid }}" hidden>
                     <a class="megamenu__panel-link" href="{{ conecta.cat_href(cat.name, cat.url) }}">
                       {{ 'Ver toda la categoría'|t }} {{ cat.name }}
                       <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">

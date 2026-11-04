@@ -1,0 +1,266 @@
+// Visit Conecta — "maquillaje" para alinearlo con el lenguaje visual de
+// Visit Bogotá sin rehacer su markup (header/footer y home de Conecta siguen
+// viniendo de @visit_theme). Se conserva el logo de Conecta.
+//
+// Todo va bajo .vn-conecta (wrapper que pone templates/page.html.twig cuando
+// la página usa el header/footer de Conecta), así no toca las páginas Visit.
+// Cambios: tipografía Lato, rojo Visit (#FF3108) en lugar del azul/naranja,
+// títulos de sección con la rayita roja del home Visit, tarjetas blancas con
+// borde fino, botones rectangulares con borde rojo, superficies gris claro.
+
+.vn-conecta {
+  --cx-rojo: var(--vn-rojo-principal, #FF3108);
+  --cx-rojo-hover: #E02A05;
+  --cx-tinta: var(--vn-gris-oscuro, #1D1D1D);
+  --cx-texto: var(--vn-tinta, #1C1F26);
+  --cx-muted: #5B6070;
+  --cx-gris-10: var(--vn-gris-10, #F5F6F8);
+  --cx-borde: #E4E7EC;
+  --cx-radio: 8px;
+  --cx-sombra: 0 1px 2px rgba(16, 27, 48, 0.06), 0 8px 24px rgba(16, 27, 48, 0.08);
+
+  font-family: 'Lato', system-ui, sans-serif;
+  color: var(--cx-texto);
+
+  button,
+  input,
+  select,
+  textarea,
+  h1, h2, h3, h4, h5, h6,
+  p, a, span, li, label {
+    font-family: 'Lato', system-ui, sans-serif;
+  }
+
+  // ── Títulos de sección (Portafolio, ¿Por qué Bogotá?, Eventos, Aliados) ──
+  section > h2,
+  section h1,
+  .portfolio__header h2,
+  .why-bogota__header h2,
+  .allies__header h2,
+  .events__intro h2 {
+    position: relative;
+    margin: 0 0 22px;
+    padding-bottom: 12px;
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--cx-tinta);
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--cx-rojo);
+    }
+  }
+  .portfolio__header p,
+  .why-bogota__header p,
+  .allies__header p,
+  .events__intro p {
+    color: var(--cx-muted);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  // ── Barra de navegación (pastilla) ──
+  .top-nav {
+    border-radius: 14px;
+    background: rgba(29, 29, 29, 0.94);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  }
+  .primary-nav a,
+  .primary-nav__toggle {
+    font-weight: 600;
+    border-radius: var(--cx-radio);
+  }
+  .primary-nav a:hover,
+  .primary-nav__toggle:hover { color: #fff; }
+  .primary-nav a::before,
+  .primary-nav__toggle::before { background: rgba(255, 49, 8, 0.22); }
+  .primary-nav__sub {
+    border-radius: var(--cx-radio);
+
+    a:hover { color: var(--cx-rojo); }
+  }
+
+  // Botón "Visit Bogotá" → CTA rojo Visit.
+  .linkStopover {
+    padding: 10px 22px;
+    border-radius: var(--cx-radio);
+    background: var(--cx-rojo);
+    color: #fff;
+    font-weight: 700;
+    transition: background 200ms ease;
+
+    &:hover { background: var(--cx-rojo-hover); color: #fff; }
+  }
+
+  // ── Buscador ──
+  .search-card {
+    background: #fff;
+    border: 1px solid var(--cx-borde);
+    border-radius: var(--cx-radio);
+    box-shadow: var(--cx-sombra);
+  }
+  .search-card__label { color: var(--cx-muted); letter-spacing: 0.06em; }
+  .search-card__submit {
+    background: var(--cx-rojo);
+    color: #fff;
+    border-radius: 6px;
+    box-shadow: none;
+
+    &:hover { background: var(--cx-rojo-hover); }
+  }
+
+  // ── Noticia destacada (el marco gris "neumórfico" pasa a tarjeta blanca) ──
+  .news-card {
+    background: #fff;
+    color: var(--cx-texto);
+    border: 1px solid var(--cx-borde);
+    border-radius: 12px;
+    box-shadow: var(--cx-sombra);
+  }
+  .news-card__tag {
+    border-radius: 4px;
+    background: var(--cx-rojo);
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  .news-card__text {
+    h2, h3 {
+      color: var(--cx-tinta);
+      font-weight: 700;
+    }
+    p { color: var(--cx-texto); }
+  }
+
+  // ── Botones "ver más" → botón fantasma rojo (como "Ver la agenda completa") ──
+  .news-card__cta,
+  .portfolio-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border: 1px solid var(--cx-rojo);
+    border-radius: var(--cx-radio);
+    background: transparent;
+    color: var(--cx-rojo);
+    font-weight: 700;
+    box-shadow: none;
+    transition: background 200ms ease, color 200ms ease;
+
+    &:hover {
+      background: var(--cx-rojo);
+      color: #fff;
+    }
+  }
+  a:hover .portfolio-card__cta { background: var(--cx-rojo); color: #fff; }
+
+  // ── Portafolio (Venues / Proveedores) ──
+  .portfolio-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--cx-borde);
+    background: #fff;
+    box-shadow: var(--cx-sombra);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+
+    &:hover { transform: translateY(-3px); }
+  }
+  .portfolio-card__body { background: #fff; }
+  .portfolio-card__text {
+    h3, h2, strong { color: var(--cx-tinta); font-weight: 800; }
+    p { color: var(--cx-muted); }
+  }
+
+  // ── ¿Por qué Bogotá? (tarjetas azul oscuro → tarjeta blanca tipo Visit) ──
+  .why-card {
+    border-radius: 12px;
+    border: 1px solid var(--cx-borde);
+    background: #fff;
+    color: var(--cx-tinta);
+    box-shadow: var(--cx-sombra);
+    transition: transform 200ms ease, border-color 200ms ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      border-color: var(--cx-rojo);
+    }
+    &:hover .why-card__info { color: var(--cx-rojo); }
+  }
+  .why-card__thumb {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .why-card__info {
+    color: var(--cx-tinta);
+    font-weight: 700;
+    transition: color 200ms ease;
+
+    * { color: inherit; }
+  }
+
+  // ── Próximos eventos (franja azul → gris claro) ──
+  .events {
+    background: var(--cx-gris-10);
+    color: var(--cx-tinta);
+
+    h2, h3, p { color: var(--cx-tinta); }
+  }
+  .events__panel { background: transparent; }
+  .events__nav {
+    border: 1px solid var(--cx-rojo);
+    background: #fff;
+    color: var(--cx-rojo);
+    box-shadow: none;
+
+    &:hover { background: var(--cx-rojo); color: #fff; }
+    svg, svg * { color: inherit; fill: currentColor; }
+  }
+
+  // ── Aliados ──
+  .ally-card {
+    border-radius: 12px;
+    border: 1px solid var(--cx-borde);
+    background: #fff;
+    box-shadow: none;
+  }
+  .ally-card__logo { background: #fff; }
+  .allies-nav {
+    color: var(--cx-rojo);
+
+    &:hover { color: var(--cx-rojo-hover); }
+  }
+
+  // Indicadores de carrusel en rojo (como el home Visit). min-height: 0
+  // anula el mínimo táctil de 44px que el base pone a todo <button>.
+  .carousel-indicators button {
+    min-height: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: #FFD0C4;
+    transition: width 200ms ease, background 200ms ease;
+
+    &[aria-current='true'] {
+      width: 22px;
+      height: 8px;
+      background: var(--cx-rojo);
+    }
+  }
+
+  // ── Footer ──
+  .site-footer {
+    background: var(--cx-gris-10);
+    color: var(--cx-texto);
+
+    a { transition: color 200ms ease; }
+    a:hover { color: var(--cx-rojo); }
+  }
+}
