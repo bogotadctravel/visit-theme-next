@@ -8,9 +8,12 @@
   --vn-max: 1280px;
   --vn-pad: clamp(16px, 4vw, 40px);
 
-  padding: clamp(40px, 6vw, 64px) 0 clamp(48px, 7vw, 80px);
+  // Doble clase: ".site-content--visit section { padding: 0 }" (_default.scss)
+  // es más específica que una sola clase y anulaba este padding.
   background: var(--vn-blanco);
   border-top: 1px solid var(--vn-gris-10);
+
+  &.vn-downloads { padding: clamp(56px, 7vw, 96px) 0 clamp(64px, 8vw, 112px); }
 
   *, *::before, *::after { box-sizing: border-box; }
 
