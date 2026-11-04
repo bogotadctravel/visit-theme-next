@@ -82,11 +82,17 @@
   .primary-nav__toggle:hover { color: #fff; }
   .primary-nav a::before,
   .primary-nav__toggle::before { background: rgba(255, 49, 8, 0.22); }
+  // Submenú (Portafolio → Venues / Proveedores): mismo gris oscuro de la
+  // pastilla en vez del azul marino del base.
   .primary-nav__sub {
     border-radius: var(--cx-radio);
+    background: rgba(29, 29, 29, 0.97);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
 
-    a:hover { color: var(--cx-rojo); }
+    a:hover { color: #fff; }
+    a::before { background: rgba(255, 49, 8, 0.22); }
   }
+  .top-nav__mobile-handle-dot { background: rgba(29, 29, 29, 0.8); }
 
   // Botón "Visit Bogotá" → CTA rojo Visit.
   .linkStopover {

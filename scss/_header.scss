@@ -398,7 +398,7 @@ body.nav-open { overflow: hidden; }
 
     li { list-style: none; }
 
-    a:not(.megamenu__sub):not(.megamenu__panel-link) {
+    a:not(.megamenu__sub):not(.megamenu__panel-link):not(.megamenu__cat) {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -683,7 +683,7 @@ body.nav-open { overflow: hidden; }
     background: transparent;
     box-shadow: none;
 
-    a:not(.megamenu__sub):not(.megamenu__panel-link) {
+    a:not(.megamenu__sub):not(.megamenu__panel-link):not(.megamenu__cat) {
       padding: 11px var(--vn-pad) 11px calc(var(--vn-pad) + 14px);
       border-radius: 0;
       font-size: 15px;
