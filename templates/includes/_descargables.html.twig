@@ -16,7 +16,7 @@
   <div class="vn-downloads__wrap">
     <div class="vn-downloads__head">
       <h2 class="vn-downloads__title" id="vnDownloadsTitle">{{ 'Descargables'|t }}</h2>
-      <p class="vn-downloads__lead">{{ 'Guías, libros y publicaciones para planear tu visita.'|t }}</p>
+      {% if not hide_lead %}<p class="vn-downloads__lead">{{ 'Guías, libros y publicaciones para planear tu visita.'|t }}</p>{% endif %}
     </div>
     <ul class="vn-downloads__grid">
       {% for item in items %}
