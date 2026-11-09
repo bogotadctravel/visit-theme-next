@@ -390,10 +390,35 @@ function _visit_theme_next_descargables(string $field, int $target_id, int $limi
     ->range(0, $limit)
     ->accessCheck(TRUE)
     ->execute();
+  return _visit_theme_next_descargables_items($nids);
+}
+
+/**
+ * Todos los descargables publicados (página de Descargables, nodo 3112).
+ *
+ * @return array
+ *   Misma estructura que _visit_theme_next_descargables().
+ */
+function _visit_theme_next_descargables_todos(): array {
+  $nids = \Drupal::entityQuery('node')
+    ->condition('type', 'descargables')
+    ->condition('status', 1)
+    ->sort('sticky', 'DESC')
+    ->sort('created', 'DESC')
+    ->accessCheck(TRUE)
+    ->execute();
+  return _visit_theme_next_descargables_items($nids);
+}
+
+/**
+ * Arma las tarjetas de la franja "Descargables" a partir de sus nids.
+ */
+function _visit_theme_next_descargables_items(array $nids): array {
   if (!$nids) {
     return [];
   }
 
+  $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', 'descargables');
   $link_fields = [];
   foreach ($definitions as $name => $definition) {
     if ($definition->getType() === 'link' && strpos($name, 'field_') === 0) {
@@ -594,6 +619,12 @@ function visit_theme_next_preprocess_node(array &$variables) {
   // "Bogotá por primera vez", 2768).
   if ((int) $node->id() === 1234 || $node->bundle() === 'itinerarios') {
     $variables['descargables'] = _visit_theme_next_descargables('field_mostrar_en_pagina', (int) $node->id());
+    $variables['#cache']['tags'][] = 'node_list:descargables';
+  }
+
+  // Página de Descargables (nodo 3112): todos los descargables publicados.
+  if ((int) $node->id() === 3112) {
+    $variables['descargables'] = _visit_theme_next_descargables_todos();
     $variables['#cache']['tags'][] = 'node_list:descargables';
   }
 

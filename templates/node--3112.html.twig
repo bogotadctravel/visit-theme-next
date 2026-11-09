@@ -1,0 +1,45 @@
+{#
+  Página de Descargables (nodo 3112) — hero + intro con la misma estructura de
+  Información al viajero (node--1234--full) y, debajo, todos los descargables
+  publicados.
+  Datos: visit_theme_next_preprocess_node() → descargables.
+#}
+{% set hero_bg = node.field_mainimg.entity
+    ? file_url(node.field_mainimg.entity.uri.value)
+    : (node.field_cover.entity ? file_url(node.field_cover.entity.uri.value) : '') %}
+
+<div class="vn-info-viajero vn-archive">
+
+  {# ================= HERO ================= #}
+  <section class="cat-hero cat-hero--tall" aria-label="{{ node.getTitle() }}">
+  {% if hero_bg %}<img class="cat-hero__bg" src="{{ hero_bg }}" alt="" aria-hidden="true">{% endif %}
+    <div class="cat-hero__topright">
+      <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
+      <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
+        <ol>
+          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li aria-current="page">{{ node.getTitle() }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="cat-hero__banner" style="background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), rgba(66, 57, 38, 0.5);">
+      <h1 class="cat-hero__title">{{ node.getTitle() }}</h1>
+    </div>
+  </section>
+
+  {# ================= INTRO ================= #}
+  <section class="info-viajero__intro">
+    <div class="info-viajero__intro-wrap">
+      {% if node.field_introduccion.value %}
+        <p class="info-viajero__lead">{{ node.field_introduccion.value }}</p>
+      {% endif %}
+      {% if node.body.value %}
+        <div class="info-viajero__body">{{ node.body.value|raw }}</div>
+      {% endif %}
+    </div>
+  </section>
+
+  {# ================= DESCARGABLES ================= #}
+  {% include '@visit_theme_next/includes/_descargables.html.twig' with { items: descargables } only %}
+
+</div>

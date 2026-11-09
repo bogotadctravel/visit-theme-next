@@ -1,9 +1,11 @@
 {#
   Franja "Descargables" (guías, libros y cartillas en PDF).
-  Datos: _visit_theme_next_descargables() en visit_theme_next.theme, expuesto
-  como `descargables` en categorías, subcategorías, Información al viajero e
-  itinerarios. Qué descargable sale dónde lo decide el editor en la ficha del
-  descargable (field_turcat / field_tursubcat / field_mostrar_en_pagina).
+  Hoy solo se muestra en la página de Descargables (node--3112), con todos los
+  publicados (_visit_theme_next_descargables_todos()). Los includes de
+  categorías, subcategorías, Información al viajero e itinerarios están
+  comentados; esas páginas siguen recibiendo `descargables` filtrados por
+  _visit_theme_next_descargables() (field_turcat / field_tursubcat /
+  field_mostrar_en_pagina).
   Estilos: scss/_descargables.scss (.vn-downloads, independiente de .vn-cat).
 
   Uso:
