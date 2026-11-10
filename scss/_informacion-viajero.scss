@@ -152,11 +152,12 @@
   outline: none;
 }
 
-// Abierto (Fancybox 6 añade .f-html): alto limitado a la ventana, con
-// encabezado y X fijos y scroll solo en .info-modal__scroll. El !important le
-// gana al display en línea que Fancybox restaura; sin ese scroll, el
-// `overflow: hidden` recortaba las fichas largas.
-.info-modal.info-modal.f-html {
+// Abierto: alto limitado a la ventana, con encabezado y X fijos y scroll solo
+// en .info-modal__scroll; sin él, el `overflow: hidden` recortaba las fichas
+// largas. El ámbito es el contenedor de Fancybox a propósito: la clase .f-html
+// sigue en el div después de cerrar, y este !important le ganaría al
+// `display: none` en línea (los modales quedaban visibles en la página).
+.fancybox__container .info-modal.info-modal {
   display: flex !important;
   flex-direction: column;
   max-height: calc(100vh - 32px);
