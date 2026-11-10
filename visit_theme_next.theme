@@ -592,6 +592,12 @@ function visit_theme_next_preprocess_node(array &$variables) {
     if (empty($variables['imperdibles'])) {
       $variables['imperdibles'] = $content_loader->getImperdibles(10);
     }
+    // Orden alfabético por título, sin distinguir tildes ni mayúsculas.
+    if (!empty($variables['imperdibles']) && is_array($variables['imperdibles'])) {
+      $translit = \Drupal::transliteration();
+      $key = static fn($item) => mb_strtolower($translit->transliterate((string) (is_array($item) ? ($item['title'] ?? '') : ($item->title ?? ''))));
+      usort($variables['imperdibles'], static fn($a, $b) => strnatcmp($key($a), $key($b)));
+    }
     if (empty($variables['eventosVisit'])) {
       $variables['eventosVisit'] = $content_loader->getEventosTeaserByMiceFlag(NULL, 12);
     }
