@@ -21,7 +21,7 @@
   <div class="masthead__bar1">
     <div class="masthead__bar1-inner">
 
-      <a class="brand" href="/" aria-label="{{ 'ui.home'|t }} – Visit Bogotá">
+      <a class="brand" href="{{ path('<front>') }}" aria-label="{{ 'ui.home'|t }} – Visit Bogotá">
         <img class="brand__logo" src="/{{ subtheme_path ?: directory }}/images/visitlogo.svg"
           alt="Visit Bogotá" width="472" height="113" loading="eager" decoding="async">
       </a>
@@ -68,7 +68,7 @@
           {% set has_tax = categorias is not empty %}
 
           <li class="mainnav__item{% if has_tax %} dropdown mainnav__item--mega{% endif %}">
-            <a class="mainnav__link{% if has_tax %} dropdown__toggle{% endif %}" href="/que-hacer-en-bogota"
+            <a class="mainnav__link{% if has_tax %} dropdown__toggle{% endif %}" href="{{ path('entity.node.canonical', {'node': 639}) }}"
               {% if has_tax %}aria-expanded="false" aria-controls="mega-descubre"{% endif %}>
               {{ 'ui.what_to_do'|t }}
               {% if has_tax %}

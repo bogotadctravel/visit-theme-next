@@ -52,7 +52,7 @@
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
-          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
           {% if parent_cat %}<li><a href="{{ conecta.cat_href(parent_cat.name, parent_cat.url) }}">{{ parent_cat.name }}</a></li>{% endif %}
           <li aria-current="page">{{ term.name.value }}</li>
         </ol>
@@ -91,7 +91,7 @@
       <div class="cat-attractions__head">
         <h2 class="cat-attractions__title">{{ 'Atractivos'|t }}</h2>
         {% if atractivos|length > 8 %}
-        <a class="btn btn--ghost cat-attractions__cta" href="/atractivos/{{ term.id() }}">{{ 'Explorar todo'|t }} {{ term.name.value }}</a>
+        <a class="btn btn--ghost cat-attractions__cta" href="{{ path('<front>')|trim('/', 'right') }}/atractivos/{{ term.id() }}">{{ 'Explorar todo'|t }} {{ term.name.value }}</a>
         {% endif %}
       </div>
       <ul class="cat-attractions__grid">
@@ -118,7 +118,7 @@
       <div class="cat-attractions__head">
         <h2 class="cat-attractions__title">{{ 'Dónde comer'|t }}</h2>
         {% if establecimientos|length > 8 %}
-        <a class="btn btn--ghost cat-attractions__cta" href="/establecimientos/{{ term.id() }}">{{ 'Explorar todo'|t }} {{ term.name.value }}</a>
+        <a class="btn btn--ghost cat-attractions__cta" href="{{ path('<front>')|trim('/', 'right') }}/establecimientos/{{ term.id() }}">{{ 'Explorar todo'|t }} {{ term.name.value }}</a>
         {% endif %}
       </div>
       <ul class="cat-attractions__grid">

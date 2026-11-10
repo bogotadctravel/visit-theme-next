@@ -23,7 +23,7 @@
       <article class="cat-layout__main">
         <nav class="breadcrumb breadcrumb--dark" aria-label="{{ 'Ruta de navegación'|t }}">
           <ol>
-            <li><a href="/">{{ 'Inicio'|t }}</a></li>
+            <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
             <li><a href="{{ path('entity.node.canonical', {'node': 650}) }}">{{ 'Historias de ciudad'|t }}</a></li>
             <li aria-current="page">{{ node.getTitle() }}</li>
           </ol>

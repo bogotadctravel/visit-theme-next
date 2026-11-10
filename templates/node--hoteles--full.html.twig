@@ -17,8 +17,8 @@
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
-          <li><a href="/">{{ 'Inicio'|t }}</a></li>
-          <li><a href="/donde-dormir">{{ 'ui.where_to_sleep'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('entity.node.canonical', {'node': 561}) }}">{{ 'ui.where_to_sleep'|t }}</a></li>
           {% if cat %}<li><a href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a></li>{% endif %}
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>

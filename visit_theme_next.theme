@@ -598,9 +598,8 @@ function visit_theme_next_preprocess_node(array &$variables) {
       $key = static fn($item) => mb_strtolower($translit->transliterate((string) (is_array($item) ? ($item['title'] ?? '') : ($item->title ?? ''))));
       usort($variables['imperdibles'], static fn($a, $b) => strnatcmp($key($a), $key($b)));
     }
-    if (empty($variables['eventosVisit'])) {
-      $variables['eventosVisit'] = $content_loader->getEventosTeaserByMiceFlag(NULL, 12);
-    }
+    // Orden por fecha futura más próxima (ver _visit_theme_next_eventos()).
+    $variables['eventosVisit'] = _visit_theme_next_eventos(12);
     // La agenda de eventos (visit_theme.theme) solo fija 'hoy' para el bundle
     // pagina_agenda_de_eventos; el home la necesita también para mostrar
     // "Hasta [fecha_fin]" en los eventos ya iniciados.
@@ -610,6 +609,21 @@ function visit_theme_next_preprocess_node(array &$variables) {
 
     $variables['#cache']['tags'][] = 'node_list:atractivos';
     $variables['#cache']['tags'][] = 'node_list:eventos';
+  }
+
+  // Listados con filtro client-side: todos los ítems, sin pager (ver
+  // _visit_theme_next_listado()).
+  $listados = [
+    826 => ['rutas', 'rutas', NULL],
+    835 => ['experiencias', 'experiencias', FALSE],
+    1280 => ['experiencias', 'experiencias', TRUE],
+    561 => ['hoteles', 'hoteles', NULL],
+    562 => ['establecimientos', 'establecimientos', NULL],
+  ];
+  if (isset($listados[(int) $node->id()])) {
+    [$var, $type, $aliada] = $listados[(int) $node->id()];
+    $variables[$var] = _visit_theme_next_listado($type, $aliada);
+    $variables['#cache']['tags'][] = 'node_list:' . $type;
   }
 
   // Información al viajero (nodo 1234): acordeón de info_util agrupado por
@@ -636,14 +650,17 @@ function visit_theme_next_preprocess_node(array &$variables) {
 
   // Ficha de evento (single-event.html): "Eventos relacionados". El tema base
   // no fija $eventosVisit para el bundle 'eventos'.
-  if ($node->bundle() === 'eventos' && empty($variables['eventosVisit'])) {
+  if ($node->bundle() === 'eventos') {
     $tid = 0;
     if ($node->hasField('field_turcat') && !$node->get('field_turcat')->isEmpty()) {
       $tid = (int) $node->get('field_turcat')->target_id;
     }
-    $variables['eventosVisit'] = $tid
-      ? $content_loader->getEventosTeaserByCategoryAndMice($tid, 0, 8)
-      : $content_loader->getEventosTeaserByMiceFlag(NULL, 8);
+    // Solo eventos vigentes (el helper del módulo por categoría no filtraba
+    // por fecha y mostraba eventos pasados), sin repetir la ficha actual.
+    $variables['eventosVisit'] = _visit_theme_next_eventos(8, ['tid' => $tid, 'exclude' => (int) $node->id()]);
+    if (!$variables['eventosVisit'] && $tid) {
+      $variables['eventosVisit'] = _visit_theme_next_eventos(8, ['exclude' => (int) $node->id()]);
+    }
     $variables['#cache']['tags'][] = 'node_list:eventos';
   }
 
@@ -698,12 +715,16 @@ function visit_theme_next_preprocess_node(array &$variables) {
   if ($node->bundle() === 'pagina_agenda_de_eventos') {
     $rango = _visit_theme_next_agenda_rango(\Drupal::request());
     if ($rango) {
-      // getEventosTeaserByMiceFlag() lee fecha_desde/fecha_hasta de la request.
+      // _visit_theme_next_eventos() lee fecha_desde/fecha_hasta de la request.
       $query = \Drupal::request()->query;
       $query->set('fecha_desde', $rango['desde']);
       $query->set('fecha_hasta', $rango['hasta']);
-      $variables['eventosVisit'] = $content_loader->getEventosTeaserByMiceFlag(NULL, 16, TRUE, 2);
-      $variables['pager_eventos'] = ['#type' => 'pager', '#element' => 2];
+    }
+    // Siempre se re-consulta: el tema base ordena por fecha de finalización.
+    $variables['eventosVisit'] = _visit_theme_next_eventos(16, ['filters' => TRUE, 'pager' => 2]);
+    $variables['pager_eventos'] = ['#type' => 'pager', '#element' => 2];
+    $variables['#cache']['tags'][] = 'node_list:eventos';
+    if ($rango) {
       $variables['current_fecha_desde'] = $rango['desde'];
       $variables['current_fecha_hasta'] = $rango['hasta'];
       $variables['agenda_title'] = $rango['label'];
@@ -750,6 +771,161 @@ function _visit_theme_next_agenda_rango(\Symfony\Component\HttpFoundation\Reques
   }
   $desde = $sab < $hoy ? $hoy : $sab;
   return ['desde' => $desde->format('Y-m-d'), 'hasta' => $dom->format('Y-m-d'), 'label' => t('Eventos este fin de semana')];
+}
+
+/**
+ * Eventos publicados en el idioma actual, ordenados por la fecha futura más
+ * próxima (reemplaza a ContentLoader::getEventosTeaserByMiceFlag(), que
+ * ordena por fecha de finalización).
+ *
+ * Criterio de orden:
+ *   1. Clave = la próxima fecha en que se puede asistir: max(inicio, hoy).
+ *      Un evento en curso (empezó antes y no ha terminado) cuenta como "hoy".
+ *   2. Empate: el que termina antes va primero (más urgencia).
+ *   3. Empate: el que empieza antes; luego por nid (orden estable).
+ * Solo eventos que no han terminado (fin >= hoy), salvo que el usuario filtre
+ * por mes o por rango de fechas (en ese caso manda el filtro).
+ *
+ * @param int $limit
+ *   Eventos por página (o total si no hay pager).
+ * @param array $opts
+ *   - filters (bool): leer filtro_mes/fecha_desde/fecha_hasta/categoria/tipo
+ *     de la URL (agenda).
+ *   - pager (int|null): elemento de pager; NULL = sin paginación.
+ *   - tid (int): solo eventos de esa field_turcat.
+ *   - exclude (int): nid a excluir (la propia ficha).
+ */
+function _visit_theme_next_eventos(int $limit, array $opts = []): array {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $request = \Drupal::request();
+  $hoy = date('Y-m-d');
+
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', 'eventos')
+    ->condition('status', 1)
+    ->condition('langcode', $langcode)
+    ->accessCheck(TRUE);
+  if (!empty($opts['tid'])) {
+    $query->condition('field_turcat.target_id', (int) $opts['tid']);
+  }
+  if (!empty($opts['exclude'])) {
+    $query->condition('nid', (int) $opts['exclude'], '<>');
+  }
+
+  $time_filter = FALSE;
+  if (!empty($opts['filters'])) {
+    $mes = $request->query->get('filtro_mes');
+    $desde = $request->query->get('fecha_desde');
+    $hasta = $request->query->get('fecha_hasta');
+    $categoria = $request->query->get('categoria');
+    $tipo = $request->query->get('tipo');
+
+    if (!empty($categoria) && $categoria !== 'all') {
+      $query->condition('field_turcat.target_id', $categoria);
+    }
+    if (!empty($tipo) && $tipo !== 'all') {
+      if ($tipo === 'mice') {
+        $query->condition('field_evento_mice.value', 1);
+      }
+      else {
+        $query->condition('field_categoria_de_evento.target_id', $tipo);
+      }
+    }
+    if (!empty($mes) && $mes !== 'all' && preg_match('/^\d{2}$/', $mes)) {
+      $time_filter = TRUE;
+      $inicio_mes = date('Y') . "-{$mes}-01";
+      $query->condition('field_fecha_de_finalizacion', $inicio_mes . 'T00:00:00', '>=');
+      $query->condition('field_fecha_de_inicio', date('Y-m-t', strtotime($inicio_mes)) . 'T23:59:59', '<=');
+    }
+    else {
+      if (!empty($desde) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $desde)) {
+        $time_filter = TRUE;
+        $query->condition('field_fecha_de_finalizacion', $desde . 'T00:00:00', '>=');
+      }
+      if (!empty($hasta) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $hasta)) {
+        $time_filter = TRUE;
+        $query->condition('field_fecha_de_inicio', $hasta . 'T23:59:59', '<=');
+      }
+    }
+  }
+  if (!$time_filter) {
+    $query->condition('field_fecha_de_finalizacion', $hoy . 'T00:00:00', '>=');
+  }
+
+  $nids = array_values($query->execute());
+
+  // Fechas de cada evento sin cargar las entidades (pueden ser cientos).
+  $fechas = [];
+  if ($nids) {
+    $db = \Drupal::database();
+    foreach (['inicio' => 'field_fecha_de_inicio', 'fin' => 'field_fecha_de_finalizacion'] as $k => $field) {
+      $rows = $db->select('node__' . $field, 'f')
+        ->fields('f', ['entity_id', 'langcode', $field . '_value'])
+        ->condition('f.entity_id', $nids, 'IN')
+        ->condition('f.deleted', 0)
+        ->execute();
+      foreach ($rows as $row) {
+        // Campo no traducible: solo hay fila en el idioma original del nodo.
+        if ($row->langcode === $langcode || !isset($fechas[$row->entity_id][$k])) {
+          $fechas[$row->entity_id][$k] = substr((string) $row->{$field . '_value'}, 0, 10);
+        }
+      }
+    }
+  }
+  usort($nids, static function ($a, $b) use ($fechas, $hoy) {
+    $ia = $fechas[$a]['inicio'] ?? '9999-12-31';
+    $ib = $fechas[$b]['inicio'] ?? '9999-12-31';
+    $fa = $fechas[$a]['fin'] ?? $ia;
+    $fb = $fechas[$b]['fin'] ?? $ib;
+    return [max($ia, $hoy), $fa, $ia, (int) $a] <=> [max($ib, $hoy), $fb, $ib, (int) $b];
+  });
+
+  if (isset($opts['pager'])) {
+    $pager = \Drupal::service('pager.manager')->createPager(count($nids), $limit, (int) $opts['pager']);
+    $nids = array_slice($nids, $pager->getCurrentPage() * $limit, $limit);
+  }
+  else {
+    $nids = array_slice($nids, 0, $limit);
+  }
+  if (!$nids) {
+    return [];
+  }
+
+  /** @var \Drupal\idt_theme_support\Service\ContentLoader $content_loader */
+  $content_loader = \Drupal::service('idt_theme_support.content_loader');
+  $nodes = \Drupal\node\Entity\Node::loadMultiple($nids);
+  // loadMultiple respeta el orden de $nids.
+  return $content_loader->getTeasersFromEntities(array_values($nodes));
+}
+
+/**
+ * Listado completo (sin pager) de un tipo de contenido en el idioma actual.
+ *
+ * Los listados con filtro client-side (Rutas 826, Experiencias 835/1280,
+ * Hoteles 561, Dónde comer 562) recibían del tema base
+ * ContentLoader::getNodesTeaser($tipo, 50), que usa ->pager(50): una URL con
+ * ?page=1 (o ?page=1,0, enlaces viejos indexados) desplazaba el offset a 50 y
+ * la página salía con 0 resultados, y todo lo que pasara de 50 no se veía.
+ */
+function _visit_theme_next_listado(string $type, ?bool $aliada = NULL, int $limit = 500): array {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $query = \Drupal::entityQuery('node')
+    ->condition('type', $type)
+    ->condition('status', 1)
+    ->condition('langcode', $langcode)
+    ->sort('created', 'DESC')
+    ->range(0, $limit)
+    ->accessCheck(TRUE);
+  if ($aliada !== NULL) {
+    $query->condition('field_experiencia_aliada_idt.value', $aliada ? 1 : 0);
+  }
+  $nids = $query->execute();
+  if (!$nids) {
+    return [];
+  }
+  /** @var \Drupal\idt_theme_support\Service\ContentLoader $content_loader */
+  $content_loader = \Drupal::service('idt_theme_support.content_loader');
+  return $content_loader->getTeasersFromEntities(array_values(\Drupal\node\Entity\Node::loadMultiple($nids)));
 }
 
 /**

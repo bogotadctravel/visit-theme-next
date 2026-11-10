@@ -29,7 +29,7 @@
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
-          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
           <li aria-current="page">{{ 'ui.where_to_eat'|t }}</li>
         </ol>
       </nav>

@@ -745,3 +745,24 @@ msgstr "opens in a new tab"
 
 msgid "Ver libro digital"
 msgstr "View digital book"
+
+msgid "Descarga la app móvil de Bogotá"
+msgstr "Download the Bogotá mobile app"
+
+msgid "Disponible en"
+msgstr "Get it on"
+
+msgid "Descárgala en"
+msgstr "Download on the"
+
+msgid "Descargar en Google Play"
+msgstr "Get it on Google Play"
+
+msgid "Descargar en App Store"
+msgstr "Download on the App Store"
+
+msgid "Consulta la validez del RNT de cualquier guía turístico"
+msgstr "Check the validity of any tour guide's RNT (National Tourism Registry)"
+
+msgid "aquí"
+msgstr "here"

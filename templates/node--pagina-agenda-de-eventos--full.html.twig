@@ -22,7 +22,7 @@
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
-          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
           {% if agenda_title %}<li><a href="{{ path('entity.node.canonical', {'node': node.id}) }}">{{ node.label }}</a></li>{% endif %}
           <li aria-current="page">{{ agenda_title ?: node.label }}</li>
         </ol>

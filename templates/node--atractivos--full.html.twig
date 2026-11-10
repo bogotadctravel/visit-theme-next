@@ -19,8 +19,8 @@
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
-          <li><a href="/">{{ 'Inicio'|t }}</a></li>
-          <li><a href="/que-hacer-en-bogota">{{ 'Descubre Bogotá'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('entity.node.canonical', {'node': 639}) }}">{{ 'Descubre Bogotá'|t }}</a></li>
           {% if cat %}<li><a href="{{ conecta.cat_href(cat.label, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.label }}</a></li>{% endif %}
           {% if subcat %}<li><a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': subcat.id}) }}">{{ subcat.label }}</a></li>{% endif %}
           <li aria-current="page">{{ node.getTitle() }}</li>

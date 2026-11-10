@@ -43,8 +43,8 @@
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
-          <li><a href="/">{{ 'Inicio'|t }}</a></li>
-          <li><a href="/agenda-de-eventos">{{ 'Eventos'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('entity.node.canonical', {'node': 547}) }}">{{ 'Eventos'|t }}</a></li>
           {% if cat_evento %}<li>{{ cat_evento }}</li>{% endif %}
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>

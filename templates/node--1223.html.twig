@@ -131,7 +131,7 @@
       <div class="eventos__intro">
         <h2 class="eventos__title" id="vn-eventos-title">{{ 'Eventos en Bogotá'|t }}</h2>
         <p class="eventos__desc">{{ 'Conciertos, ferias y planes que se viven en Bogotá durante los próximos días.'|t }}</p>
-        <a class="btn btn--outline eventos__cta" href="/agenda-de-eventos">{{ 'Ver la agenda completa'|t }}</a>
+        <a class="btn btn--outline eventos__cta" href="{{ path('entity.node.canonical', {'node': 547}) }}">{{ 'Ver la agenda completa'|t }}</a>
       </div>
 
       <div class="eventos__carousel">
@@ -193,16 +193,16 @@
 
       {# 4 columnas pegadas: cada recurso es una franja del mismo panorama (24/48/72 ya traen el badge) #}
       <div class="planea-viaje__grid">
-        <a class="planea-viaje__col" href="/bogota-en-24-horas" aria-label="{{ 'Bogotá en 24 horas'|t }}">
+        <a class="planea-viaje__col" href="{{ path('entity.node.canonical', {'node': 2769}) }}" aria-label="{{ 'Bogotá en 24 horas'|t }}">
           <img class="planea-viaje__img" src="/{{ subtheme_path ?: directory }}/images/recursos/01_24%20horas.jpg" alt="" loading="lazy">
         </a>
-        <a class="planea-viaje__col" href="/bogota-en-48-horas" aria-label="{{ 'Bogotá en 48 horas'|t }}">
+        <a class="planea-viaje__col" href="{{ path('entity.node.canonical', {'node': 2792}) }}" aria-label="{{ 'Bogotá en 48 horas'|t }}">
           <img class="planea-viaje__img" src="/{{ subtheme_path ?: directory }}/images/recursos/02_48%20horas.jpg" alt="" loading="lazy">
         </a>
-        <a class="planea-viaje__col" href="/bogota-en-72-horas" aria-label="{{ 'Bogotá en 72 horas'|t }}">
+        <a class="planea-viaje__col" href="{{ path('entity.node.canonical', {'node': 2765}) }}" aria-label="{{ 'Bogotá en 72 horas'|t }}">
           <img class="planea-viaje__img" src="/{{ subtheme_path ?: directory }}/images/recursos/03_72%20horas.jpg" alt="" loading="lazy">
         </a>
-        <a class="planea-viaje__col" href="/es/informacion-al-viajero">
+        <a class="planea-viaje__col" href="{{ path('entity.node.canonical', {'node': 1234}) }}">
           <img class="planea-viaje__img" src="/{{ subtheme_path ?: directory }}/images/recursos/04_info_viajero.jpg" alt="" loading="lazy">
           <span class="planea-viaje__info-btn">{{ 'Información del viajero'|t }}</span>
         </a>
@@ -211,15 +211,16 @@
       {# Móvil: las ilustraciones no caben; solo los 3 cuadritos en una fila. #}
       <div class="planea-viaje__mobile">
         <ul class="planea-viaje__badges">
+          {% set plan_nids = {'24': 2769, '48': 2792, '72': 2765} %}
           {% for h, label in {'24': 'Bogotá en 24 horas'|t, '48': 'Bogotá en 48 horas'|t, '72': 'Bogotá en 72 horas'|t} %}
           <li>
-            <a class="planea-viaje__badge" href="/bogota-en-{{ h }}-horas">
+            <a class="planea-viaje__badge" href="{{ path('entity.node.canonical', {'node': plan_nids[h]}) }}">
               <img src="/{{ subtheme_path ?: directory }}/images/{{ h }}h@2x-8.png" alt="{{ label }}" loading="lazy" decoding="async">
             </a>
           </li>
           {% endfor %}
         </ul>
-        <a class="planea-viaje__mobile-info" href="/es/informacion-al-viajero">{{ 'Información del viajero'|t }}</a>
+        <a class="planea-viaje__mobile-info" href="{{ path('entity.node.canonical', {'node': 1234}) }}">{{ 'Información del viajero'|t }}</a>
       </div>
     </div>
   </section>

@@ -21,12 +21,12 @@
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
-          <li><a href="/">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
           {% if is_eat %}
           <li><a href="{{ path('entity.node.canonical', {'node': 562}) }}">{{ 'ui.where_to_eat'|t }}</a></li>
           {% if vn_term_name %}<li><a href="{{ vn_term_url }}">{{ vn_term_name }}</a></li>{% endif %}
           {% else %}
-          <li><a href="/que-hacer-en-bogota">{{ 'Descubre Bogotá'|t }}</a></li>
+          <li><a href="{{ path('entity.node.canonical', {'node': 639}) }}">{{ 'Descubre Bogotá'|t }}</a></li>
           {% if vn_term_name %}<li><a href="{{ vn_term_url }}">{{ vn_term_name }}</a></li>{% endif %}
           <li aria-current="page">{{ 'Atractivos'|t }}</li>
           {% endif %}

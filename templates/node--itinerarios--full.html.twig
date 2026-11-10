@@ -18,8 +18,8 @@
       <img class="hero-logo-mark" src="/{{ subtheme_path ?: directory }}/images/logo-bogota-original.svg" alt="Bogotá">
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
-          <li><a href="/">{{ 'Inicio'|t }}</a></li>
-          <li><a href="/planifica-tu-viaje">{{ 'Planea tu viaje'|t }}</a></li>
+          <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
+          <li><a href="{{ path('entity.node.canonical', {'node': 549}) }}">{{ 'Planea tu viaje'|t }}</a></li>
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>
       </nav>
@@ -79,7 +79,7 @@
       <div class="cat-attractions__head">
         <h2 class="cat-attractions__title">{{ 'Atractivos en este itinerario'|t }}</h2>
         {% if itinerary_cat_tid %}
-        <a class="btn btn--ghost cat-attractions__cta" href="/atractivos/{{ itinerary_cat_tid }}">{{ 'Explorar todos los atractivos'|t }}</a>
+        <a class="btn btn--ghost cat-attractions__cta" href="{{ path('<front>')|trim('/', 'right') }}/atractivos/{{ itinerary_cat_tid }}">{{ 'Explorar todos los atractivos'|t }}</a>
         {% endif %}
       </div>
       <ul class="cat-attractions__grid">
