@@ -152,7 +152,27 @@
   outline: none;
 }
 
+// Abierto (Fancybox 6 añade .f-html): alto limitado a la ventana, con
+// encabezado y X fijos y scroll solo en .info-modal__scroll. El !important le
+// gana al display en línea que Fancybox restaura; sin ese scroll, el
+// `overflow: hidden` recortaba las fichas largas.
+.info-modal.info-modal.f-html {
+  display: flex !important;
+  flex-direction: column;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+}
+
+.info-modal__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
 .info-modal__header {
+  flex: 0 0 auto;
   padding: 18px 64px 18px 24px; // espacio para la X de Fancybox
   background: var(--vn-gris-oscuro);
   color: var(--vn-blanco);

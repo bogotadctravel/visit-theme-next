@@ -86,10 +86,12 @@
               <div class="info-modal__header">
                 <h3 class="info-modal__title">{{ item.title }}</h3>
               </div>
-              {% if item.image_url %}
-                <img class="info-modal__img" src="{{ item.image_url }}" alt="" loading="lazy" decoding="async">
-              {% endif %}
-              <div class="info-modal__body">{{ item.body|raw }}</div>
+              <div class="info-modal__scroll">
+                {% if item.image_url %}
+                  <img class="info-modal__img" src="{{ item.image_url }}" alt="" loading="lazy" decoding="async">
+                {% endif %}
+                <div class="info-modal__body">{{ item.body|raw }}</div>
+              </div>
             </div>
           </li>
           {% endfor %}
