@@ -766,3 +766,15 @@ msgstr "Check the validity of any tour guide's RNT (National Tourism Registry)"
 
 msgid "aquí"
 msgstr "here"
+
+msgid "No se encontraron resultados"
+msgstr "No results found"
+
+msgid "ui.save"
+msgstr "Save"
+
+msgid "ui.ideal_place"
+msgstr "Find the ideal venue for your event"
+
+msgid "Atención al usuario"
+msgstr "User support"

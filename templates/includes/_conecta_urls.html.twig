@@ -10,14 +10,14 @@
 #}
 
 {%- macro cat_href(name, fallback) -%}
-  {%- if 'corporativa' in name|lower -%}/conecta{%- else -%}{{ fallback }}{%- endif -%}
+  {%- if 'corporativa' in name|lower -%}{{ path('<front>')|trim('/', 'right') }}/conecta{%- else -%}{{ fallback }}{%- endif -%}
 {%- endmacro -%}
 
 {%- macro subcat_href(name, fallback, parent_name) -%}
   {%- set n = name|lower -%}
   {%- if parent_name is defined and 'corporativa' in parent_name|lower -%}
-    {%- if 'proveedor' in n -%}/conecta/proveedores
-    {%- elseif 'venue' in n -%}/conecta/venues
+    {%- if 'proveedor' in n -%}{{ path('<front>')|trim('/', 'right') }}/conecta/proveedores
+    {%- elseif 'venue' in n -%}{{ path('<front>')|trim('/', 'right') }}/conecta/venues
     {%- else -%}{{ fallback }}
     {%- endif -%}
   {%- elseif 'donde comer' in n or 'dónde comer' in n or 'restaurante' in n -%}

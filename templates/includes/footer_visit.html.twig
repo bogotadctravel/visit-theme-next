@@ -3,7 +3,7 @@
   (visitbogota3-theme: .site-footer con fondo rojo).
   Datos del tema base:
     · site_info (whatsapp, redes)            → visit_theme_preprocess_page()
-    · taxonomy('categorias_2026')            → columna "Qué hacer"
+    · taxonomy('categorias_2026')            → columna "Descubre Bogotá"
     · mas_opciones['#items']                 → columna "Más opciones"
   Estilos en css/overrides.css (scss/_footer.scss).
 #}
@@ -16,79 +16,86 @@
         alt="Visit Bogotá" width="472" height="113" loading="lazy" decoding="async">
       <p class="site-footer__tagline">{{ 'Bogotá, tu casa.'|t }}</p>
 
-      {% if site_info.whatsapp %}
-      <a class="site-footer__whatsapp" href="{{ site_info.whatsapp }}" target="_blank" rel="noopener noreferrer">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5a10.6 10.6 0 0 0-16.9 12.7L2 21l4.9-1.6A10.6 10.6 0 0 0 20.5 3.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.3 8.1c.2-.5.5-.5.8-.5h.6c.2 0 .5 0 .7.5l.8 1.9c.1.2 0 .5-.1.6l-.6.7c-.1.2-.1.4 0 .6.4.8 1.6 2 2.4 2.4.2.1.4.1.6 0l.7-.6c.2-.1.4-.2.6-.1l1.9.8c.4.2.4.5.4.7v.6c0 .3 0 .6-.5.8-1.9 1-4.6-.2-6.5-2.1-1.9-1.9-3.1-4.6-2.1-6.5Z" fill="currentColor"/></svg>
-        {{ 'ui.tourist_support'|t }}
-      </a>
-      {% endif %}
-
       <ul class="site-footer__social">
         {% if site_info.facebook %}
         <li><a href="{{ site_info.facebook }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5h2.5V5.2c-.4 0-1.9-.2-3.1-.2-3 0-4.9 1.8-4.9 5.1v2.7H5.5V16h3v8h3.4v-8h3l.5-3.2h-3.5V10c0-.9.2-1.5 1.6-1.5Z" fill="currentColor"/></svg></a></li>
+          <img src="/{{ subtheme_path ?: directory }}/images/iconosfooter/faceb.svg" alt="" width="24" height="24" loading="lazy" decoding="async"></a></li>
         {% endif %}
         {% if site_info.instagram %}
         <li><a href="{{ site_info.instagram }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg></a></li>
+          <img src="/{{ subtheme_path ?: directory }}/images/iconosfooter/insta.svg" alt="" width="24" height="24" loading="lazy" decoding="async"></a></li>
         {% endif %}
-        {% if site_info.threads %}
-        <li><a href="{{ site_info.threads }}" target="_blank" rel="noopener noreferrer" aria-label="Threads">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c4.4 0 7.5 2.7 7.9 6.9.3 3.6-1 6.4-3.8 7.7-1.1.5-2.3.7-3.5.6-2.7-.2-4.4-1.6-4.4-3.5 0-2 1.9-3.2 4.6-3.2.9 0 1.7.1 2.4.3-.2-1.6-1.1-2.4-2.7-2.4-1.1 0-2.1.4-2.9 1.1l-1.4-1.6c1.2-1.1 2.7-1.7 4.4-1.7 3 0 4.9 1.9 5.1 4.9.1 1 0 1.9-.3 2.7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a></li>
-        {% endif %}
-        {% if site_info.twitter %}
-        <li><a href="{{ site_info.twitter }}" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></a></li>
+        {% if site_info.tiktok %}
+        <li><a href="{{ site_info.tiktok }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <img src="/{{ subtheme_path ?: directory }}/images/iconosfooter/tiktok.svg" alt="" width="24" height="24" loading="lazy" decoding="async"></a></li>
         {% endif %}
         {% if site_info.youtube %}
         <li><a href="{{ site_info.youtube }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6.5" width="18" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10.5 10.2v3.6l3.3-1.8-3.3-1.8Z" fill="currentColor"/></svg></a></li>
+          <img src="/{{ subtheme_path ?: directory }}/images/iconosfooter/yt.svg" alt="" width="24" height="24" loading="lazy" decoding="async"></a></li>
         {% endif %}
       </ul>
-
-      {# App móvil oficial "Visit Bogotá" (IDT) #}
-      <div class="site-footer__app">
-        <p class="site-footer__app-title">{{ 'Descarga la app móvil de Bogotá'|t }}</p>
-        {# TEMPORAL: comparación de estilos de botones de tiendas. Dejar solo la opción elegida. #}
-        
-        <ul class="site-footer__stores site-footer__stores--outline">
-          <li><a class="site-footer__store" href="https://play.google.com/store/apps/details?id=com.servinf.test.bogotadctravel" target="_blank" rel="noopener noreferrer" aria-label="{{ 'Descargar en Google Play'|t }}">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3 13.4 12l-9.8 9.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1Z" fill="#00d7fe"/><path d="m16.8 8.6-3.4 3.4-9.8-9.7c.3-.2.8-.2 1.2 0l12 6.3Z" fill="#00f076"/><path d="m16.8 15.4-12 6.3c-.4.2-.9.2-1.2 0l9.8-9.7 3.4 3.4Z" fill="#ff3a44"/><path d="M20.3 13.3 16.8 15.4 13.4 12l3.4-3.4 3.5 2.1c1 .6 1 2 0 2.6Z" fill="#ffd500"/></svg>
-            <span class="site-footer__store-text">{{ 'Disponible en'|t }}<strong>Google Play</strong></span>
-          </a></li>
-          <li><a class="site-footer__store" href="https://apps.apple.com/co/app/id1478036261" target="_blank" rel="noopener noreferrer" aria-label="{{ 'Descargar en App Store'|t }}">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.2-.9-1.7 0-3.2 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.7ZM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z" fill="currentColor"/></svg>
-            <span class="site-footer__store-text">{{ 'Descárgala en'|t }}<strong>App Store</strong></span>
-          </a></li>
-        </ul>
-      
-      </div>
-
-      {% include "@visit_theme_next/includes/_disclaimer_establecimientos.html.twig" %}
     </div>
 
-    {% set categorias_footer = taxonomy('categorias_2026') %}
-    {% if categorias_footer is not empty %}
-    <nav class="site-footer__col" aria-label="{{ 'ui.what_to_do'|t }}">
-      <h3 class="site-footer__heading">{{ 'ui.what_to_do'|t }}</h3>
-      <ul>
-        {% for item in categorias_footer %}
-        <li><a href="{{ conecta.cat_href(item.name, item.url) }}">{{ item.name }}</a></li>
-        {% endfor %}
-      </ul>
-    </nav>
-    {% endif %}
+    <div class="site-footer__links">
+      <div class="site-footer__col">
+        <h3 class="site-footer__heading">{{ 'Atención al usuario'|t }}</h3>
+        <ul class="site-footer__contact">
+          {% if site_info.whatsapp %}
+          <li><a href="{{ site_info.whatsapp }}" target="_blank" rel="noopener noreferrer">
+            <img src="/{{ subtheme_path ?: directory }}/images/iconosfooter/atencion.svg" alt="" width="22" height="22" loading="lazy" decoding="async">
+            <span>{{ 'ui.tourist_support'|t }}</span>
+          </a></li>
+          {% endif %}
+          <li>
+            <img src="/{{ subtheme_path ?: directory }}/images/iconosfooter/ubicacion.svg" alt="" width="22" height="22" loading="lazy" decoding="async">
+            <address>Carrera 10 N.º 28-49<br>Edificio Centro Internacional<br>Bogotá D.C., Colombia.</address>
+          </li>
+        </ul>
+      </div>
 
-    {% if mas_opciones['#items'] is not empty %}
-    <nav class="site-footer__col" aria-label="{{ 'ui.more_options'|t }}">
-      <h3 class="site-footer__heading">{{ 'ui.more_options'|t }}</h3>
-      <ul>
-        {% for item in mas_opciones['#items'] %}
-        <li><a href="{{ item.url }}">{{ item.title }}</a></li>
-        {% endfor %}
+      {% set categorias_footer = taxonomy('categorias_2026') %}
+      {% if categorias_footer is not empty %}
+      <nav class="site-footer__col" aria-label="{{ 'Descubre Bogotá'|t }}">
+        <h3 class="site-footer__heading">{{ 'Descubre Bogotá'|t }}</h3>
+        <ul>
+          {% for item in categorias_footer %}
+          <li><a href="{{ conecta.cat_href(item.name, item.url) }}">{{ item.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+      {% endif %}
+
+      {% if mas_opciones['#items'] is not empty %}
+      <nav class="site-footer__col" aria-label="{{ 'ui.more_options'|t }}">
+        <h3 class="site-footer__heading">{{ 'ui.more_options'|t }}</h3>
+        <ul>
+          {% for item in mas_opciones['#items'] %}
+          <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+
+    {# App móvil oficial "Visit Bogotá" (IDT) #}
+    <div class="site-footer__app">
+      <p class="site-footer__app-title">{{ 'Descarga la app móvil de Bogotá'|t }}</p>
+      {# TEMPORAL: comparación de estilos de botones de tiendas. Dejar solo la opción elegida. #}
+      
+      <ul class="site-footer__stores site-footer__stores--outline">
+        <li><a class="site-footer__store" href="https://play.google.com/store/apps/details?id=com.servinf.test.bogotadctravel" target="_blank" rel="noopener noreferrer" aria-label="{{ 'Descargar en Google Play'|t }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3 13.4 12l-9.8 9.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1Z" fill="#00d7fe"/><path d="m16.8 8.6-3.4 3.4-9.8-9.7c.3-.2.8-.2 1.2 0l12 6.3Z" fill="#00f076"/><path d="m16.8 15.4-12 6.3c-.4.2-.9.2-1.2 0l9.8-9.7 3.4 3.4Z" fill="#ff3a44"/><path d="M20.3 13.3 16.8 15.4 13.4 12l3.4-3.4 3.5 2.1c1 .6 1 2 0 2.6Z" fill="#ffd500"/></svg>
+          <span class="site-footer__store-text">{{ 'Disponible en'|t }}<strong>Google Play</strong></span>
+        </a></li>
+        <li><a class="site-footer__store" href="https://apps.apple.com/co/app/id1478036261" target="_blank" rel="noopener noreferrer" aria-label="{{ 'Descargar en App Store'|t }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.7.9-.8 0-2-.9-3.2-.9-1.7 0-3.2 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.1-.8 1.5 0 1.9.8 3.2.8 1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.4-.9-2.4-3.7ZM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z" fill="currentColor"/></svg>
+          <span class="site-footer__store-text">{{ 'Descárgala en'|t }}<strong>App Store</strong></span>
+        </a></li>
       </ul>
-    </nav>
-    {% endif %}
+    
+    </div>
+
+    {% include "@visit_theme_next/includes/_disclaimer_establecimientos.html.twig" %}
 
   </div>
 

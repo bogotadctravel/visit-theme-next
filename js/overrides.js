@@ -721,3 +721,26 @@
     init();
   }
 })();
+
+/**
+ * Buscador: el mensaje "sin resultados" lo escribe el tema base (main.js) fijo
+ * en español. Aquí se reemplaza por su versión traducida.
+ */
+(function () {
+  'use strict';
+  function init() {
+    if (typeof Drupal === 'undefined') return;
+    document.querySelectorAll('#search-results').forEach(function (list) {
+      new MutationObserver(function () {
+        var item = list.querySelector('li.no-results');
+        var message = Drupal.t('No se encontraron resultados');
+        if (item && item.textContent !== message) item.textContent = message;
+      }).observe(list, { childList: true });
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

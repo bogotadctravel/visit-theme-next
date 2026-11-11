@@ -140,7 +140,7 @@
           {# ── Ítems dinámicos del menú principal ── #}
           {% for item in menu_principal_visitbogota['#items'] %}
           {% set item_classes = item.attributes.class ? item.attributes.class|join(' ') : '' %}
-          {% set item_href = 'corporativa' in item.title|lower ? '/conecta' : item.url %}
+          {% set item_href = 'corporativa' in item.title|lower ? path('<front>')|trim('/', 'right') ~ '/conecta' : item.url %}
           <li class="mainnav__item {{ item_classes }}{% if item.below %} dropdown{% endif %}">
             <a class="mainnav__link{% if item.below %} dropdown__toggle{% endif %}" href="{{ item_href }}"
               {% if 'corporativa' not in item.title|lower %}{{ h.ext_attrs(item.url) }}{% endif %}
