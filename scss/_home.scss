@@ -7,6 +7,10 @@
 .vn-home {
   --vn-max: 1280px;
   --vn-pad: clamp(16px, 4vw, 40px);
+  // Espacio vertical único entre franjas del home (antes cada una traía el suyo,
+  // hasta 96px por lado). Dos franjas blancas seguidas suman 2× este valor.
+  --vn-sec: clamp(28px, 3.5vw, 48px);
+  --vn-planea-gris: #efefed; // gris de fondo de los recursos de "Planea tu viaje"
 
   *, *::before, *::after { box-sizing: border-box; }
 
@@ -193,7 +197,7 @@
   //  10 IMPERDIBLES — carrusel
   // =======================================================
   .imperdibles {
-    padding: clamp(24px, 3.5vw, 44px) 0 clamp(24px, 3vw, 36px);
+    padding: var(--vn-sec) 0;
     background: var(--vn-blanco);
     overflow: hidden;
   }
@@ -291,7 +295,7 @@
   //  DESCUBRE BOGOTÁ — grid de categorías
   // =======================================================
   .que-hacer {
-    padding: clamp(24px, 3vw, 36px) 0 clamp(56px, 8vw, 96px);
+    padding: var(--vn-sec) 0;
     background: var(--vn-gris-10);
   }
   .que-hacer__head {
@@ -361,7 +365,7 @@
   //  EVENTOS ESTA SEMANA
   // =======================================================
   .eventos {
-    padding: clamp(48px, 7vw, 88px) 0 clamp(56px, 8vw, 96px);
+    padding: var(--vn-sec) 0;
     background: var(--vn-blanco);
   }
   .eventos__title {
@@ -526,7 +530,7 @@
   //  PLANEA TU VIAJE
   // =======================================================
   .planea-viaje {
-    padding: clamp(48px, 7vw, 80px) var(--vn-pad) clamp(56px, 7vw, 88px);
+    padding: var(--vn-sec) var(--vn-pad);
     background: var(--vn-blanco);
   }
 
@@ -535,7 +539,13 @@
     margin: 0 auto;
   }
 
-  .planea-viaje__intro { margin-bottom: clamp(24px, 4vw, 40px); }
+  // Título y texto sobre el mismo gris de los recursos: el bloque continúa sin
+  // corte en la franja de ilustraciones de abajo (una sola pieza gris).
+  .planea-viaje__intro {
+    margin: 0;
+    padding: clamp(24px, 3.5vw, 44px) clamp(20px, 3vw, 40px) clamp(8px, 1.5vw, 16px);
+    background: var(--vn-planea-gris);
+  }
 
   .planea-viaje__title {
     margin: 0 0 8px;
@@ -571,20 +581,25 @@
     &:hover .planea-viaje__info-btn { background: var(--vn-rojo-principal); color: var(--vn-blanco); }
   }
 
-  // Proporción fija (los recursos varían 952–964px de ancho) para que el borde gris quede alineado
+  // Proporción fija (los recursos varían 952–964px de ancho) para que el borde gris quede alineado.
+  // Los recursos miden 2221px de alto con márgenes vacíos: filas 0–124 casi blancas, gris
+  // hasta 1864, blanco hasta 2221 (los badges terminan en 2064). Se recorta a 300→2080
+  // (1780px): arriba queda solo gris, pegado al bloque del título; abajo, sin aire sobrante.
+  // object-position Y = 300 / (300 + 141) ≈ 68%.
   .planea-viaje__img {
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 960 / 2221;
-    object-fit: fill;
+    aspect-ratio: 960 / 1780;
+    object-fit: cover;
+    object-position: 50% 68%;
     transition: filter var(--vn-transicion);
   }
 
   .planea-viaje__info-btn {
     position: absolute;
     left: 50%;
-    bottom: 16%; // borde inferior del fondo gris del recurso (≈84% de la altura)
+    bottom: 12.1%; // borde inferior del gris en el recorte: (2080 − 1864) / 1780
     width: 86%;
     padding: 16px 12px;
     border-radius: 14px;
@@ -611,10 +626,15 @@
 
   @media (max-width: 640px) {
     .planea-viaje__grid { display: none; }
+    // Sin ilustraciones: el gris abarca texto + badges + botón en un solo bloque.
+    .planea-viaje { padding-inline: 0; }
+    .planea-viaje__intro { padding: 28px var(--vn-pad) 20px; }
     .planea-viaje__mobile {
       display: flex;
       flex-direction: column;
       gap: 20px;
+      padding: 0 var(--vn-pad) 28px;
+      background: var(--vn-planea-gris);
     }
     .planea-viaje__badges {
       display: grid;
@@ -633,6 +653,7 @@
     }
     .planea-viaje__mobile-info {
       display: block;
+      background: var(--vn-blanco);
       padding: 14px 12px;
       border-radius: 10px;
       border: 2px solid #B2B2B2;
@@ -649,13 +670,13 @@
   //  BLOG
   // =======================================================
   .blog-home {
-    padding: clamp(56px, 8vw, 96px) 0;
+    padding: var(--vn-sec) 0 0; // sin espacio abajo: el mosaico se apoya en la franja roja del footer
     background: var(--vn-blanco);
   }
   .blog-home__head {
     max-width: var(--vn-max);
     margin: 0 auto;
-    padding: 0 var(--vn-pad) clamp(32px, 5vw, 48px);
+    padding: 0 var(--vn-pad) clamp(20px, 3vw, 32px);
   }
   .blog-home__title {
     margin: 0 0 18px;
