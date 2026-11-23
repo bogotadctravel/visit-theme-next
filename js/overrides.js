@@ -91,6 +91,13 @@
           scheduleClose();
         });
       });
+
+      // Al salir por teclado del último elemento operable del desplegable
+      // (o de cualquier punto dentro de él), cerrarlo en vez de dejarlo
+      // visualmente abierto mientras el foco sigue avanzando por la página.
+      dd.addEventListener('focusout', function (e) {
+        if (!dd.contains(e.relatedTarget)) hideMenu(dd);
+      });
     });
 
     window.addEventListener('resize', function () {
@@ -113,6 +120,15 @@
         allPanels().forEach(function (p) { p.hidden = true; });
       };
 
+      // Enlaces visibles del panel abierto en este momento (si hay uno).
+      var openPanelLinks = function () {
+        var panel = allPanels().filter(function (p) { return !p.hidden; })[0];
+        return panel ? [].slice.call(panel.querySelectorAll('a[href]')) : [];
+      };
+      var openCatIndex = function () {
+        return cats.findIndex(function (c) { return c.getAttribute('aria-expanded') === 'true'; });
+      };
+
       cats.forEach(function (cat) {
         cat.addEventListener('mouseenter', function () {
           if (!window.matchMedia(HOVER_QUERY).matches) return;
@@ -130,7 +146,40 @@
           else showCat(cat.dataset.cat);
         });
         cat.addEventListener('focus', function () { showCat(cat.dataset.cat); });
+
+        // .megamenu__cats (todas las categorías) termina en el DOM antes de
+        // que empiece .megamenu__panels (todos los paneles): sin esto, Tab
+        // saltaba de categoría en categoría sin entrar nunca a las
+        // subcategorías del panel que el foco acababa de abrir. Al tabular
+        // hacia adelante desde una categoría, se entra directo a los
+        // enlaces de su propio panel.
+        cat.addEventListener('keydown', function (e) {
+          if (e.key !== 'Tab' || e.shiftKey) return;
+          var links = openPanelLinks();
+          if (links.length) { e.preventDefault(); links[0].focus(); }
+        });
       });
+
+      // Al salir del panel abierto: hacia adelante, seguir con la próxima
+      // categoría (vuelve a entrar al flujo normal si no hay una siguiente);
+      // hacia atrás desde su primer enlace, volver a la categoría que lo abrió.
+      var panelsWrap = mega.querySelector('.megamenu__panels');
+      if (panelsWrap) {
+        panelsWrap.addEventListener('keydown', function (e) {
+          if (e.key !== 'Tab') return;
+          var links = openPanelLinks();
+          var idx = links.indexOf(e.target);
+          if (idx === -1) return;
+          var catIdx = openCatIndex();
+          if (!e.shiftKey && idx === links.length - 1 && cats[catIdx + 1]) {
+            e.preventDefault();
+            cats[catIdx + 1].focus();
+          } else if (e.shiftKey && idx === 0 && catIdx !== -1) {
+            e.preventDefault();
+            cats[catIdx].focus();
+          }
+        });
+      }
     });
 
     // Click fuera / Escape cierran los desplegables (salvo navegando el panel móvil abierto).
