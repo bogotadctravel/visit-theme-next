@@ -394,6 +394,9 @@ msgstr "How to get there"
 msgid "ui.imperdible_badge"
 msgstr "Must-see"
 
+msgid "ui.invalid_date_range"
+msgstr "Check the dates: the end date cannot be earlier than the start date."
+
 msgid "ui.listen_audio_guide"
 msgstr "Listen to audio guide"
 

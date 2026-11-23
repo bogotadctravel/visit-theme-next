@@ -15,7 +15,9 @@ body.no-scroll { overflow: hidden; }
 .vn-disena .vn-planner {
 
   --navy: #0B1F3A;
-  --red: #FF3108;
+  // Oscurecido junto con --vn-rojo-principal (ver scss/_header.scss) para
+  // cumplir 1.4.3 Contraste mínimo WCAG 2.1 AA.
+  --red: #C62400;
   --yellow: #FFC72C;
   --ink: #1B2430;
   --muted: #667085;

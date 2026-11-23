@@ -20,8 +20,12 @@ code, kbd, pre, samp { font-family: ui-monospace, SFMono-Regular, Menlo, monospa
 :root {
   // Paleta de marca v3
   --vn-azul-marino:      #1A2B4A;
-  --vn-rojo-principal:   #FF3108;
-  --vn-rojo-principal-h: #E22B07;
+  // Oscurecido respecto al rojo original (#FF3108, ~3.7:1 sobre blanco) para
+  // cumplir 1.4.3 Contraste mínimo WCAG 2.1 AA (4.5:1) tanto en texto/enlaces
+  // rojos sobre fondo claro como en texto blanco sobre fondo rojo (footer):
+  // #C62400 sobre blanco ≈ 5.75:1. Ver hallazgo 9 del informe SANDI.
+  --vn-rojo-principal:   #C62400;
+  --vn-rojo-principal-h: #AE2000;
   --vn-negro:            #222222;
   --vn-amarillo:         #FBB018;
   --vn-blanco:           #FFFFFF;

@@ -9,8 +9,10 @@
 // borde fino, botones rectangulares con borde rojo, superficies gris claro.
 
 .vn-conecta {
-  --cx-rojo: var(--vn-rojo-principal, #FF3108);
-  --cx-rojo-hover: #E02A05;
+  // Oscurecido junto con --vn-rojo-principal (ver scss/_header.scss) para
+  // cumplir 1.4.3 Contraste mínimo WCAG 2.1 AA.
+  --cx-rojo: var(--vn-rojo-principal, #C62400);
+  --cx-rojo-hover: #AE2000;
   --cx-tinta: var(--vn-gris-oscuro, #1D1D1D);
   --cx-texto: var(--vn-tinta, #1C1F26);
   --cx-muted: #5B6070;

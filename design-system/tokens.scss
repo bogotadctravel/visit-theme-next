@@ -12,8 +12,8 @@
 :root {
   // ---- Paleta de marca v3 --------------------------------------------------
   --vn-azul-marino:      #1A2B4A; // no se usa en ningún componente actual (reservado)
-  --vn-rojo-principal:   #FF3108; // color de acento principal: botones, hover, activo, focus de marca
-  --vn-rojo-principal-h: #E22B07; // hover/estado oscurecido de --vn-rojo-principal
+  --vn-rojo-principal:   #C62400; // acento principal: botones, hover, activo, focus de marca — oscurecido vs #FF3108 (2026-11, hallazgo 9 SANDI) para cumplir 1.4.3 Contraste mínimo AA
+  --vn-rojo-principal-h: #AE2000; // hover/estado oscurecido de --vn-rojo-principal
   --vn-negro:            #222222; // declarado pero sin uso detectado fuera de --vn-gris-oscuro
   --vn-amarillo:         #FBB018; // acento secundario: focus-visible, kicker de evento, texto sobre hero oscuro
   --vn-blanco:           #FFFFFF;

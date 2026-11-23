@@ -435,7 +435,8 @@
     ul.innerHTML = list.map(p => {
       const inTrip = state.trip.includes(p.id);
       return `<li>
-        <div class="dtv-result-card ${p.id === state.selected ? 'is-selected' : ''}" data-id="${p.id}" role="button" tabindex="0" style="--c:${CATS[p.cat].color}">
+        <div class="dtv-result-card ${p.id === state.selected ? 'is-selected' : ''}" data-id="${p.id}" role="button" tabindex="0"
+             aria-label="${esc(p.name)}: ${esc(Drupal.t('ver en el mapa'))}" style="--c:${CATS[p.cat].color}">
           <img class="result-thumb" src="${esc(p.thumb)}" alt="" loading="lazy">
           <div class="result-body">
             <span class="dtv-tag ${state.cats.size === 0 ? 'dtv-tag-imperdible' : ''}">${icon(p.cat)}${esc(tagFor(p))}</span>
@@ -443,7 +444,8 @@
             <p class="muted">${esc(p.zone)}${p.hasGeo ? '' : `${p.zone ? ' · ' : ''}<span class="no-geo">${Drupal.t('Sin ubicación en el mapa')}</span>`}</p>
           </div>
           <button class="add-mini ${inTrip ? 'is-added' : ''}" data-add="${p.id}"
-                  aria-label="${inTrip ? Drupal.t('Quitar de mi viaje') : Drupal.t('Agregar a mi viaje')}" title="${inTrip ? Drupal.t('En mi viaje') : Drupal.t('Agregar a mi viaje')}">
+                  aria-label="${inTrip ? Drupal.t('Quitar @nombre de mi viaje', { '@nombre': p.name }) : Drupal.t('Agregar @nombre a mi viaje', { '@nombre': p.name })}"
+                  title="${inTrip ? Drupal.t('En mi viaje') : Drupal.t('Agregar a mi viaje')}">
             ${inTrip ? '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>' : '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>'}
           </button>
         </div>

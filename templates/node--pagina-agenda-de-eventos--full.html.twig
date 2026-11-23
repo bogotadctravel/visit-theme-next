@@ -53,7 +53,11 @@
       <span>{{ 'Filtros'|t }}</span>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
     </button>
-    <form class="events-filters" id="events-filters-form" method="GET" action="">
+    <form class="events-filters" id="events-filters-form" method="GET" action="" novalidate>
+      {# El tooltip nativo de validación de <input type="date"> no se anuncia de
+         forma fiable con lectores de pantalla (hallazgo 12 SANDI): se valida a
+         mano y el error se expone en este contenedor con role="alert". #}
+      <p id="events-filters-error" class="events-filters__error" role="alert" hidden></p>
       <div class="events-filters__row">
 
         <div class="events-filters__field">
@@ -89,11 +93,11 @@
 
         <div class="events-filters__field">
           <label for="fecha_desde">{{ 'ui.from_date'|t }}</label>
-          <input type="date" id="fecha_desde" name="fecha_desde" value="{{ current_fecha_desde }}" min="{{ hoy }}">
+          <input type="date" id="fecha_desde" name="fecha_desde" value="{{ current_fecha_desde }}" min="{{ hoy }}" aria-describedby="events-filters-error">
         </div>
         <div class="events-filters__field">
           <label for="fecha_hasta">{{ 'ui.to_date'|t }}</label>
-          <input type="date" id="fecha_hasta" name="fecha_hasta" value="{{ current_fecha_hasta }}" min="{{ current_fecha_desde ?: hoy }}">
+          <input type="date" id="fecha_hasta" name="fecha_hasta" value="{{ current_fecha_hasta }}" min="{{ current_fecha_desde ?: hoy }}" aria-describedby="events-filters-error">
         </div>
 
         <button class="btn btn--primary events-filters__submit" type="submit">{{ 'ui.search'|t }}</button>
@@ -154,11 +158,44 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    var form = document.getElementById('events-filters-form');
     var d = document.getElementById('fecha_desde'), h = document.getElementById('fecha_hasta');
+    var errorBox = document.getElementById('events-filters-error');
+
     if (d && h) {
       d.addEventListener('change', function () {
         h.min = d.value;
         if (h.value && h.value < d.value) h.value = d.value;
+      });
+    }
+
+    // Validación propia en vez del globo nativo de <input type="date">, que
+    // los lectores de pantalla no anuncian de forma fiable (hallazgo 12 SANDI).
+    function clearError() {
+      if (!errorBox) return;
+      errorBox.hidden = true;
+      errorBox.textContent = '';
+      [d, h].forEach(function (f) { if (f) f.removeAttribute('aria-invalid'); });
+    }
+
+    function showError(field, message) {
+      if (!errorBox) return;
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+      if (field) { field.setAttribute('aria-invalid', 'true'); field.focus(); }
+    }
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        clearError();
+        var message = '{{ 'ui.invalid_date_range'|t|e('js') }}';
+        if (d && d.value && d.min && d.value < d.min) {
+          e.preventDefault();
+          showError(d, message);
+        } else if (h && h.value && h.min && h.value < h.min) {
+          e.preventDefault();
+          showError(h, message);
+        }
       });
     }
   });

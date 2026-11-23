@@ -23,8 +23,8 @@ Contenido:
 
 | Token | Hex | Uso |
 |---|---|---|
-| `--vn-rojo-principal` | `#FF3108` | Acento de marca: botones primarios, hover de marca, estado activo/focus, bullets, bordes de acento |
-| `--vn-rojo-principal-h` | `#E22B07` | Hover/oscurecido de `--vn-rojo-principal` |
+| `--vn-rojo-principal` | `#C62400` | Acento de marca: botones primarios, hover de marca, estado activo/focus, bullets, bordes de acento |
+| `--vn-rojo-principal-h` | `#AE2000` | Hover/oscurecido de `--vn-rojo-principal` |
 | `--vn-amarillo` | `#FBB018` | Acento secundario: `focus-visible`, kicker de fecha en hero de evento, texto sobre fondo oscuro |
 | `--vn-azul-marino` | `#1A2B4A` | Declarado, sin uso activo detectado (reservado) |
 | `--vn-negro` | `#222222` | Declarado, sin uso activo detectado fuera de `--vn-gris-oscuro` |
