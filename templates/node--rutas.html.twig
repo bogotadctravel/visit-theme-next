@@ -85,12 +85,12 @@
         </div>
         {% endif %}
 
-        {% if node.field_video.entity %}
+        {# {% if node.field_video.entity %}
         <div class="place-block">
           <h2 class="place-block__title">{{ 'Video'|t }}</h2>
           <div class="place-video"><video controls preload="none" poster="{{ hero_bg }}" src="{{ file_url(node.field_video.entity.fileuri) }}"></video></div>
         </div>
-        {% endif %}
+        {% endif %} #}
 
         {# Galería y mapa viven aquí (no como secciones aparte a ancho completo)
            para que el sidebar sticky tenga contenido al lado y no quede un
