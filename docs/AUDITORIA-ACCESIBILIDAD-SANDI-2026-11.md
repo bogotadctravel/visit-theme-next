@@ -26,6 +26,17 @@ nuestro.
   contacto, Diseña tu viaje y 404. La única violación restante en todo el
   sitio es el botón del widget de Candelaria (ver pendientes).
 
+**Desplegado y verificado en producción el 2026-11-24** (subtema `2e6ad2e`, tema
+base `47e6dc7`): 85/85 pruebas contra visitbogota.co y staging.visitbogota.co.
+
+**Hay que pedirle a SANDI que apague sus scripts de corrección**
+(`hallazgo-01-menu.js`, `-02-idiomas.js`, `-08-carruseles-en.js`,
+`-09-contraste.js`, `-10-buscador.js`, `-11-hero.js`, `-12-fechas.js`,
+`-14-resultados.js`): con SANDI activo pisan los arreglos nativos y los
+empeoran — p. ej. las bolitas del hero vuelven a "Ir a la imagen 1 de 5" (sin
+la descripción de la imagen) y el selector de idiomas vuelve a anunciar un
+menú (`aria-haspopup="menu"`).
+
 ## Cumplimiento
 
 **De los 22 criterios que no cumplían, 22 quedan resueltos en código** (en tres
