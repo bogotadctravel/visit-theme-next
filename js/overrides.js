@@ -268,13 +268,18 @@
     var searchInput = masthead.querySelector('#search-input');
     if (searchComp && searchInput) {
       var results = searchComp.querySelector('#search-results');
-      var openResults = function () {
-        searchComp.classList.add('is-open');
-        searchInput.setAttribute('aria-expanded', 'true');
-      };
-      var closeResults = function () {
-        searchComp.classList.remove('is-open');
-        searchInput.setAttribute('aria-expanded', 'false');
+      var status = document.getElementById('search-status');
+      var openResults = function () { searchComp.classList.add('is-open'); };
+      var closeResults = function () { searchComp.classList.remove('is-open'); };
+
+      // Siguiente/anterior elemento enfocable fuera del buscador, para que las
+      // flechas nunca dejen el foco atrapado en el campo (hallazgo 10 SANDI).
+      var focusOutside = function (dir) {
+        var all = [].slice.call(document.querySelectorAll('a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'))
+          .filter(function (el) { return el.offsetParent !== null && !searchComp.contains(el); });
+        var before = all.filter(function (el) { return searchComp.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING; });
+        var target = dir > 0 ? all[before.length] : before[before.length - 1];
+        if (target) { closeResults(); target.focus(); }
       };
 
       searchInput.addEventListener('focus', openResults);
@@ -285,9 +290,11 @@
           var firstLink = results.querySelector('li a[href]');
           if (firstLink) { e.preventDefault(); window.location.href = firstLink.getAttribute('href'); }
         }
-        if (e.key === 'ArrowDown' && results) {
-          var first = results.querySelector('li a[href]');
-          if (first) { e.preventDefault(); first.focus(); }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          var first = results && results.querySelector('li a[href]');
+          e.preventDefault();
+          if (e.key === 'ArrowDown' && first) first.focus();
+          else focusOutside(e.key === 'ArrowDown' ? 1 : -1);
         }
       });
       // Flechas arriba/abajo recorren los resultados; arriba desde el primero
@@ -299,7 +306,7 @@
           var at = links.indexOf(document.activeElement);
           if (at === -1) return;
           e.preventDefault();
-          if (e.key === 'ArrowDown') { if (links[at + 1]) links[at + 1].focus(); }
+          if (e.key === 'ArrowDown') { if (links[at + 1]) links[at + 1].focus(); else focusOutside(1); }
           else if (at === 0) searchInput.focus();
           else links[at - 1].focus();
         });
@@ -307,15 +314,23 @@
       document.addEventListener('click', function (e) {
         if (!searchComp.contains(e.target)) closeResults();
       });
+      // Cerrar el panel al salir del buscador con Tab.
+      searchComp.addEventListener('focusout', function (e) {
+        if (!searchComp.contains(e.relatedTarget)) closeResults();
+      });
 
-      // #search-results es role="listbox": sus <li> los inyecta el behavior
-      // del tema base sin role="option", lo que rompe aria-required-children.
-      // Se etiquetan aquí al vuelo sin tocar ese behavior.
+      // Los resultados los pinta el behavior del tema base: aquí se anuncia
+      // cuántos hay (WCAG 4.1.3) y se traduce su "sin resultados", que viene
+      // fijo en español.
       if (results && window.MutationObserver) {
         new MutationObserver(function () {
-          [].slice.call(results.children).forEach(function (li) {
-            if (!li.hasAttribute('role')) li.setAttribute('role', 'option');
-          });
+          var empty = results.querySelector('.no-results');
+          if (empty) empty.textContent = Drupal.t('No se encontraron resultados');
+          if (!status) return;
+          var n = results.querySelectorAll('li a[href]').length;
+          if (!searchInput.value.trim()) status.textContent = '';
+          else if (empty || !n) status.textContent = Drupal.t('No se encontraron resultados');
+          else status.textContent = Drupal.formatPlural(n, '1 resultado. Usa flecha abajo para recorrerlo.', '@count resultados. Usa flecha abajo para recorrerlos.');
         }).observe(results, { childList: true });
       }
     }
@@ -347,38 +362,47 @@
 
     var dotsWrap = opts.dotsId ? document.getElementById(opts.dotsId) : null;
     var dots = [];
+    var picked = -1;
 
-    // Un punto por posición de scroll, no por ítem: con varias tarjetas visibles
-    // a la vez hay menos posiciones que ítems (si no, sobran puntos "muertos").
-    var dotCount = function () {
-      var s = step();
-      if (!s) return items.length;
-      var maxScroll = track.scrollWidth - track.clientWidth;
-      if (maxScroll <= 1) return 1;
-      return Math.round(maxScroll / s) + 1;
+    var itemName = function (item) {
+      var el = item.querySelector('[class*="__title"], [class*="__name"], h2, h3, h4');
+      var text = el ? el.textContent : '';
+      if (!text.trim()) { var img = item.querySelector('img[alt]'); text = img ? img.getAttribute('alt') : ''; }
+      return text.replace(/\s+/g, ' ').trim();
+    };
+    var scrollToItem = function (i) {
+      var max = track.scrollWidth - track.clientWidth;
+      track.scrollTo({ left: Math.min(max, items[i].offsetLeft - items[0].offsetLeft), behavior: 'smooth' });
     };
 
+    // Hallazgo 8 SANDI: antes había un punto por posición de scroll (5 ítems
+    // podían dar 3 puntos) con una etiqueta fija en español ("Ir a la
+    // subcategoría 1") que se leía igual en la versión en inglés. Ahora hay
+    // un punto por ítem, con el nombre del ítem y traducido con Drupal.t().
     var buildDots = function () {
-      if (!dotsWrap) return;
-      var n = dotCount();
-      if (n === dots.length) return;
+      if (!dotsWrap || dots.length) return;
       dotsWrap.textContent = '';
-      dots = [];
-      for (var i = 0; i < n; i++) {
-        (function (i) {
-          var dot = document.createElement('button');
-          dot.type = 'button';
-          dot.setAttribute('aria-label', (opts.dotLabel || 'Ir a') + ' ' + (i + 1));
-          dot.addEventListener('click', function () {
-            track.scrollTo({ left: step() * i, behavior: 'smooth' });
-          });
-          dotsWrap.appendChild(dot);
-          dots.push(dot);
-        })(i);
-      }
-      // Los contenedores de puntos llevan display:flex en CSS, así que .hidden
-      // no basta: se oculta por estilo en línea si no hay más de una posición.
-      dotsWrap.style.display = n <= 1 ? 'none' : '';
+      items.forEach(function (item, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        var args = { '@n': i + 1, '@total': items.length, '@nombre': itemName(item) };
+        dot.setAttribute('aria-label', opts.dotLabel ? opts.dotLabel(args) : Drupal.t('Elemento @n de @total: @nombre', args));
+        dot.addEventListener('click', function (e) {
+          picked = i;
+          scrollToItem(i);
+          // Activado con teclado (Enter/Espacio dan detail === 0): llevar el
+          // foco al enlace del ítem, así el lector lo anuncia y Enter lo abre.
+          // Se difiere: si el foco cambia dentro del mismo evento de teclado,
+          // el navegador entrega ese Enter al enlace y lo abre.
+          if (e.detail === 0) {
+            var link = item.querySelector('a[href]');
+            if (link) setTimeout(function () { link.focus({ preventScroll: true }); }, 0);
+          }
+        });
+        dotsWrap.appendChild(dot);
+        dots.push(dot);
+      });
+      dotsWrap.style.display = items.length <= 1 ? 'none' : '';
     };
     buildDots();
 
@@ -388,7 +412,13 @@
       if (arrows[1]) arrows[1].disabled = track.scrollLeft >= max;
       if (dots.length) {
         var index = Math.min(dots.length - 1, Math.round(track.scrollLeft / step()));
-        dots.forEach(function (d, i) { d.classList.toggle('is-active', i === index); });
+        // Con varias tarjetas visibles, el scroll se topa antes del último
+        // ítem: si se eligió uno de esos, se respeta la elección.
+        if (track.scrollLeft >= max && picked > index) index = picked;
+        dots.forEach(function (d, i) {
+          d.classList.toggle('is-active', i === index);
+          if (i === index) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+        });
       }
     };
     track.addEventListener('scroll', update, { passive: true });
@@ -448,23 +478,48 @@
       var slides = [].slice.call(heroTrack.querySelectorAll('.hero__slide'));
       if (slides.length > 1) {
         var current = 0;
-        var goTo = function (i) {
+        var dotEls = [];
+        var goTo = function (i, focus) {
           current = (i + slides.length) % slides.length;
-          slides.forEach(function (s, j) { s.classList.toggle('is-active', current === j); });
-          [].slice.call(heroDots.children).forEach(function (d, j) {
+          slides.forEach(function (s, j) {
+            s.classList.toggle('is-active', current === j);
+            if (current === j) s.removeAttribute('aria-hidden'); else s.setAttribute('aria-hidden', 'true');
+          });
+          dotEls.forEach(function (d, j) {
             d.classList.toggle('is-active', current === j);
             d.setAttribute('aria-selected', current === j ? 'true' : 'false');
+            d.tabIndex = current === j ? 0 : -1;
           });
+          if (focus) dotEls[current].focus();
         };
-        slides.forEach(function (_, i) {
+        // Hallazgos 3 y 11 SANDI: cada bolita anuncia qué imagen muestra (el
+        // alt cargado en el CMS) y su posición, no solo "Ir al slide N".
+        slides.forEach(function (slide, i) {
+          var img = slide.querySelector('img');
+          var desc = img ? (img.getAttribute('alt') || '').trim() : '';
           var dot = document.createElement('button');
           dot.type = 'button';
+          dot.id = 'hero-dot-' + (i + 1);
           dot.className = 'hero__dot' + (i === 0 ? ' is-active' : '');
           dot.setAttribute('role', 'tab');
           dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
-          dot.setAttribute('aria-label', 'Ir al slide ' + (i + 1));
+          if (slide.id) dot.setAttribute('aria-controls', slide.id);
+          dot.tabIndex = i === 0 ? 0 : -1;
+          var args = { '@n': i + 1, '@total': slides.length, '@desc': desc };
+          dot.setAttribute('aria-label', desc
+            ? Drupal.t('Imagen @n de @total: @desc', args)
+            : Drupal.t('Imagen @n de @total', args));
           dot.addEventListener('click', function () { goTo(i); });
           heroDots.appendChild(dot);
+          dotEls.push(dot);
+        });
+        // Patrón de pestañas WAI-ARIA: una sola bolita en el orden de Tab y
+        // las flechas recorren las demás.
+        heroDots.addEventListener('keydown', function (e) {
+          var keys = { ArrowRight: current + 1, ArrowLeft: current - 1, Home: 0, End: slides.length - 1 };
+          if (!(e.key in keys)) return;
+          e.preventDefault();
+          goTo(keys[e.key], true);
         });
 
         // Swipe horizontal con el dedo (las diapositivas están apiladas, no
@@ -495,7 +550,7 @@
         dotsId: 'eventosDots',
         arrowSelector: '.vn-home .eventos__arrow',
         itemSelector: '.eventos__item',
-        dotLabel: 'Ir al evento',
+        dotLabel: function (a) { return Drupal.t('Evento @n de @total: @nombre', a); },
       });
     } catch (err) {
       if (window.console) console.warn('[vn-home] carrusel:', err);
@@ -519,7 +574,7 @@
     toggle.addEventListener('click', function () {
       var expanded = body.classList.toggle('is-expanded');
       toggle.setAttribute('aria-expanded', String(expanded));
-      if (label) label.textContent = expanded ? 'Leer menos' : 'Leer más';
+      if (label) label.textContent = expanded ? Drupal.t('Leer menos') : Drupal.t('Leer más');
 
       // Analytics (GTM): el botón trae `hasAnalytics` + `data-event="leer_mas_*"`
       // y GTM registra el evento en cada clic. Solo la expansión significa que
@@ -535,6 +590,32 @@
     });
   }
 
+  // Foco de un modal .vn-modal: al abrir va al botón de cerrar y Tab no sale
+  // del diálogo; al cerrar vuelve al elemento que lo abrió (WCAG 2.1.2 y 2.4.3).
+  function modalFocus(modal) {
+    var trigger = null;
+    var dialog = modal.querySelector('[role="dialog"]') || modal;
+    modal.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab' || modal.hidden) return;
+      var f = [].slice.call(dialog.querySelectorAll('a[href], button, iframe, [tabindex]:not([tabindex="-1"])'));
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    return {
+      opened: function () {
+        trigger = document.activeElement;
+        var close = dialog.querySelector('[data-modal-close]');
+        if (close) close.focus();
+      },
+      closed: function () {
+        if (trigger && trigger.focus) trigger.focus();
+        trigger = null;
+      },
+    };
+  }
+
   // Modal de imagen (galería de la ficha de atractivo).
   function initGalleryModal() {
     var modal = document.getElementById('galleryModal');
@@ -542,17 +623,20 @@
     modal.dataset.vnInit = '1';
 
     var img = document.getElementById('galleryModalImg');
+    var focus = modalFocus(modal);
     var open = function (src, alt) {
       if (!img) return;
       img.src = src;
       img.alt = alt || '';
       modal.hidden = false;
       document.body.style.overflow = 'hidden';
+      focus.opened();
     };
     var close = function () {
       modal.hidden = true;
       if (img) img.src = '';
       document.body.style.overflow = '';
+      focus.closed();
     };
 
     document.querySelectorAll('.place-gallery__item[data-gallery-src]').forEach(function (btn) {
@@ -576,17 +660,26 @@
     modal.dataset.vnInit = '1';
 
     var body = document.getElementById('instagramModalBody');
+    var focus = modalFocus(modal);
     var open = function (url) {
       if (!body) return;
       var embedSrc = url.replace(/\/?$/, '/') + 'embed';
-      body.innerHTML = '<iframe src="' + embedSrc + '" title="Publicación de Instagram" loading="lazy" allowtransparency="true"></iframe>';
+      var frame = document.createElement('iframe');
+      frame.src = embedSrc;
+      frame.title = Drupal.t('Publicación de Instagram');
+      frame.loading = 'lazy';
+      frame.setAttribute('allowtransparency', 'true');
+      body.textContent = '';
+      body.appendChild(frame);
       modal.hidden = false;
       document.body.style.overflow = 'hidden';
+      focus.opened();
     };
     var close = function () {
       modal.hidden = true;
       if (body) body.innerHTML = '';
       document.body.style.overflow = '';
+      focus.closed();
     };
 
     document.querySelectorAll('.card-video[data-instagram-url]').forEach(function (card) {
@@ -616,7 +709,7 @@
         dotsId: 'catSubcatsDots',
         arrowSelector: '.vn-cat .cat-subcats__arrow',
         itemSelector: '.cat-subcats__item',
-        dotLabel: 'Ir a la subcategoría',
+        dotLabel: function (a) { return Drupal.t('Subcategoría @n de @total: @nombre', a); },
       });
     } catch (err) {
       if (window.console) console.warn('[vn-cat] carrusel:', err);

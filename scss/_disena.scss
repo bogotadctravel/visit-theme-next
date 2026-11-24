@@ -81,7 +81,7 @@ body.no-scroll { overflow: hidden; }
     transition: background .15s, border-color .15s, color .15s;
   }
   .chip:hover { border-color: var(--c); }
-  .chip:focus-visible, .dtv-result-card:focus-visible, .btn:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
+  .chip:focus-visible, .dtv-result-card__main:focus-visible, .btn:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
   .chip .ico { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .chip-dot {
     width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
@@ -202,9 +202,15 @@ body.no-scroll { overflow: hidden; }
     content: ''; position: absolute; left: -10px; top: 14px; bottom: 14px; width: 4px; border-radius: 0 4px 4px 0; background: var(--c);
   }
   .result-thumb { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: var(--line); }
-  .result-body { min-width: 0; flex: 1; }
-  .result-body h3 { font-size: 14px; font-weight: 700; line-height: 1.25; margin: 3px 0 2px; }
-  .result-body .muted { font-size: 12px; }
+  // Botón principal de la tarjeta (ver en el mapa): hereda el aspecto de la
+  // tarjeta; el botón "Agregar" queda como hermano, no anidado.
+  .dtv-result-card__main {
+    display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;
+    padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+  }
+  .result-body { min-width: 0; flex: 1; display: block; }
+  .result-body__title { display: block; font-size: 14px; font-weight: 700; line-height: 1.25; margin: 3px 0 2px; }
+  .result-body .muted { display: block; font-size: 12px; }
 
   .dtv-tag {
     display: inline-flex; align-items: center; gap: 4px;
@@ -419,8 +425,8 @@ body.no-scroll { overflow: hidden; }
   // chips/botones al hacer clic. Se restituye el borde de cada pieza (el foco
   // de teclado lo marca el outline :focus-visible de arriba).
   *:focus { border: 0 !important; }
-  .chip:focus,
-  .dtv-result-card:focus { border: 1.5px solid var(--c) !important; }
+  .chip:focus { border: 1.5px solid var(--c) !important; }
+  .dtv-result-card:focus-within { border-color: var(--c) !important; }
   .add-mini:focus { border: 1.5px solid var(--line) !important; }
   .add-mini.is-added:focus { border-color: var(--red) !important; }
   .btn:focus { border: 1.5px solid transparent !important; }

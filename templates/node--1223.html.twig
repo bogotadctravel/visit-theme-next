@@ -30,16 +30,25 @@
   {% set hero_slides = [] %}
   {% for item in node.field_imagen_campana %}
     {% if item.entity %}
-      {% set hero_slides = hero_slides|merge([file_url(item.entity.uri.value)]) %}
+      {% set hero_slides = hero_slides|merge([{ src: file_url(item.entity.uri.value), alt: item.alt }]) %}
     {% endif %}
   {% endfor %}
+  {# field_imagen_campana no es traducible: en /en el alt sigue en español, así
+     que se marca con su idioma real (WCAG 3.1.2) para que el lector de
+     pantalla no lo pronuncie como inglés. #}
+  {% set hero_alt_lang = node.getUntranslated().langcode.value %}
+  {% set hero_alt_lang_attr = hero_alt_lang != node.langcode.value ? ' lang="' ~ hero_alt_lang ~ '"' : '' %}
 
   <section class="hero" aria-label="Bogotá">
     <div class="hero__track">
       {% if hero_slides is not empty %}
-        {% for src in hero_slides %}
-        <div class="hero__slide{% if loop.first %} is-active{% endif %}">
-          <img class="hero__bg" src="{{ src }}" alt=""{% if loop.first %} fetchpriority="high"{% endif %} decoding="async">
+        {% for slide in hero_slides %}
+        {#- Hallazgos 3 y 11 SANDI: el alt estaba vacío, así que ni la imagen ni
+            su bolita de selección anunciaban qué mostraba. initHome() toma el
+            alt de cada slide para la etiqueta de su bolita. -#}
+        <div class="hero__slide{% if loop.first %} is-active{% endif %}" id="hero-slide-{{ loop.index }}"
+          {% if hero_slides|length > 1 %}role="tabpanel" aria-labelledby="hero-dot-{{ loop.index }}"{% endif %}{{ hero_alt_lang_attr|raw }}{% if not loop.first %} aria-hidden="true"{% endif %}>
+          <img class="hero__bg" src="{{ slide.src }}" alt="{{ slide.alt }}"{% if loop.first %} fetchpriority="high"{% endif %} decoding="async">
         </div>
         {% endfor %}
       {% else %}
@@ -61,7 +70,7 @@
   </section>
 
   {% if hero_slides|length > 1 %}
-  <div class="hero__dots" id="heroDots" role="tablist" aria-label="{{ 'Seleccionar slide'|t }}"></div>
+  <div class="hero__dots" id="heroDots" role="tablist" aria-label="{{ 'Seleccionar imagen del banner'|t }}"></div>
   {% endif %}
 
   {# {% if banners_home %}<div class="vn-home__banners">{{ banners_home }}</div>{% endif %} #}
@@ -82,7 +91,7 @@
           <a class="card-imperdible" href="{{ item.url }}">
             <span class="card-imperdible__media">
               <img class="card-imperdible__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}"
-                alt="{{ item.title }}" loading="lazy" decoding="async">
+                alt="" loading="lazy" decoding="async">
             </span>
             <span class="card-imperdible__title">{{ item.title }}</span>
           </a>
@@ -173,7 +182,7 @@
           {% endfor %}
         </ul>
 
-        <div class="eventos__dots" id="eventosDots"></div>
+        <div class="eventos__dots" id="eventosDots" role="group" aria-label="{{ 'Seleccionar evento'|t }}"></div>
       </div>
     </div>
   </section>
@@ -238,7 +247,7 @@
       {% for item in article|slice(0, 5) %}
       <li>
         <a class="blog-home__item{% if loop.first %} blog-home__item--big{% endif %}" href="{{ item.url }}">
-          <img class="blog-home__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="{{ item.title }}" loading="lazy" decoding="async">
+          <img class="blog-home__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="" loading="lazy" decoding="async">
           <span class="blog-home__caption">{{ item.title }}</span>
         </a>
       </li>

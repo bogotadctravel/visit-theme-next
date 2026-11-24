@@ -394,7 +394,7 @@ msgstr "How to get there"
 msgid "ui.imperdible_badge"
 msgstr "Must-see"
 
-msgid "ui.invalid_date_range"
+msgid "Revisa las fechas: la fecha hasta no puede ser anterior a la fecha desde."
 msgstr "Check the dates: the end date cannot be earlier than the start date."
 
 msgid "ui.listen_audio_guide"
@@ -781,3 +781,57 @@ msgstr "Find the ideal venue for your event"
 
 msgid "Atención al usuario"
 msgstr "User support"
+
+# --- Accesibilidad SANDI (2026-11-24) ---
+msgid "Leer menos"
+msgstr "Read less"
+
+msgid "ver en el mapa"
+msgstr "view on the map"
+
+msgid "Agregar @nombre a mi viaje"
+msgstr "Add @nombre to my trip"
+
+msgid "Quitar @nombre de mi viaje"
+msgstr "Remove @nombre from my trip"
+
+msgid "Seleccionar imagen del banner"
+msgstr "Select banner image"
+
+msgid "Seleccionar evento"
+msgstr "Select event"
+
+msgid "Seleccionar subcategoría"
+msgstr "Select subcategory"
+
+msgid "Imagen @n de @total: @desc"
+msgstr "Image @n of @total: @desc"
+
+msgid "Imagen @n de @total"
+msgstr "Image @n of @total"
+
+msgid "Elemento @n de @total: @nombre"
+msgstr "Item @n of @total: @nombre"
+
+msgid "Evento @n de @total: @nombre"
+msgstr "Event @n of @total: @nombre"
+
+msgid "Subcategoría @n de @total: @nombre"
+msgstr "Subcategory @n of @total: @nombre"
+
+msgid "Escribe para buscar. Con flecha abajo recorres los resultados y con Escape sales del buscador."
+msgstr "Type to search. Use the down arrow to go through the results and Escape to leave the search box."
+
+msgid "Resultados de búsqueda"
+msgstr "Search results"
+
+msgid "1 resultado. Usa flecha abajo para recorrerlo."
+msgid_plural "@count resultados. Usa flecha abajo para recorrerlos."
+msgstr[0] "1 result. Use the down arrow to go through it."
+msgstr[1] "@count results. Use the down arrow to go through them."
+
+msgid "Subtítulos"
+msgstr "Captions"
+
+msgid "Descripción y transcripción del video"
+msgstr "Video description and transcript"

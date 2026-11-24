@@ -33,7 +33,8 @@ code, kbd, pre, samp { font-family: ui-monospace, SFMono-Regular, Menlo, monospa
   --vn-gris-oscuro:      #1D1D1D;
   --vn-gris-10:          #F5F6F8;
   --vn-gris-30:          #D8DCE3;
-  --vn-gris-60:          #6B7280;
+  // #6B7280 daba 4.47:1 sobre --vn-gris-10 (incumple 1.4.3 por poco).
+  --vn-gris-60:          #5B6170;
   --vn-sombra-menu:      0 12px 32px rgba(16, 27, 48, .18);
 
   // Medidas estructurales del header

@@ -472,6 +472,14 @@
     }
   }
   // Video con botón de play
+  .place-transcript {
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.6;
+
+    summary { cursor: pointer; font-weight: 700; color: var(--vn-rojo-principal); }
+    > div { margin-top: 8px; }
+  }
   .place-video {
     position: relative;
     margin-top: 8px;

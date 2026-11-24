@@ -33,7 +33,7 @@ Contenido:
 | `--vn-gris-oscuro` | `#1D1D1D` | Títulos, fondo de fallback en heros mientras carga la imagen |
 | `--vn-gris-10` | `#F5F6F8` | Fondos sutiles: filtros, franja inferior de `.card-evento`, hover de filas/menú |
 | `--vn-gris-30` | `#D8DCE3` | Bordes por defecto en casi todos los componentes |
-| `--vn-gris-60` | `#6B7280` | Texto secundario, labels, placeholders |
+| `--vn-gris-60` | `#5B6170` | Texto secundario, labels, placeholders |
 | `--vn-sombra-menu` | `0 12px 32px rgba(16,27,48,.18)` | Única sombra tokenizada; usada en dropdowns/menú |
 
 **Colores sin tokenizar** (hex crudo en el código, ver detalle en `tokens.scss`): `#cbbba0` (fondo de la fila "Dirección" del sidebar de ficha), `#111`/`#000` (texto sobre esa fila), `#706F6F`/`#707070` (separadores del megamenú), `#142140` (hover del botón TransMilenio sobre el mapa).

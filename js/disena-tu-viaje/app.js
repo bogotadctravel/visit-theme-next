@@ -435,14 +435,18 @@
     ul.innerHTML = list.map(p => {
       const inTrip = state.trip.includes(p.id);
       return `<li>
-        <div class="dtv-result-card ${p.id === state.selected ? 'is-selected' : ''}" data-id="${p.id}" role="button" tabindex="0"
-             aria-label="${esc(p.name)}: ${esc(Drupal.t('ver en el mapa'))}" style="--c:${CATS[p.cat].color}">
-          <img class="result-thumb" src="${esc(p.thumb)}" alt="" loading="lazy">
-          <div class="result-body">
-            <span class="dtv-tag ${state.cats.size === 0 ? 'dtv-tag-imperdible' : ''}">${icon(p.cat)}${esc(tagFor(p))}</span>
-            <h3>${esc(p.name)}</h3>
-            <p class="muted">${esc(p.zone)}${p.hasGeo ? '' : `${p.zone ? ' · ' : ''}<span class="no-geo">${Drupal.t('Sin ubicación en el mapa')}</span>`}</p>
-          </div>
+        <div class="dtv-result-card ${p.id === state.selected ? 'is-selected' : ''}" data-id="${p.id}" style="--c:${CATS[p.cat].color}">
+          <!-- Botón real para "ver en el mapa" y "Agregar" como hermano: antes la
+               tarjeta era role="button" con otro botón dentro (control anidado,
+               WCAG 4.1.2) y el lector leía su texto dos veces (hallazgo 14). -->
+          <button type="button" class="dtv-result-card__main" aria-label="${esc(p.name)}: ${esc(Drupal.t('ver en el mapa'))}">
+            <img class="result-thumb" src="${esc(p.thumb)}" alt="" loading="lazy">
+            <span class="result-body">
+              <span class="dtv-tag ${state.cats.size === 0 ? 'dtv-tag-imperdible' : ''}">${icon(p.cat)}${esc(tagFor(p))}</span>
+              <span class="result-body__title">${esc(p.name)}</span>
+              <span class="muted">${esc(p.zone)}${p.hasGeo ? '' : `${p.zone ? ' · ' : ''}<span class="no-geo">${Drupal.t('Sin ubicación en el mapa')}</span>`}</span>
+            </span>
+          </button>
           <button class="add-mini ${inTrip ? 'is-added' : ''}" data-add="${p.id}"
                   aria-label="${inTrip ? Drupal.t('Quitar @nombre de mi viaje', { '@nombre': p.name }) : Drupal.t('Agregar @nombre a mi viaje', { '@nombre': p.name })}"
                   title="${inTrip ? Drupal.t('En mi viaje') : Drupal.t('Agregar a mi viaje')}">
@@ -457,14 +461,9 @@
     if (e.target.closest('[data-retry-results]')) { ensureData(true); return refreshData(false); }
     const add = e.target.closest('[data-add]');
     if (add) { toggleTrip(add.dataset.add); return; }
+    // Enter/Espacio sobre .dtv-result-card__main (un <button>) llegan aquí como click.
     const card = e.target.closest('.dtv-result-card');
     if (card) select(card.dataset.id, { pan: true });
-  });
-  $('#resultsList').addEventListener('keydown', e => {
-    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('dtv-result-card')) {
-      e.preventDefault();
-      select(e.target.dataset.id, { pan: true });
-    }
   });
 
   /* ---------- Mapa (ArcGIS) ---------- */

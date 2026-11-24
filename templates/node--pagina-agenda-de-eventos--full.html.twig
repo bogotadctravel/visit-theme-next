@@ -188,7 +188,7 @@
     if (form) {
       form.addEventListener('submit', function (e) {
         clearError();
-        var message = '{{ 'ui.invalid_date_range'|t|e('js') }}';
+        var message = '{{ 'Revisa las fechas: la fecha hasta no puede ser anterior a la fecha desde.'|t|e('js') }}';
         if (d && d.value && d.min && d.value < d.min) {
           e.preventDefault();
           showError(d, message);

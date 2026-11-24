@@ -60,9 +60,21 @@
         {% endif %}
 
         {% if node.field_video.entity %}
+        {#- WCAG 1.2.1–1.2.3: subtítulos (.vtt) y transcripción, si el
+            contenido los trae (campos de scripts/a11y_media_fields.php). -#}
+        {% set video_subs = node.field_subtitulos.entity %}
+        {% set video_transcript = node.field_transcripcion.value ? node.field_transcripcion.processed : '' %}
         <div class="place-block">
           <h2 class="place-block__title">{{ 'Video'|t }}</h2>
-          <div class="place-video"><video controls preload="none" poster="{{ hero_bg }}" src="{{ file_url(node.field_video.entity.fileuri) }}"></video></div>
+          <div class="place-video"><video controls preload="none" poster="{{ hero_bg }}" src="{{ file_url(node.field_video.entity.fileuri) }}">
+            {%- if video_subs %}<track kind="captions" src="{{ file_url(video_subs.fileuri) }}" srclang="{{ node.langcode.value }}" label="{{ 'Subtítulos'|t }}" default>{% endif -%}
+          </video></div>
+          {% if video_transcript %}
+          <details class="place-transcript">
+            <summary>{{ 'Descripción y transcripción del video'|t }}</summary>
+            <div id="video-transcripcion">{{ video_transcript }}</div>
+          </details>
+          {% endif %}
         </div>
         {% endif %}
 
@@ -178,7 +190,7 @@
         {% for item in relacionados|slice(0, 4) %}
         <li>
           <a class="card-imperdible" href="{{ item.url }}">
-            <span class="card-imperdible__media"><img class="card-imperdible__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="{{ item.title }}" loading="lazy" decoding="async"></span>
+            <span class="card-imperdible__media"><img class="card-imperdible__img" src="{{ item.image_full ?: item.image ?: 'https://placehold.co/600x400' }}" alt="" loading="lazy" decoding="async"></span>
             <span class="card-imperdible__title">{{ item.title }}</span>
           </a>
         </li>

@@ -39,11 +39,17 @@
               <path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
             <label for="search-input" class="sr-only">{{ 'ui.search_placeholder'|t }}</label>
+            {#- Hallazgo 10 SANDI: con role="combobox" el lector entraba en modo
+                formulario y las flechas no hacían nada si aún no había
+                resultados. Ahora es un campo de búsqueda simple con
+                instrucciones; js/overrides.js mueve el foco con las flechas. -#}
             <input type="search" name="search-input" id="search-input" autocomplete="off"
               placeholder="{{ 'ui.search_placeholder'|t }}"
-              role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list">
+              aria-controls="search-results" aria-describedby="search-hint">
           </div>
-          <ul id="search-results" class="search-results" role="listbox" aria-live="polite" aria-atomic="false"></ul>
+          <p id="search-hint" class="sr-only">{{ 'Escribe para buscar. Con flecha abajo recorres los resultados y con Escape sales del buscador.'|t }}</p>
+          <p id="search-status" class="sr-only" role="status"></p>
+          <ul id="search-results" class="search-results" aria-label="{{ 'Resultados de búsqueda'|t }}"></ul>
         </div>
 
         {# Selector de idioma (región headerVisit del tema base). #}
