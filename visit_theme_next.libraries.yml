@@ -1,7 +1,7 @@
 overrides:
   # Subir este valor en cada cambio de css/js: es el ?v= de la URL y
   # Cloudflare cachea por URL (con VERSION quedaba pegado el archivo viejo).
-  version: 2026.11.24
+  version: 2026.11.25
   css:
     theme:
       css/overrides.css: {}

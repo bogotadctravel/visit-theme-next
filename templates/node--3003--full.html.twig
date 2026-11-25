@@ -61,13 +61,13 @@
 
       <div class="planner-grid">
         {# Sidebar izquierdo: resultados #}
-        <aside class="panel panel-results" aria-label="{{ 'Lugares en el mapa'|t }}">
+        <section class="panel panel-results" aria-label="{{ 'Lugares en el mapa'|t }}">
           <div class="panel-head">
             <h2 id="resultsTitle">{{ 'Imperdibles'|t }}</h2>
             <span class="panel-count" id="resultsCount">10</span>
           </div>
           <ul class="results-list" id="resultsList"></ul>
-        </aside>
+        </section>
 
         {# Mapa #}
         <div class="map-wrap" role="region" aria-label="{{ 'Mapa de Bogotá'|t }}">
@@ -91,7 +91,7 @@
         </div>
 
         {# Sidebar derecho: Mi viaje #}
-        <aside class="panel panel-trip" aria-label="{{ 'Mi viaje'|t }}">
+        <section class="panel panel-trip" aria-label="{{ 'Mi viaje'|t }}">
           <div class="panel-head">
             <h2>{{ 'Mi viaje'|t }}</h2>
             <span class="panel-count" id="tripCount">0</span>
@@ -109,7 +109,7 @@
             <p class="trip-hint" id="tripHint">{{ 'Agrega al menos 2 lugares para compartir tu itinerario.'|t }}</p>
             <button type="button" class="btn btn-primary btn-block" id="saveTrip" disabled>{{ 'Compartir itinerario'|t }}</button>
           </div>
-        </aside>
+        </section>
       </div>
 
       {# Modal compartir itinerario #}

@@ -835,3 +835,6 @@ msgstr "Captions"
 
 msgid "Descripción y transcripción del video"
 msgstr "Video description and transcript"
+
+msgid "Descripción"
+msgstr "Description"

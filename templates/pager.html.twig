@@ -39,7 +39,8 @@
 #}
 {% if items %}
   <nav class="pager" role="navigation" aria-labelledby="{{ heading_id }}">
-    <{{ pagination_heading_level }} id="{{ heading_id }}" class="visually-hidden">{{ 'Pagination'|t }}</{{ pagination_heading_level }}>
+    {# h2 fijo: core usa h4 y rompe el orden de encabezados (WCAG 1.3.1). #}
+    <h2 id="{{ heading_id }}" class="visually-hidden">{{ 'Pagination'|t }}</h2>
     <ul class="pager__items js-pager__items">
       {# Print first item if we are not on the first page. #}
       {% if items.first %}

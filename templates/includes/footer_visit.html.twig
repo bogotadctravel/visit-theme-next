@@ -38,7 +38,7 @@
 
     <div class="site-footer__links">
       <div class="site-footer__col">
-        <h3 class="site-footer__heading">{{ 'Atención al usuario'|t }}</h3>
+        <h2 class="site-footer__heading">{{ 'Atención al usuario'|t }}</h2>
         <ul class="site-footer__contact">
           {% if site_info.whatsapp %}
           <li><a href="{{ site_info.whatsapp }}" target="_blank" rel="noopener noreferrer">
@@ -56,7 +56,7 @@
       {% set categorias_footer = taxonomy('categorias_2026') %}
       {% if categorias_footer is not empty %}
       <nav class="site-footer__col" aria-label="{{ 'Descubre Bogotá'|t }}">
-        <h3 class="site-footer__heading">{{ 'Descubre Bogotá'|t }}</h3>
+        <h2 class="site-footer__heading">{{ 'Descubre Bogotá'|t }}</h2>
         <ul>
           {% for item in categorias_footer %}
           <li><a href="{{ conecta.cat_href(item.name, item.url) }}">{{ item.name }}</a></li>
@@ -67,7 +67,7 @@
 
       {% if mas_opciones['#items'] is not empty %}
       <nav class="site-footer__col" aria-label="{{ 'ui.more_options'|t }}">
-        <h3 class="site-footer__heading">{{ 'ui.more_options'|t }}</h3>
+        <h2 class="site-footer__heading">{{ 'ui.more_options'|t }}</h2>
         <ul>
           {% for item in mas_opciones['#items'] %}
           <li><a href="{{ item.url }}">{{ item.title }}</a></li>

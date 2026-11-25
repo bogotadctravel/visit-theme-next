@@ -39,6 +39,8 @@
 
       <article class="place-content">
         {% if body_sin_estilos or node.body.0.value %}
+        {#- h2 oculto: el cuerpo editorial suele empezar en h3 justo después del h1 (WCAG 1.3.1). -#}
+        <h2 class="sr-only">{{ 'Descripción'|t }}</h2>
         <div class="place-content__body cat-intro__body--collapsible" id="catIntroBody">
           {% if body_sin_estilos %}{{ body_sin_estilos }}{% else %}{{ node.body.0.value|raw }}{% endif %}
         </div>

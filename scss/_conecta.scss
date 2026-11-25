@@ -248,18 +248,32 @@
 
   // Indicadores de carrusel en rojo (como el home Visit). min-height: 0
   // anula el mínimo táctil de 44px que el base pone a todo <button>.
+  // El botón mide 24px de alto (WCAG 2.5.8 / target-size) y el punto visible
+  // de 8px va en ::before, así el diseño no cambia.
   .carousel-indicators button {
     min-height: 0;
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    background: #FFD0C4;
-    transition: width 200ms ease, background 200ms ease;
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 0;
+    background: transparent;
+    transition: width 200ms ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 4px;
+      background: #FFD0C4;
+      transition: background 200ms ease;
+    }
 
     &[aria-current='true'] {
-      width: 22px;
-      height: 8px;
-      background: var(--cx-rojo);
+      width: 38px;
+      height: 24px;
+      background: transparent;
+
+      &::before { inset: 8px; background: var(--cx-rojo); }
     }
   }
 
@@ -472,6 +486,14 @@
   .gallery-viewer__control:hover { background: var(--cx-rojo); }
   .hero::before { background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.25)); }
   .events__body { background-color: var(--cx-gris-10); }
+  // Con el fondo claro, los filtros heredaban el texto blanco del tema base
+  // (1.08:1, WCAG 1.4.3). Activo: rojo con texto blanco.
+  .events__page .events__filters button {
+    color: var(--cx-texto);
+    background: #fff;
+    border: 1px solid var(--cx-borde);
+    &.active, &[aria-pressed='true'] { background: var(--cx-rojo); border-color: var(--cx-rojo); color: #fff; }
+  }
   .success-card:hover { background: #fff; box-shadow: var(--cx-sombra); }
 
   // Sombras teñidas de azul → neutras.
