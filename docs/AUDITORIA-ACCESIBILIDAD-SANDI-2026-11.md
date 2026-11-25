@@ -1,4 +1,4 @@
-# Auditoría de accesibilidad SANDI — estado al 2026-11-24
+# Auditoría de accesibilidad SANDI — estado al 2026-11-25
 
 Ajustes en `visit-theme` (tema base) y `visit-theme-next` (subtema, que es el que
 sirve el header, el home, las fichas y los listados de **visitbogota.co**) para:
@@ -36,6 +36,38 @@ base `47e6dc7`): 85/85 pruebas contra visitbogota.co y staging.visitbogota.co.
 empeoran — p. ej. las bolitas del hero vuelven a "Ir a la imagen 1 de 5" (sin
 la descripción de la imagen) y el selector de idiomas vuelve a anunciar un
 menú (`aria-haspopup="menu"`).
+
+## Revisión del sitio completo con Unlighthouse (24 y 25 de noviembre)
+
+Las pruebas anteriores cubrían 31 páginas. Para medir el sitio entero se corrió
+Unlighthouse sobre 200 rutas de producción (móvil, SANDI bloqueado). El 24 salió
+**Accesibilidad 94,3** de promedio, con fallas concentradas en Conecta y en las
+fichas de eventos que no estaban en la muestra. Se corrigieron y publicaron el 25
+(tema base `0044898` y `4c66c1a`, subtema `975be5c`):
+
+| Regla | Rutas 24 nov | Rutas 25 nov | Corrección |
+|---|---|---|---|
+| `link-name` | 96 | 1 | texto de TransMilenio oculto visualmente en móvil, no eliminado |
+| `heading-order` | 68 | 0 | `aria-level`, h2 oculto "Descripción", footer y paginador con h2 |
+| `image-redundant-alt` | 52 | 0 | `alt=""` cuando el nombre ya está en el mismo enlace (64 imágenes) |
+| `aria-hidden-focus` | 48 | 0 | menú móvil y copias del carrusel con `inert` |
+| `aria-allowed-role` | 47 | 0 | sin `role` en las diapositivas de Splide |
+| `color-contrast` | 25 | 0 | enlace del aviso de producto y filtros de eventos de Conecta |
+| `frame-title` | 24 | 0 | `title` en los mapas de venues y proveedores |
+| `aria-allowed-attr` / `target-size` | 16 | 0 | indicadores con `aria-current`, 24×24 px y nombre del ítem |
+| `aria-prohibited-attr`, `definition-list` | 8 | 0 | salones de venues con listas válidas |
+
+Resultado el 25: **Accesibilidad 100,0 de promedio, 199 de 200 rutas en 100**. La
+restante es un enlace vacío dentro del texto de una ruta en inglés (contenido).
+También se eliminaron los `<main>` anidados de 34 plantillas: axe con todas las
+reglas, incluidas las de buenas prácticas, da 0 violaciones en 14 páginas de Visit
+y Conecta, en escritorio y móvil.
+
+Recomendaciones se queda en 95,9 en las 200 rutas por una sola causa ajena al
+tema: la cabecera CSP del proxy (Traefik) tiene un `;` de más en `media-src`
+(`… https://*.visitbogota.co; https://azurecandelaria.visitbogota.co;`), que el
+navegador reporta como error de consola. Además, a `frame-src` le falta
+`https://*.arcgis.com`.
 
 ## Cumplimiento
 
@@ -100,10 +132,15 @@ drush cr
 ```
 
 - Ya **no hace falta purgar Cloudflare**: las librerías ahora tienen versión propia
-  (`?v=2026.11.24` en -next, `?v=154.x` en el base). Hay que **subir ese valor**
+  (`?v=2026.11.25` en -next, `?v=156.x` en el base). Hay que **subir ese valor**
   en cada cambio futuro de CSS/JS.
 - `visit-theme/js/main.js` no se carga directo: tras editarlo hay que regenerar
-  `js/main.min.js` (`npx terser js/main.js --compress --mangle -o js/main.min.js`).
+  `js/main.min.js` con
+  `npx terser js/main.js --compress --mangle reserved=['Drupal'] -o js/main.min.js`.
+  Sin `reserved`, terser renombra `Drupal` y Drupal deja de encontrar los
+  `Drupal.t()`: los textos del JS salen en español en /en. Después de publicar
+  un `main.min.js` nuevo, correr `drush state:delete system.javascript_parsed`
+  y `drush cr` para que Drupal vuelva a leer sus textos.
 - Los dos scripts son idempotentes: correrlos de nuevo no duplica nada.
 - Tras desplegar se puede ir apagando en SANDI el script de cada hallazgo.
 
@@ -119,3 +156,11 @@ drush cr
    necesitará transcripción (WCAG 1.2.1); se puede generar el borrador con el
    mismo Whisper local.
 4. Revisar los borradores ✍️ y pedir a SANDI la re-evaluación.
+5. **CSP del proxy** (`/data/visitbogota.co_proxy/docker-compose.yml`, etiqueta
+   `contentSecurityPolicy` del servicio `traefik`): quitar el `;` de más en
+   `media-src` y agregar `https://*.arcgis.com` a `frame-src`. Exige recrear el
+   contenedor de Traefik (unos segundos sin servicio en todos los sitios del
+   servidor).
+6. **Contenido**: enlace vacío en el texto de la ruta en inglés "Distrito Diverso
+   — La Playa en Chapinero"; enlaces "Más información" sin texto descriptivo
+   (SEO) y 9 páginas sin meta descripción.
