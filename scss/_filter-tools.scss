@@ -1,0 +1,80 @@
+// =============================================================
+//  "Limpiar filtros" + "Compartir esta búsqueda" (js/overrides.js) en los
+//  listados con filtros. El botón de compartir solo se ve en móvil.
+// =============================================================
+
+.vn-filter-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  &[hidden] { display: none; }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 8px 14px;
+    border: 1.5px solid var(--vn-rojo-principal);
+    border-radius: 999px;
+    background: var(--vn-blanco);
+    color: var(--vn-rojo-principal);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background var(--vn-transicion), color var(--vn-transicion);
+
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    &:hover { background: var(--vn-rojo-principal); color: var(--vn-blanco); }
+    &:focus-visible { outline: 3px solid var(--vn-azul-marino); outline-offset: 2px; }
+  }
+
+  // Compartir: solo móvil.
+  &__share { display: none; }
+
+  @media (max-width: 960px) {
+    &__share { display: inline-flex; }
+  }
+}
+
+// Ubicación en cada tipo de listado.
+.archive__results-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+}
+.events-filters .vn-filter-tools { flex-basis: 100%; margin-top: 12px; }
+
+.vn-filter-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 1001;
+  margin: 0;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--vn-azul-marino, #1A2B4A);
+  color: #fff;
+  font-size: 14px;
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+
+  &.is-visible { opacity: 1; transform: translate(-50%, 0); }
+}

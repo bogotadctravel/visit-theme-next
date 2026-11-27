@@ -1,0 +1,67 @@
+{#
+  Página 404 del subtema (reemplaza la de visit_theme, que no tenía header).
+  Header y footer de siempre + aviso, buscador grande (búsqueda en vivo,
+  initLiveSearch en js/overrides.js) y las tarjetas de categorías del home
+  (mismo marcado que "Descubre Bogotá" en node--1223, bajo .vn-home).
+  Estilos en scss/_error-404.scss.
+#}
+{% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
+
+{% include "@visit_theme_next/includes/header_visit.html.twig" %}
+
+<main id="main-content" class="site-content site-content--visit">
+  <div class="vn-404">
+
+    <section class="vn-404__hero" aria-labelledby="vn-404-title">
+      <p class="vn-404__code" aria-hidden="true">404</p>
+      <h1 class="vn-404__title" id="vn-404-title">{{ 'No encontramos esta página'|t }}</h1>
+      <p class="vn-404__text">{{ 'Puede que el enlace haya cambiado o que la página ya no exista. Busca lo que necesitas o explora Bogotá por categorías.'|t }}</p>
+
+      <form class="vn-404__search js-live-search" role="search" action="{{ path('<front>') }}">
+        <div class="vn-404__field">
+          <svg class="vn-404__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <label for="vn-404-search" class="sr-only">{{ '¿Qué estás buscando?'|t }}</label>
+          <input type="search" id="vn-404-search" name="q" class="vn-404__input" autocomplete="off" data-search-input
+            placeholder="{{ '¿Qué estás buscando?'|t }}"
+            aria-controls="vn-404-results" aria-describedby="vn-404-hint">
+          <button type="submit" class="vn-404__submit">{{ 'Buscar'|t }}</button>
+        </div>
+        <p id="vn-404-hint" class="sr-only">{{ 'Escribe para buscar. Con flecha abajo recorres los resultados y con Escape sales del buscador.'|t }}</p>
+        <p class="sr-only" role="status" data-search-status></p>
+        <ul id="vn-404-results" class="search-results vn-404__results" data-search-results aria-label="{{ 'Resultados de búsqueda'|t }}"></ul>
+      </form>
+
+      <p class="vn-404__home"><a href="{{ path('<front>') }}">{{ 'Ir al inicio'|t }}</a></p>
+    </section>
+
+    {% set categorias = taxonomy('categorias_2026') %}
+    {% if categorias is not empty %}
+    <div class="vn-home">
+      <section class="que-hacer" aria-labelledby="vn-404-cats-title">
+        <div class="que-hacer__head">
+          <h2 class="que-hacer__title" id="vn-404-cats-title">{{ 'Descubre Bogotá'|t }}</h2>
+          <p class="que-hacer__desc">{{ 'Explora la ciudad por categorías, desde gastronomía y cultura hasta bienestar y negocios.'|t }}</p>
+        </div>
+        <ul class="que-hacer__grid">
+          {% for cat in categorias %}
+          <li>
+            <a class="card-categoria" href="{{ conecta.cat_href(cat.name, cat.url) }}">
+              <span class="card-categoria__media">
+                <img class="card-categoria__img" src="{{ cat.image_full ?: cat.image }}" alt="" loading="lazy" decoding="async">
+              </span>
+              <span class="card-categoria__title">{{ cat.name }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+    {% endif %}
+
+  </div>
+</main>
+
+{% include "@visit_theme_next/includes/footer_visit.html.twig" %}

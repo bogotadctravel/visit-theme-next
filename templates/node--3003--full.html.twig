@@ -74,6 +74,13 @@
           <div id="map" class="dtv-map"></div>
           <div class="map-loading" id="mapLoading">{{ 'Cargando mapa…'|t }}</div>
 
+          {# "Ver mi itinerario": en el mapa y en la lista solo lo agregado a Mi viaje. #}
+          <button type="button" class="map-trip-toggle" id="tripOnlyBtn" aria-pressed="false">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 12 2.5a7 7 0 0 1 7 7C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <span class="map-trip-toggle__label">{{ 'Ver mi itinerario'|t }}</span>
+            <span class="map-trip-toggle__count">0</span>
+          </button>
+
           {# Card flotante #}
           <article class="float-card" id="floatCard" hidden>
             <button type="button" class="float-close" id="floatClose" aria-label="{{ 'Cerrar'|t }}">&times;</button>

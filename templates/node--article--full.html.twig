@@ -7,7 +7,7 @@
 #}
 {% set cover = node.field_cover.entity ?: (node.field_mainimg.entity ?: node.field_image.entity) %}
 {% set cover_url = cover ? file_url(cover.uri.value) : '' %}
-{% set cat = node.field_turcat.0.entity %}
+{% set cat = vn_crumb_cat %}
 
 {# Tiempo de lectura aproximado (~200 palabras/min) a partir del cuerpo. #}
 {% set palabras = node.body.0.value|striptags|split(' ')|length %}
@@ -31,7 +31,7 @@
 
         <h1 class="single-blog__title">{{ node.getTitle() }}</h1>
         <p class="single-blog__meta">
-          {%- if cat %}{{ cat.name.value }} <span aria-hidden="true">·</span> {% endif -%}
+          {%- if cat %}{{ cat.label }} <span aria-hidden="true">·</span> {% endif -%}
           {{ minutos }} {{ 'min de lectura'|t }}
         </p>
 

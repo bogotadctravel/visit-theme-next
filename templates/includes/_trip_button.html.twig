@@ -1,0 +1,29 @@
+{#
+  Botón "Agregar a mi viaje" (fichas) / "Agrega este itinerario a tu viaje".
+  Lo maneja el bloque "Mi viaje" de js/overrides.js (window.VNTrip); el viaje
+  se abre en Diseña tu viaje (nodo 3003).
+
+  Parámetros:
+    refs        "categoría.nid[,categoría.nid…]" — categorías del mapa:
+                atractivos | hoteles | restaurantes | ofertas
+    name        nombre del lugar (para el aviso)
+    label       texto antes de agregar
+    label_added texto cuando ya está en el viaje
+    class       clases extra
+#}
+{% if refs %}
+<button type="button" class="btn vn-trip-btn js-trip-add {{ class|default('') }}"
+  data-trip-refs="{{ refs }}"
+  data-name="{{ name|default('') }}"
+  data-planner="{{ path('entity.node.canonical', {'node': 3003}) }}"
+  data-label-add="{{ label }}"
+  data-label-added="{{ label_added }}"
+  aria-pressed="false">
+  <svg class="vn-trip-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 12 2.5a7 7 0 0 1 7 7C19 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="2"/>
+    <path class="vn-trip-btn__plus" d="M12 6.5v6M9 9.5h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    <path class="vn-trip-btn__check" d="M9 9.6l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span class="js-trip-label">{{ label }}</span>
+</button>
+{% endif %}

@@ -28,28 +28,28 @@
 
       <div class="masthead__tools">
 
-        {# Buscador en línea: el input es directamente el buscador con autocompletar.
-           El behavior "idt-search-toggle" de visit_theme/global-styling detecta
-           #search-input / #search-results dentro de .search-comp y cablea la
-           búsqueda en vivo (sin overlay ni botón para abrirla). #}
-        <div class="search-comp">
+        {# Buscador en línea con autocompletar: initLiveSearch() de
+           js/overrides.js (.js-live-search + data-search-*). El campo no se
+           llama #search-input a propósito: así el behavior "idt-search-toggle"
+           del tema base no lo cablea también. #}
+        <div class="search-comp js-live-search">
           <div class="search-field">
             <svg class="search-field__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
               <circle cx="9" cy="9" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
               <path d="M13.5 13.5L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <label for="search-input" class="sr-only">{{ 'ui.search_placeholder'|t }}</label>
+            <label for="vn-search-input" class="sr-only">{{ 'ui.search_placeholder'|t }}</label>
             {#- Hallazgo 10 SANDI: con role="combobox" el lector entraba en modo
                 formulario y las flechas no hacían nada si aún no había
                 resultados. Ahora es un campo de búsqueda simple con
                 instrucciones; js/overrides.js mueve el foco con las flechas. -#}
-            <input type="search" name="search-input" id="search-input" autocomplete="off"
+            <input type="search" name="q" id="vn-search-input" class="search-input" autocomplete="off" data-search-input
               placeholder="{{ 'ui.search_placeholder'|t }}"
-              aria-controls="search-results" aria-describedby="search-hint">
+              aria-controls="vn-search-results" aria-describedby="search-hint">
           </div>
           <p id="search-hint" class="sr-only">{{ 'Escribe para buscar. Con flecha abajo recorres los resultados y con Escape sales del buscador.'|t }}</p>
-          <p id="search-status" class="sr-only" role="status"></p>
-          <ul id="search-results" class="search-results" aria-label="{{ 'Resultados de búsqueda'|t }}"></ul>
+          <p id="search-status" class="sr-only" role="status" data-search-status></p>
+          <ul id="vn-search-results" class="search-results" data-search-results aria-label="{{ 'Resultados de búsqueda'|t }}"></ul>
         </div>
 
         {# Selector de idioma (región headerVisit del tema base). #}

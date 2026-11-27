@@ -5,7 +5,7 @@
   body_sin_estilos, contenidos_relacionados) + campos del nodo.
 #}
 {% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
-{% set cat = node.field_turcat.0.entity %}
+{% set cat = vn_crumb_cat %}
 {% set lat = node.field_latlong.0.value %}
 {% set lng = node.field_latlong.1.value %}
 
@@ -20,7 +20,7 @@
         <ol>
           <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
           <li><a href="{{ path('entity.node.canonical', {'node': 562}) }}">{{ 'ui.where_to_eat'|t }}</a></li>
-          {% if cat %}<li><a href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a></li>{% endif %}
+          {% if cat %}<li><a href="{{ conecta.cat_href(cat.label, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.label }}</a></li>{% endif %}
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>
       </nav>
@@ -99,6 +99,15 @@
 
       <aside class="place-sidebar">
         <div class="place-sidebar__card">
+
+          {#- Diseña tu viaje (js/overrides.js, "Mi viaje"). -#}
+          {% include '@visit_theme_next/includes/_trip_button.html.twig' with {
+            refs: 'restaurantes.' ~ node.id,
+            name: node.getTitle(),
+            label: 'Agregar a mi viaje'|t,
+            label_added: 'En mi viaje · Quitar'|t,
+            class: 'place-sidebar__btn',
+          } only %}
 
           {% if node.field_direccion.0.value %}
           <div class="place-sidebar__row place-sidebar__row--address">

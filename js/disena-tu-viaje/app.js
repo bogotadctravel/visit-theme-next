@@ -21,8 +21,13 @@
     results: {},                                                // { imperdibles|cat: { status, qs, ids, total } }
     tripLoading: false,                                         // resolviendo un itinerario compartido
     selected: null,                                             // id del lugar destacado
-    trip: []                                                    // ids en "Mi viaje"
+    trip: [],                                                   // ids en "Mi viaje"
+    tripOnly: false                                             // vista "Ver mi itinerario": solo el viaje
   };
+
+  // Viaje compartido con el resto del sitio (botones "Agregar a mi viaje" de
+  // fichas e itinerarios). Lo define js/overrides.js; sin él, solo URL.
+  const store = window.VNTrip || null;
 
   const $ = sel => document.querySelector(sel);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -35,6 +40,7 @@
   const visibleKeys = () => (state.cats.size ? [...state.cats] : ['imperdibles']);
 
   function visiblePlaces() {
+    if (state.tripOnly) return state.trip.map(byId).filter(Boolean);
     const seen = new Set(), list = [];
     visibleKeys().forEach(k => ((state.results[k] && state.results[k].ids) || []).forEach(id => {
       if (!seen.has(id)) { seen.add(id); list.push(byId(id)); }
@@ -43,6 +49,7 @@
   }
 
   function visibleStatus() {
+    if (state.tripOnly) return state.tripLoading ? 'loading' : 'ok';
     const st = visibleKeys().map(k => (state.results[k] ? state.results[k].status : 'loading'));
     return st.includes('error') ? 'error' : st.includes('loading') ? 'loading' : 'ok';
   }
@@ -204,6 +211,7 @@
   }
 
   function ensureData(retry) {
+    if (state.tripOnly) return;
     visibleKeys().forEach(k => loadResults(k, retry));
   }
 
@@ -328,6 +336,7 @@
     if (!btn) return;
     const cat = btn.dataset.cat;
     state.openDD = null;
+    setTripOnly(false, true);
     if (cat === '__all') {
       state.cats.clear();
       clearFilters();
@@ -345,6 +354,7 @@
 
   filtersSub.addEventListener('click', e => {
     if (e.target.id === 'clearFilters') {
+      setTripOnly(false, true);
       state.cats.clear();
       state.openDD = null;
       clearFilters();
@@ -412,6 +422,7 @@
   /* ---------- Sidebar izquierdo ---------- */
 
   function tagFor(p) {
+    if (state.tripOnly) return CATS[p.cat].short;
     if (state.cats.size === 0) return Drupal.t('Imperdible !n', { '!n': p.imperdible });
     return p.discount ? `${CATS[p.cat].short} · ${Drupal.t('!n% dto.', { '!n': p.discount })}` : CATS[p.cat].short;
   }
@@ -420,7 +431,8 @@
 
   function renderResults(list) {
     const status = visibleStatus();
-    $('#resultsTitle').textContent = state.cats.size === 0 ? Drupal.t('Imperdibles') : Drupal.t('Resultados');
+    $('#resultsTitle').textContent = state.tripOnly ? Drupal.t('Mi itinerario')
+      : state.cats.size === 0 ? Drupal.t('Imperdibles') : Drupal.t('Resultados');
     $('#resultsCount').textContent = status === 'loading' && !list.length ? '…' : list.length;
     $('.panel-results').classList.toggle('is-updating', status === 'loading' && list.length > 0);
     const ul = $('#resultsList');
@@ -429,7 +441,9 @@
         ? `<li class="results-empty">${spinnerDark}${Drupal.t('Cargando lugares…')}</li>`
         : status === 'error'
           ? `<li class="results-empty">${Drupal.t('No se pudieron cargar los lugares.')}<br><button class="link-btn" data-retry-results>${Drupal.t('Reintentar')}</button></li>`
-          : `<li class="results-empty">${Drupal.t('No hay lugares con estos filtros.')}<br>${Drupal.t('Prueba quitando alguno.')}</li>`;
+          : state.tripOnly
+            ? `<li class="results-empty">${Drupal.t('Aún no has agregado lugares a tu viaje.')}</li>`
+            : `<li class="results-empty">${Drupal.t('No hay lugares con estos filtros.')}<br>${Drupal.t('Prueba quitando alguno.')}</li>`;
       return;
     }
     ul.innerHTML = list.map(p => {
@@ -442,7 +456,7 @@
           <button type="button" class="dtv-result-card__main" aria-label="${esc(p.name)}: ${esc(Drupal.t('ver en el mapa'))}">
             <img class="result-thumb" src="${esc(p.thumb)}" alt="" loading="lazy">
             <span class="result-body">
-              <span class="dtv-tag ${state.cats.size === 0 ? 'dtv-tag-imperdible' : ''}">${icon(p.cat)}${esc(tagFor(p))}</span>
+              <span class="dtv-tag ${state.cats.size === 0 && !state.tripOnly ? 'dtv-tag-imperdible' : ''}">${icon(p.cat)}${esc(tagFor(p))}</span>
               <span class="result-body__title">${esc(p.name)}</span>
               <span class="muted">${esc(p.zone)}${p.hasGeo ? '' : `${p.zone ? ' · ' : ''}<span class="no-geo">${Drupal.t('Sin ubicación en el mapa')}</span>`}</span>
             </span>
@@ -715,7 +729,8 @@
       toast(Drupal.t('«!nombre» quitado de tu viaje', { '!nombre': byId(id).name }));
     }
     renderTrip();
-    renderResults(visiblePlaces());
+    if (state.tripOnly) refreshData(false);
+    else renderResults(visiblePlaces());
     updateCardAddBtn();
   }
 
@@ -736,12 +751,46 @@
         <button class="trip-remove" data-remove="${p.id}" aria-label="${Drupal.t('Quitar @nombre', { '@nombre': p.name })}">&times;</button>
       </li>`;
     }).join('');
-    if (!state.tripLoading) syncUrl();
+    if (!state.tripLoading) {
+      syncUrl();
+      if (store) store.set(state.trip.map(id => `${byId(id).cat}.${id}`));
+    }
+    renderTripOnlyBtn();
     $('#saveTrip').disabled = n < 2 || state.tripLoading;
     $('#tripHint').textContent = n < 2
       ? (n === 0 ? Drupal.t('Agrega al menos 2 lugares para guardar tu itinerario.') : Drupal.t('Agrega 1 lugar más para guardar tu itinerario.'))
       : Drupal.t('Tu itinerario tiene !n lugares.', { '!n': n });
   }
+
+  /* ---------- Vista "Ver mi itinerario" (solo los lugares del viaje) ---------- */
+
+  function renderTripOnlyBtn() {
+    const btn = $('#tripOnlyBtn');
+    if (!btn) return;
+    const n = state.trip.length;
+    btn.setAttribute('aria-pressed', String(state.tripOnly));
+    btn.classList.toggle('is-active', state.tripOnly);
+    btn.querySelector('.map-trip-toggle__label').textContent = state.tripOnly
+      ? Drupal.t('Ver todos los lugares')
+      : Drupal.t('Ver mi itinerario');
+    btn.querySelector('.map-trip-toggle__count').textContent = state.tripLoading ? '…' : n;
+    btn.querySelector('.map-trip-toggle__count').hidden = state.tripOnly;
+  }
+
+  function setTripOnly(on, silent) {
+    if (state.tripOnly === !!on) return;
+    state.tripOnly = !!on;
+    if (state.tripOnly && state.selected && !state.trip.includes(state.selected)) closeCard();
+    renderTripOnlyBtn();
+    if (!silent) refreshData(true);
+  }
+
+  $('#tripOnlyBtn').addEventListener('click', () => {
+    if (!state.tripOnly && !state.trip.length && !state.tripLoading) {
+      return toast(Drupal.t('Aún no has agregado lugares a tu viaje.'));
+    }
+    setTripOnly(!state.tripOnly);
+  });
 
   $('#tripList').addEventListener('click', e => {
     const rm = e.target.closest('[data-remove]');
@@ -765,9 +814,6 @@
 
   const modal = $('#modal');
   let lastFocus = null;
-
-  // El QR solo se muestra en escritorio: en el celular se comparte directo con el enlace.
-  const isDesktop = () => window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 821px)').matches;
 
   function renderQr(url) {
     const box = $('#qrBox');
@@ -793,7 +839,8 @@
       `<li><span style="--c:${CATS[byId(id).cat].color}">${i + 1}</span>${esc(byId(id).name)}</li>`).join('');
     $('#shareUrl').value = url;
     $('#shareCopy').textContent = Drupal.t('Copiar');
-    $('#shareQr').hidden = !(isDesktop() && window.qrcode && renderQr(url));
+    // QR en todos los dispositivos (se puede mostrar a otra persona para que lo escanee).
+    $('#shareQr').hidden = !(window.qrcode && renderQr(url));
     $('#shareNative').hidden = !navigator.share;
     modal.hidden = false;
     document.body.classList.add('no-scroll');
@@ -889,9 +936,28 @@
 
     // Enlace armado a mano sin "cat": activamos las categorías del itinerario
     // para que todos sus lugares se vean en el mapa.
-    if (!q.has('cat')) tripRefs.forEach(r => state.cats.add(r.cat));
+    //
+    // ?ver=viaje: llega desde "Ver mi viaje" (fichas/itinerarios) → solo el
+    // viaje, sin activar categorías (al salir de esa vista quedan los imperdibles).
+    state.tripOnly = q.get('ver') === 'viaje';
+    if (!q.has('cat') && !state.tripOnly) tripRefs.forEach(r => state.cats.add(r.cat));
+
+    // Sin viaje en la URL: el que la persona armó en el sitio (localStorage).
+    tripSource = tripRefs.length ? 'url' : '';
+    if (!tripRefs.length && store) {
+      tripRefs = store.get().map(ref => {
+        const [cat, id] = ref.split('.');
+        return { cat, id };
+      }).filter(r => CATS[r.cat]);
+      if (tripRefs.length) tripSource = 'store';
+    }
+    if (!tripRefs.length) state.tripOnly = false;
+    // Marcar ya "cargando": el primer renderTrip() no debe guardar un viaje vacío.
+    state.tripLoading = tripRefs.length > 0;
     return tripRefs.length > 0;
   }
+
+  let tripSource = ''; // 'url' (enlace compartido o "Ver mi viaje") | 'store' (localStorage)
 
   // Reconstruye el itinerario compartido consultando solo los listados que necesita.
   function resolveTrip() {
@@ -905,11 +971,15 @@
         state.tripLoading = false;
         const missing = tripRefs.length - state.trip.length;
         renderTrip();
-        renderResults(visiblePlaces());
+        refreshData(false);
         fitTo(state.trip.map(byId));
         const n = state.trip.length;
+        if (!n) setTripOnly(false);
+        const loaded = tripSource === 'store'
+          ? Drupal.formatPlural(n, 'Tu viaje · 1 lugar', 'Tu viaje · @count lugares')
+          : Drupal.formatPlural(n, 'Itinerario compartido cargado · 1 lugar', 'Itinerario compartido cargado · @count lugares');
         toast(n
-          ? Drupal.formatPlural(n, 'Itinerario compartido cargado · 1 lugar', 'Itinerario compartido cargado · @count lugares')
+          ? loaded
             + (missing ? ' ' + Drupal.formatPlural(missing, '(1 ya no disponible)', '(@count ya no disponibles)') : '')
           : Drupal.t('No se pudo cargar el itinerario compartido'));
         const panel = $('.panel-trip');
@@ -927,6 +997,7 @@
     const f = [...state.cats].flatMap(c => Object.entries(state.filters[c])
       .flatMap(([key, ids]) => [...ids].map(id => `${c}.${encodeURIComponent(key)}.${encodeURIComponent(id)}`)));
     if (f.length) parts.push('f=' + f.join(','));
+    if (state.tripOnly && state.trip.length) parts.push('ver=viaje');
     if (withDebug && debugMode) parts.push('debug=1');
     return parts.length ? '?' + parts.join('&') : '';
   }

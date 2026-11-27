@@ -6,7 +6,7 @@
  *   · alto de las imágenes de subcategoría igualado a la columna de categorías
  *   · panel móvil en acordeón: el JS mueve buscador, idioma y los paneles del
  *     megamenú a su sitio dentro del panel y los devuelve en escritorio.
- * El buscador (overlay) lo maneja el behavior "idt-search-toggle" del tema base.
+ * Búsqueda en vivo: initLiveSearch() (.js-live-search), propia del subtema.
  */
 (function () {
   'use strict';
@@ -261,79 +261,175 @@
       });
     }
 
-    // ── Buscador en línea: solo se muestra el panel de resultados con el foco.
-    //    La búsqueda en vivo (fetch + render) la hace el behavior del tema base;
-    //    aquí solo se gestiona abrir/cerrar y navegar con Enter. ──
-    var searchComp = masthead.querySelector('.search-comp');
-    var searchInput = masthead.querySelector('#search-input');
-    if (searchComp && searchInput) {
-      var results = searchComp.querySelector('#search-results');
-      var status = document.getElementById('search-status');
-      var openResults = function () { searchComp.classList.add('is-open'); };
-      var closeResults = function () { searchComp.classList.remove('is-open'); };
+    // El buscador del header es un .js-live-search más (ver initLiveSearch).
+  }
 
-      // Siguiente/anterior elemento enfocable fuera del buscador, para que las
-      // flechas nunca dejen el foco atrapado en el campo (hallazgo 10 SANDI).
-      var focusOutside = function (dir) {
-        var all = [].slice.call(document.querySelectorAll('a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'))
-          .filter(function (el) { return el.offsetParent !== null && !searchComp.contains(el); });
-        var before = all.filter(function (el) { return searchComp.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING; });
-        var target = dir > 0 ? all[before.length] : before[before.length - 1];
-        if (target) { closeResults(); target.focus(); }
-      };
+  // =========================================================
+  //  BÚSQUEDA EN VIVO (.js-live-search)
+  //  Header y buscador grande de la 404. Antes la hacía el behavior
+  //  "idt-search-toggle" del tema base (busca #search-input dentro de
+  //  .search-comp); el campo ya no lleva ese id, así que el base no lo toca.
+  //  Marcado esperado dentro del contenedor:
+  //    [data-search-input]   <input type="search">
+  //    [data-search-results] <ul>
+  //    [data-search-status]  <p role="status"> (opcional)
+  //  Los atractivos salen siempre primero, con estrella.
+  // =========================================================
+  // Los mismos 12 más relevantes de siempre; solo cambia el orden. (Pedir más
+  // y luego subir los atractivos llenaba la lista de atractivos poco
+  // relevantes y sacaba, p. ej., el hotel o el artículo que se buscaba.)
+  var SEARCH_FETCH = 12;
 
-      searchInput.addEventListener('focus', openResults);
-      searchInput.addEventListener('input', openResults);
-      searchInput.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') { closeResults(); searchInput.blur(); return; }
-        if (e.key === 'Enter' && results) {
-          var firstLink = results.querySelector('li a[href]');
-          if (firstLink) { e.preventDefault(); window.location.href = firstLink.getAttribute('href'); }
-        }
-        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-          var first = results && results.querySelector('li a[href]');
-          e.preventDefault();
-          if (e.key === 'ArrowDown' && first) first.focus();
-          else focusOutside(e.key === 'ArrowDown' ? 1 : -1);
-        }
-      });
-      // Flechas arriba/abajo recorren los resultados; arriba desde el primero
-      // devuelve el foco al campo.
-      if (results) {
-        results.addEventListener('keydown', function (e) {
-          if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
-          var links = [].slice.call(results.querySelectorAll('li a[href]'));
-          var at = links.indexOf(document.activeElement);
-          if (at === -1) return;
-          e.preventDefault();
-          if (e.key === 'ArrowDown') { if (links[at + 1]) links[at + 1].focus(); else focusOutside(1); }
-          else if (at === 0) searchInput.focus();
-          else links[at - 1].focus();
-        });
+  function searchEsc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // Sin tildes ni mayúsculas, carácter a carácter (mismo largo que el texto).
+  function searchNorm(s) {
+    return Array.from(s, function (ch) {
+      return ch.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()[0] || ch;
+    }).join('');
+  }
+
+  // Raíz singular, como el servidor: "restaurantes" resalta "restaurante".
+  function searchStem(w) {
+    if (w.length < 5) return w;
+    if (/[^aeiou]es$/.test(w)) return w.slice(0, -2);
+    return w.endsWith('s') ? w.slice(0, -1) : w;
+  }
+
+  // Texto escapado con lo buscado dentro de <mark>.
+  function searchMark(text, words) {
+    text = text || '';
+    var chars = Array.from(text);
+    var normal = searchNorm(text);
+    if (text.length !== chars.length || normal.length !== chars.length) return searchEsc(text);
+    var hit = chars.map(function () { return false; });
+    words.forEach(function (word) {
+      for (var at = normal.indexOf(word); at !== -1; at = normal.indexOf(word, at + word.length)) {
+        for (var i = at; i < at + word.length; i++) hit[i] = true;
       }
-      document.addEventListener('click', function (e) {
-        if (!searchComp.contains(e.target)) closeResults();
-      });
-      // Cerrar el panel al salir del buscador con Tab.
-      searchComp.addEventListener('focusout', function (e) {
-        if (!searchComp.contains(e.relatedTarget)) closeResults();
-      });
+    });
+    return chars.map(function (ch, i) {
+      return (hit[i] && !hit[i - 1] ? '<mark>' : '') + searchEsc(ch) + (hit[i] && !hit[i + 1] ? '</mark>' : '');
+    }).join('');
+  }
 
-      // Los resultados los pinta el behavior del tema base: aquí se anuncia
-      // cuántos hay (WCAG 4.1.3) y se traduce su "sin resultados", que viene
-      // fijo en español.
-      if (results && window.MutationObserver) {
-        new MutationObserver(function () {
-          var empty = results.querySelector('.no-results');
-          if (empty) empty.textContent = Drupal.t('No se encontraron resultados');
-          if (!status) return;
-          var n = results.querySelectorAll('li a[href]').length;
-          if (!searchInput.value.trim()) status.textContent = '';
-          else if (empty || !n) status.textContent = Drupal.t('No se encontraron resultados');
-          else status.textContent = Drupal.formatPlural(n, '1 resultado. Usa flecha abajo para recorrerlo.', '@count resultados. Usa flecha abajo para recorrerlos.');
-        }).observe(results, { childList: true });
+  // Atractivos primero (orden estable: dentro de cada grupo manda la relevancia).
+  function searchRank(data) {
+    var first = data.filter(function (r) { return r.bundle === 'atractivos'; });
+    var rest = data.filter(function (r) { return r.bundle !== 'atractivos'; });
+    return first.concat(rest);
+  }
+
+  function initLiveSearch(comp) {
+    if (!comp || comp.dataset.vnSearchInit) return;
+    var input = comp.querySelector('[data-search-input]');
+    var results = comp.querySelector('[data-search-results]');
+    var status = comp.querySelector('[data-search-status]');
+    if (!input || !results) return;
+    comp.dataset.vnSearchInit = '1';
+
+    var t = function (s) { return (window.Drupal && Drupal.t) ? Drupal.t(s) : s; };
+    var lang = (window.drupalSettings && drupalSettings.path && drupalSettings.path.currentLanguage) || 'es';
+    var controller = null;
+    var timer = null;
+
+    var open = function () { comp.classList.add('is-open'); };
+    var close = function () { comp.classList.remove('is-open'); };
+    var announce = function (msg) { if (status) status.textContent = msg; };
+
+    function render(data, query) {
+      var words = searchNorm(query).split(/[^\p{L}\p{N}]+/u)
+        .filter(function (w) { return w.length >= 2; }).map(searchStem);
+      if (!data.length) {
+        results.innerHTML = '<li class="no-results">' + searchEsc(t('No se encontraron resultados')) + '</li>';
+        announce(t('No se encontraron resultados'));
+        return;
       }
+      results.innerHTML = searchRank(data).map(function (r) {
+        var img = r.image_thumb || r.image || '';
+        var star = r.bundle === 'atractivos';
+        return '<li class="' + (star ? 'is-atractivo' : '') + '" title="' + searchEsc(r.title || '') + '">'
+          + '<a href="' + searchEsc(r.url || '#') + '">'
+          + (img ? '<img src="' + searchEsc(img) + '" alt="">' : '<div class="no-img"></div>')
+          + '<div class="info">'
+          + '<p>' + searchMark(r.title, words) + '</p>'
+          + (r.snippet ? '<small>' + searchMark(r.snippet, words) + '</small>' : '')
+          + '<span class="search-results__type">'
+          + (star ? '<span class="search-results__star" aria-hidden="true">★</span>' : '')
+          + searchEsc(r.type_label || '') + '</span>'
+          + '</div></a></li>';
+      }).join('');
+      var n = results.querySelectorAll('li a[href]').length;
+      announce(Drupal.formatPlural(n, '1 resultado. Usa flecha abajo para recorrerlo.', '@count resultados. Usa flecha abajo para recorrerlos.'));
     }
+
+    function search(query) {
+      if (controller) controller.abort();
+      if (!query) { results.innerHTML = ''; announce(''); return; }
+      controller = new AbortController();
+      fetch('/' + lang + '/api/v3/buscar?q=' + encodeURIComponent(query) + '&limit=' + SEARCH_FETCH, { signal: controller.signal })
+        .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then(function (json) { render((json && json.data) || [], query); })
+        .catch(function (e) { if (e.name !== 'AbortError' && window.console) console.error('Search error:', e.message); });
+    }
+
+    // Siguiente/anterior elemento enfocable fuera del buscador, para que las
+    // flechas nunca dejen el foco atrapado en el campo (hallazgo 10 SANDI).
+    function focusOutside(dir) {
+      var all = [].slice.call(document.querySelectorAll('a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'))
+        .filter(function (el) { return el.offsetParent !== null && !comp.contains(el); });
+      var before = all.filter(function (el) { return comp.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING; });
+      var target = dir > 0 ? all[before.length] : before[before.length - 1];
+      if (target) { close(); target.focus(); }
+    }
+
+    input.addEventListener('focus', open);
+    input.addEventListener('input', function () {
+      open();
+      clearTimeout(timer);
+      var q = input.value.trim();
+      timer = setTimeout(function () { search(q); }, 200);
+    });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { close(); input.blur(); return; }
+      if (e.key === 'Enter') {
+        var firstLink = results.querySelector('li a[href]');
+        if (firstLink) { e.preventDefault(); window.location.href = firstLink.getAttribute('href'); }
+        else e.preventDefault();
+      }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        var first = results.querySelector('li a[href]');
+        e.preventDefault();
+        if (e.key === 'ArrowDown' && first) first.focus();
+        else focusOutside(e.key === 'ArrowDown' ? 1 : -1);
+      }
+    });
+    // Flechas arriba/abajo recorren los resultados; arriba desde el primero
+    // devuelve el foco al campo.
+    results.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+      var links = [].slice.call(results.querySelectorAll('li a[href]'));
+      var at = links.indexOf(document.activeElement);
+      if (at === -1) return;
+      e.preventDefault();
+      if (e.key === 'ArrowDown') { if (links[at + 1]) links[at + 1].focus(); else focusOutside(1); }
+      else if (at === 0) input.focus();
+      else links[at - 1].focus();
+    });
+    document.addEventListener('click', function (e) { if (!comp.contains(e.target)) close(); });
+    comp.addEventListener('focusout', function (e) { if (!comp.contains(e.relatedTarget)) close(); });
+    // Formulario (404): Enter/botón sin resultados aún → buscar ya.
+    var form = input.form;
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var firstLink = results.querySelector('li a[href]');
+      if (firstLink) window.location.href = firstLink.getAttribute('href');
+      else search(input.value.trim());
+    });
   }
 
   // =========================================================
@@ -849,6 +945,7 @@
 
   function init() {
     initHeader();
+    document.querySelectorAll('.js-live-search').forEach(initLiveSearch);
     initHome();
     initCat();
     initPlace();
@@ -865,21 +962,316 @@
 })();
 
 /**
- * Buscador: el mensaje "sin resultados" lo escribe el tema base (main.js) fijo
- * en español. Aquí se reemplaza por su versión traducida.
+ * "Mi viaje" fuera del planificador: botones "Agregar a mi viaje" de las
+ * fichas (atractivos, hoteles, restaurantes, ofertas) y "Agrega este
+ * itinerario a tu viaje" de los itinerarios.
+ *
+ * El viaje se guarda en localStorage ('vn-dtv-trip') como referencias
+ * "categoría.nid" con las mismas categorías del mapa de Diseña tu viaje
+ * (atractivos | hoteles | restaurantes | ofertas). El planificador
+ * (js/disena-tu-viaje/app.js) lee y escribe la misma clave mediante
+ * window.VNTrip. Si el navegador bloquea localStorage, el enlace "Ver mi
+ * viaje" lleva igual el viaje en la URL (?viaje=…).
+ *
+ * Marcado del botón:
+ *   <button class="js-trip-add" data-trip-refs="atractivos.12,atractivos.40"
+ *     data-planner="/es/disena-tu-viaje"
+ *     data-label-add="…" data-label-added="…">
  */
 (function () {
   'use strict';
+
+  var KEY = 'vn-dtv-trip';
+  var CATS = ['atractivos', 'hoteles', 'restaurantes', 'ofertas'];
+  var memory = [];
+  var valid = function (ref) {
+    var parts = String(ref).split('.');
+    return parts.length === 2 && CATS.indexOf(parts[0]) !== -1 && /^\d+$/.test(parts[1]);
+  };
+  var t = function (s, args) { return (window.Drupal && Drupal.t) ? Drupal.t(s, args) : s; };
+
+  var VNTrip = {
+    KEY: KEY,
+    get: function () {
+      try {
+        var v = JSON.parse(window.localStorage.getItem(KEY) || '[]');
+        return Array.isArray(v) ? v.filter(valid) : [];
+      } catch (e) {
+        return memory.slice();
+      }
+    },
+    set: function (refs) {
+      var seen = {};
+      memory = (refs || []).filter(function (r) { return valid(r) && !seen[r] && (seen[r] = true); });
+      try { window.localStorage.setItem(KEY, JSON.stringify(memory)); } catch (e) { /* sin almacenamiento */ }
+      return memory;
+    },
+    has: function (ref) { return VNTrip.get().indexOf(ref) !== -1; },
+    // Agrega sin duplicar. Devuelve cuántas referencias eran nuevas.
+    add: function (refs) {
+      var cur = VNTrip.get();
+      var added = refs.filter(function (r) { return valid(r) && cur.indexOf(r) === -1; });
+      VNTrip.set(cur.concat(added));
+      return added.length;
+    },
+    remove: function (ref) { VNTrip.set(VNTrip.get().filter(function (r) { return r !== ref; })); },
+    // Enlace al planificador con el viaje y la vista "solo mi itinerario".
+    url: function (planner) {
+      var refs = VNTrip.get();
+      return planner + (refs.length ? '?viaje=' + refs.join(',') + '&ver=viaje' : '');
+    }
+  };
+  window.VNTrip = VNTrip;
+
+  // ── Aviso flotante "Ver mi viaje" ──
+  var float = null;
+  var floatTimer = null;
+  function showFloat(msg, planner) {
+    if (!float) {
+      float = document.createElement('div');
+      float.className = 'vn-trip-float';
+      float.innerHTML = '<p class="vn-trip-float__msg" role="status"></p>'
+        + '<a class="vn-trip-float__btn" href="#"></a>'
+        + '<button type="button" class="vn-trip-float__close" aria-label="' + t('Cerrar') + '">&times;</button>';
+      float.querySelector('.vn-trip-float__close').addEventListener('click', function () {
+        float.classList.remove('is-visible');
+      });
+      document.body.appendChild(float);
+    }
+    var n = VNTrip.get().length;
+    float.querySelector('.vn-trip-float__msg').textContent = msg;
+    var btn = float.querySelector('.vn-trip-float__btn');
+    btn.textContent = t('Ver mi viaje') + ' (' + n + ')';
+    btn.href = VNTrip.url(planner);
+    btn.hidden = n === 0;
+    // Doble frame: la transición arranca aunque el elemento sea nuevo.
+    requestAnimationFrame(function () { requestAnimationFrame(function () { float.classList.add('is-visible'); }); });
+    clearTimeout(floatTimer);
+    // Se queda a la vista; solo se oculta solo si el viaje quedó vacío.
+    if (!n) floatTimer = setTimeout(function () { float.classList.remove('is-visible'); }, 3000);
+  }
+
+  function refsOf(btn) {
+    return (btn.getAttribute('data-trip-refs') || '').split(',').map(function (r) { return r.trim(); }).filter(valid);
+  }
+
+  function paint(btn) {
+    var refs = refsOf(btn);
+    var cur = VNTrip.get();
+    var all = refs.length && refs.every(function (r) { return cur.indexOf(r) !== -1; });
+    btn.classList.toggle('is-added', !!all);
+    btn.setAttribute('aria-pressed', all ? 'true' : 'false');
+    var label = btn.querySelector('.js-trip-label') || btn;
+    label.textContent = all ? btn.getAttribute('data-label-added') : btn.getAttribute('data-label-add');
+  }
+
   function init() {
-    if (typeof Drupal === 'undefined') return;
-    document.querySelectorAll('#search-results').forEach(function (list) {
-      new MutationObserver(function () {
-        var item = list.querySelector('li.no-results');
-        var message = Drupal.t('No se encontraron resultados');
-        if (item && item.textContent !== message) item.textContent = message;
-      }).observe(list, { childList: true });
+    var buttons = [].slice.call(document.querySelectorAll('.js-trip-add'));
+    buttons.forEach(function (btn) {
+      if (btn.dataset.vnTripInit) return;
+      btn.dataset.vnTripInit = '1';
+      paint(btn);
+      btn.addEventListener('click', function () {
+        var refs = refsOf(btn);
+        if (!refs.length) return;
+        var planner = btn.getAttribute('data-planner') || '/';
+        var name = btn.getAttribute('data-name') || '';
+        var msg;
+        if (refs.length === 1 && VNTrip.has(refs[0])) {
+          // Ficha: segundo clic quita el lugar.
+          VNTrip.remove(refs[0]);
+          msg = t('«!nombre» quitado de tu viaje', { '!nombre': name });
+        } else {
+          var added = VNTrip.add(refs);
+          if (refs.length === 1) msg = t('«!nombre» agregado a tu viaje', { '!nombre': name });
+          else if (added) msg = Drupal.formatPlural(added, 'Se agregó 1 lugar a tu viaje', 'Se agregaron @count lugares a tu viaje');
+          else msg = t('Este itinerario ya está en tu viaje');
+        }
+        buttons.forEach(paint);
+        showFloat(msg, planner);
+      });
     });
   }
+
+  // Otra pestaña cambió el viaje: repintar.
+  window.addEventListener('storage', function (e) {
+    if (e.key === KEY) document.querySelectorAll('.js-trip-add').forEach(paint);
+  });
+  // Volver con el botón "atrás" (bfcache): el viaje pudo cambiar en el mapa.
+  window.addEventListener('pageshow', function () {
+    document.querySelectorAll('.js-trip-add').forEach(paint);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+/**
+ * Filtros de los listados: el estado vive en la URL (al abrir una ficha y
+ * volver con "atrás" se conservan), botón "Limpiar filtros" y, en móvil,
+ * "Compartir esta búsqueda" (enlace ya filtrado con las apps del teléfono).
+ *
+ *   · Checkboxes .filters + #cardsList (hoteles, restaurantes, rutas, ofertas,
+ *     experiencias, atractivos por categoría…). El filtrado lo hace el
+ *     behavior "idt-gastro-filter" del tema base; aquí solo se marcan las
+ *     casillas desde ?filtros=tid,tid y se dispara "change".
+ *   · Guías (#guias-filters): selects → ?idioma=…&sector=….
+ *   · Agenda (#events-filters-form): ya filtra por GET; solo se añaden los
+ *     botones.
+ */
+(function () {
+  'use strict';
+
+  var t = function (s) { return (window.Drupal && Drupal.t) ? Drupal.t(s) : s; };
+
+  function setParams(params) {
+    var url = new URL(window.location.href);
+    Object.keys(params).forEach(function (k) {
+      if (params[k]) url.searchParams.set(k, params[k]);
+      else url.searchParams.delete(k);
+    });
+    history.replaceState(history.state, '', url.pathname + url.search + url.hash);
+  }
+
+  function toast(msg) {
+    var el = document.querySelector('.vn-filter-toast');
+    if (!el) {
+      el = document.createElement('p');
+      el.className = 'vn-filter-toast';
+      el.setAttribute('role', 'status');
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add('is-visible');
+    clearTimeout(el._t);
+    el._t = setTimeout(function () { el.classList.remove('is-visible'); }, 2200);
+  }
+
+  function share() {
+    var url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: document.title, url: url }).catch(function () { /* cancelado */ });
+    } else if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(url).then(function () { toast(t('Enlace copiado')); });
+    } else {
+      window.prompt(t('Copia este enlace'), url);
+    }
+  }
+
+  // Barra con los dos botones. update(active) muestra/oculta según haya filtros.
+  function toolbar(onClear) {
+    var bar = document.createElement('div');
+    bar.className = 'vn-filter-tools';
+    bar.innerHTML = '<button type="button" class="vn-filter-tools__btn vn-filter-tools__clear">'
+      + '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+      + '<span>' + t('Limpiar filtros') + '</span></button>'
+      + '<button type="button" class="vn-filter-tools__btn vn-filter-tools__share">'
+      + '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>'
+      + '<span>' + t('Compartir esta búsqueda') + '</span></button>';
+    bar.querySelector('.vn-filter-tools__clear').addEventListener('click', onClear);
+    bar.querySelector('.vn-filter-tools__share').addEventListener('click', share);
+    bar.update = function (active) { bar.hidden = !active; };
+    return bar;
+  }
+
+  // ── Checkboxes del tema base ──
+  function initCheckboxes(panel) {
+    if (panel.dataset.vnFilterTools) return;
+    var list = document.getElementById('cardsList');
+    var boxes = [].slice.call(panel.querySelectorAll('input[type="checkbox"]'));
+    if (!list || !boxes.length) return;
+    panel.dataset.vnFilterTools = '1';
+
+    var checked = function () {
+      return boxes.filter(function (b) { return b.checked; }).map(function (b) { return b.value; });
+    };
+    var bar = toolbar(function () {
+      boxes.forEach(function (b) { b.checked = false; });
+      boxes[0].dispatchEvent(new Event('change'));
+      sync();
+      var toggle = document.querySelector('.filter-toggle-btn');
+      (toggle && toggle.offsetParent ? toggle : boxes[0]).focus();
+    });
+    var sync = function () {
+      var vals = checked();
+      setParams({ filtros: vals.join(',') });
+      bar.update(vals.length > 0);
+    };
+
+    var head = document.querySelector('.archive__results-head');
+    if (head) head.appendChild(bar);
+    else list.parentNode.insertBefore(bar, list);
+
+    // Restaurar desde la URL.
+    var wanted = (new URLSearchParams(window.location.search).get('filtros') || '').split(',').filter(Boolean);
+    if (wanted.length) {
+      boxes.forEach(function (b) { b.checked = wanted.indexOf(b.value) !== -1; });
+      boxes[0].dispatchEvent(new Event('change'));
+      // En móvil el panel arranca plegado: abrirlo para que se vea qué está aplicado.
+      var toggleBtn = document.querySelector('.filter-toggle-btn[aria-controls="' + panel.id + '"]');
+      if (toggleBtn) { toggleBtn.setAttribute('aria-expanded', 'true'); panel.classList.add('is-open'); }
+    }
+    panel.addEventListener('change', function (e) {
+      if (e.target.matches('input[type="checkbox"]')) sync();
+    });
+    sync();
+  }
+
+  // ── Guías: selects ──
+  function initGuiasTools() {
+    var form = document.getElementById('guias-filters');
+    var lang = document.getElementById('f-idioma');
+    var sector = document.getElementById('f-sector');
+    if (!form || !lang || !sector || form.dataset.vnFilterTools) return;
+    form.dataset.vnFilterTools = '1';
+
+    var bar = toolbar(function () {
+      lang.value = '';
+      sector.value = '';
+      lang.dispatchEvent(new Event('change'));
+      sync();
+      lang.focus();
+    });
+    var sync = function () {
+      setParams({ idioma: lang.value, sector: sector.value });
+      bar.update(!!(lang.value || sector.value));
+    };
+    form.appendChild(bar);
+
+    var q = new URLSearchParams(window.location.search);
+    var restored = false;
+    [[lang, 'idioma'], [sector, 'sector']].forEach(function (pair) {
+      var v = q.get(pair[1]);
+      if (v && pair[0].querySelector('option[value="' + CSS.escape(v) + '"]')) { pair[0].value = v; restored = true; }
+    });
+    if (restored) lang.dispatchEvent(new Event('change'));
+    lang.addEventListener('change', sync);
+    sector.addEventListener('change', sync);
+    sync();
+  }
+
+  // ── Agenda: GET ──
+  function initAgendaTools() {
+    var form = document.getElementById('events-filters-form');
+    if (!form || form.dataset.vnFilterTools) return;
+    form.dataset.vnFilterTools = '1';
+    var keys = ['filtro_mes', 'categoria', 'tipo', 'fecha_desde', 'fecha_hasta', 'rango'];
+    var q = new URLSearchParams(window.location.search);
+    var active = keys.some(function (k) { return q.get(k); });
+    var bar = toolbar(function () { window.location.href = window.location.pathname; });
+    bar.update(active);
+    form.appendChild(bar);
+  }
+
+  function init() {
+    document.querySelectorAll('.filters').forEach(initCheckboxes);
+    initGuiasTools();
+    initAgendaTools();
+  }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

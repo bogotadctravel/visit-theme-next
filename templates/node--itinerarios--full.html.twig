@@ -19,7 +19,7 @@
       <nav class="breadcrumb" aria-label="{{ 'Ruta de navegación'|t }}">
         <ol>
           <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
-          <li><a href="{{ path('entity.node.canonical', {'node': 549}) }}">{{ 'Planea tu viaje'|t }}</a></li>
+          <li><a href="{{ path('entity.node.canonical', {'node': 3003}) }}">{{ 'Diseña tu viaje'|t }}</a></li>
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>
       </nav>
@@ -50,8 +50,23 @@
         {% endif %}
       </article>
 
-      {% if rutas is not empty %}
+      {#- Atractivos del itinerario para "Diseña tu viaje" (todos, no solo los 8 de la franja). -#}
+      {% set trip_refs = (atractivos|default([]))|filter(a => a.type|lower == 'atractivos' and a.id)|map(a => 'atractivos.' ~ a.id)|join(',') %}
+      {% if rutas is not empty or trip_refs %}
       <aside class="rutas-sidebar">
+        {% if trip_refs %}
+        <div class="rutas-sidebar__trip">
+          {% include '@visit_theme_next/includes/_trip_button.html.twig' with {
+            refs: trip_refs,
+            name: node.getTitle(),
+            label: 'Agrega este itinerario a tu viaje'|t,
+            label_added: 'Itinerario agregado a tu viaje'|t,
+            class: 'vn-trip-btn--block',
+          } only %}
+          <p class="rutas-sidebar__trip-hint">{{ 'Suma sus atractivos a tu mapa en Diseña tu viaje.'|t }}</p>
+        </div>
+        {% endif %}
+        {% if rutas is not empty %}
         <h2 class="rutas-sidebar__title">{{ 'Rutas relacionadas'|t }}</h2>
         <ul class="rutas-sidebar__grid">
           {% for item in rutas|slice(0, 3) %}
@@ -65,6 +80,7 @@
           </li>
           {% endfor %}
         </ul>
+        {% endif %}
       </aside>
       {% endif %}
 

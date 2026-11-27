@@ -1,7 +1,7 @@
 overrides:
   # Subir este valor en cada cambio de css/js: es el ?v= de la URL y
   # Cloudflare cachea por URL (con VERSION quedaba pegado el archivo viejo).
-  version: 2026.11.25
+  version: 2026.11.27
   css:
     theme:
       css/overrides.css: {}
@@ -14,7 +14,7 @@ overrides:
 # NO va aquí: lo inyecta js/disena-tu-viaje/app.js al final (ver loadArcgis).
 # qrcode-generator es UMD: debe ejecutarse antes de que exista el `define` de ArcGIS.
 disena-tu-viaje:
-  version: 1.1
+  version: 1.2
   css:
     theme:
       https://js.arcgis.com/4.30/esri/themes/light/main.css: { type: external, minified: true }

@@ -838,3 +838,64 @@ msgstr "Video description and transcript"
 
 msgid "Descripción"
 msgstr "Description"
+
+msgid "No encontramos esta página"
+msgstr "We couldn't find this page"
+
+msgid "Puede que el enlace haya cambiado o que la página ya no exista. Busca lo que necesitas o explora Bogotá por categorías."
+msgstr "The link may have changed or the page may no longer exist. Search for what you need or explore Bogotá by category."
+
+msgid "¿Qué estás buscando?"
+msgstr "What are you looking for?"
+
+msgid "Ir al inicio"
+msgstr "Go to the home page"
+
+msgid "Ver mi viaje"
+msgstr "See my trip"
+
+msgid "Este itinerario ya está en tu viaje"
+msgstr "This itinerary is already in your trip"
+
+msgid "Se agregó 1 lugar a tu viaje"
+msgid_plural "Se agregaron @count lugares a tu viaje"
+msgstr[0] "1 place added to your trip"
+msgstr[1] "@count places added to your trip"
+
+msgid "En mi viaje · Quitar"
+msgstr "In my trip · Remove"
+
+msgid "Agrega este itinerario a tu viaje"
+msgstr "Add this itinerary to your trip"
+
+msgid "Itinerario agregado a tu viaje"
+msgstr "Itinerary added to your trip"
+
+msgid "Suma sus atractivos a tu mapa en Diseña tu viaje."
+msgstr "Adds its attractions to your map in Design your trip."
+
+msgid "Mi itinerario"
+msgstr "My itinerary"
+
+msgid "Aún no has agregado lugares a tu viaje."
+msgstr "You haven't added any places to your trip yet."
+
+msgid "Ver todos los lugares"
+msgstr "See all places"
+
+msgid "Ver mi itinerario"
+msgstr "See my itinerary"
+
+msgid "Tu viaje · 1 lugar"
+msgid_plural "Tu viaje · @count lugares"
+msgstr[0] "Your trip · 1 place"
+msgstr[1] "Your trip · @count places"
+
+msgid "Compartir esta búsqueda"
+msgstr "Share this search"
+
+msgid "Enlace copiado"
+msgstr "Link copied"
+
+msgid "Copia este enlace"
+msgstr "Copy this link"

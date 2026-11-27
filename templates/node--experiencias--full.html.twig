@@ -4,8 +4,8 @@
   (visit_theme_preprocess_node) + campos del nodo.
 #}
 {% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
-{% set cat = node.field_turcat.0.entity %}
-{% set subcat = node.field_tursubcat.0.entity %}
+{% set cat = vn_crumb_cat %}
+{% set subcat = vn_crumb_subcat %}
 {% set lat = node.field_latlong.0.value %}
 {% set lng = node.field_latlong.1.value %}
 
@@ -20,7 +20,7 @@
         <ol>
           <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
           <li><a href="{{ path('entity.node.canonical', {'node': 835}) }}">{{ 'ui.certified_experiences'|t }}</a></li>
-          {% if cat %}<li><a href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a></li>{% endif %}
+          {% if cat %}<li><a href="{{ conecta.cat_href(cat.label, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.label }}</a></li>{% endif %}
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>
       </nav>
@@ -124,6 +124,18 @@
       <aside class="place-sidebar">
         <div class="place-sidebar__card">
 
+          {#- Diseña tu viaje (js/overrides.js, "Mi viaje"). -#}
+          {#- Solo las ofertas (no aliadas IDT): son las que tiene el mapa de Diseña tu viaje. -#}
+          {% if not node.field_experiencia_aliada_idt.value %}
+          {% include '@visit_theme_next/includes/_trip_button.html.twig' with {
+            refs: 'ofertas.' ~ node.id,
+            name: node.getTitle(),
+            label: 'Agregar a mi viaje'|t,
+            label_added: 'En mi viaje · Quitar'|t,
+            class: 'place-sidebar__btn',
+          } only %}
+          {% endif %}
+
           {% if node.field_porcentaje_de_descuento.0.value %}
           <span class="place-sidebar__badge">{{ node.field_porcentaje_de_descuento.0.value }}% {{ 'de descuento'|t }}</span>
           {% endif %}
@@ -158,12 +170,12 @@
           </div>
           {% endif %}
 
-          {% if node.field_turcat|length > 0 or node.field_turpara|length > 0 %}
+          {% if cat or subcat or node.field_turpara|length > 0 %}
           <div class="place-sidebar__row">
             <span class="place-sidebar__label">{{ 'Categorías'|t }}</span>
             <span class="place-sidebar__tags">
-              {% for item in node.field_turcat %}<a class="place-tag" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.id}) }}">{{ item.entity.name.value }}</a>{% endfor %}
-              {% for item in node.field_tursubcat %}<a class="place-tag" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': item.entity.id}) }}">{{ item.entity.name.value }}</a>{% endfor %}
+              {% if cat %}<a class="place-tag" href="{{ conecta.cat_href(cat.label, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.label }}</a>{% endif %}
+              {% if subcat %}<a class="place-tag" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': subcat.id}) }}">{{ subcat.label }}</a>{% endif %}
               {% for item in node.field_turpara %}<span class="place-tag">{{ item.entity.name.value }}</span>{% endfor %}
             </span>
           </div>

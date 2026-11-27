@@ -4,7 +4,7 @@
   nodos_cercanos (si tiene latlong) + campos del nodo.
 #}
 {% import "@visit_theme_next/includes/_conecta_urls.html.twig" as conecta %}
-{% set cat = node.field_turcat.0.entity %}
+{% set cat = vn_crumb_cat %}
 {% set lat = node.field_latlong.0.value %}
 {% set lng = node.field_latlong.1.value %}
 
@@ -19,7 +19,7 @@
         <ol>
           <li><a href="{{ path('<front>') }}">{{ 'Inicio'|t }}</a></li>
           <li><a href="{{ path('entity.node.canonical', {'node': 826}) }}">{{ 'ui.tourist_routes'|t }}</a></li>
-          {% if cat %}<li><a href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a></li>{% endif %}
+          {% if cat %}<li><a href="{{ conecta.cat_href(cat.label, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.label }}</a></li>{% endif %}
           <li aria-current="page">{{ node.getTitle() }}</li>
         </ol>
       </nav>
@@ -141,7 +141,7 @@
           <div class="place-sidebar__row">
             <span class="place-sidebar__label">{{ 'ui.category'|t }}</span>
             <span class="place-sidebar__tags">
-              <a class="place-tag" href="{{ conecta.cat_href(cat.name.value, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.name.value }}</a>
+              <a class="place-tag" href="{{ conecta.cat_href(cat.label, path('entity.taxonomy_term.canonical', {'taxonomy_term': cat.id})) }}">{{ cat.label }}</a>
             </span>
           </div>
           {% endif %}

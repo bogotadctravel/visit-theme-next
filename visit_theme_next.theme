@@ -588,6 +588,12 @@ function visit_theme_next_preprocess_node(array &$variables) {
     }
   }
 
+  // Miga de pan de las fichas: categoría/subcategoría que sí tienen página.
+  if ($node->hasField('field_turcat') || $node->hasField('field_tursubcat')) {
+    [$variables['vn_crumb_cat'], $variables['vn_crumb_subcat']] = _visit_theme_next_crumb_terms($node);
+    $variables['#cache']['tags'][] = 'taxonomy_term_list';
+  }
+
   if ((int) $node->id() === 1223) {
     if (empty($variables['imperdibles'])) {
       $variables['imperdibles'] = $content_loader->getImperdibles(10);
@@ -731,6 +737,81 @@ function visit_theme_next_preprocess_node(array &$variables) {
       $variables['#cache']['contexts'][] = 'url.query_args:rango';
     }
   }
+}
+
+/**
+ * Categoría y subcategoría para la miga de pan de una ficha.
+ *
+ * Las fichas referencian a la vez términos de los vocabularios viejos
+ * (categorias_turisticas / subcategorias_turisticas, varios despublicados) y
+ * de los 2026, en cualquier orden. Tomar el primero sin mirar dejaba migas a
+ * páginas 404 (p. ej. Plaza de Mercado La Concordia → término 240,
+ * despublicado). Reglas:
+ *   1. Solo términos que el visitante puede ver (publicados) en el idioma
+ *      actual.
+ *   2. Se prefiere el vocabulario 2026; la subcategoría, la que cuelga de la
+ *      categoría elegida (field_categoria_superior).
+ *   3. Si un término viejo no sirve, se busca su homónimo en el vocabulario
+ *      2026 (mismo nombre en español).
+ *
+ * @return array
+ *   [categoría|null, subcategoría|null], ya traducidos al idioma actual.
+ */
+function _visit_theme_next_crumb_terms(\Drupal\node\NodeInterface $node): array {
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  $usable = static function ($term) use ($langcode) {
+    if ($term->hasTranslation($langcode)) {
+      $term = $term->getTranslation($langcode);
+    }
+    elseif ($langcode !== 'es') {
+      // Sin traducción, la página del término no existe en este idioma.
+      return NULL;
+    }
+    return ($term->isPublished() && $term->access('view')) ? $term : NULL;
+  };
+
+  $pick = static function (string $field, string $vid_2026, ?int $parent_tid = NULL) use ($node, $usable, $storage) {
+    if (!$node->hasField($field) || $node->get($field)->isEmpty()) {
+      return NULL;
+    }
+    $new = [];
+    $old = [];
+    foreach ($node->get($field)->referencedEntities() as $term) {
+      if ($term->bundle() === $vid_2026) {
+        $new[] = $term;
+      }
+      else {
+        $old[] = $term;
+      }
+    }
+    // Homónimos 2026 de los términos viejos (al final: son respaldo).
+    foreach ($old as $term) {
+      $es = $term->hasTranslation('es') ? $term->getTranslation('es') : $term;
+      foreach ($storage->loadByProperties(['vid' => $vid_2026, 'name' => $es->getName()]) as $twin) {
+        $new[] = $twin;
+      }
+    }
+    $candidates = [];
+    foreach (array_merge($new, $old) as $term) {
+      if ($ok = $usable($term)) {
+        $candidates[$ok->id()] = $ok;
+      }
+    }
+    if ($parent_tid) {
+      foreach ($candidates as $term) {
+        if ($term->hasField('field_categoria_superior') && (int) $term->get('field_categoria_superior')->target_id === $parent_tid) {
+          return $term;
+        }
+      }
+    }
+    return $candidates ? reset($candidates) : NULL;
+  };
+
+  $cat = $pick('field_turcat', 'categorias_2026');
+  $subcat = $pick('field_tursubcat', 'subcategorias_2026', $cat ? (int) $cat->id() : NULL);
+  return [$cat, $subcat];
 }
 
 /**
